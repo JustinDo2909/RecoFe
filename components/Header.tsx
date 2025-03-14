@@ -13,7 +13,6 @@ import LogoReco from "./LogoReco";
 const Header = () => {
   const { logout } = useUser();
   const token = Cookies.get("authToken");
-  console.log(token, "vddd");
 
   const handleLogout = async () => {
     await logout();
