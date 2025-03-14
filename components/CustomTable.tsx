@@ -1,4 +1,3 @@
-import { Filter } from "lucide-react";
 import React, { useState } from "react";
 
 interface TableProps<T> {
