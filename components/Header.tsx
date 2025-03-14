@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import HeaderMenu from "./HeaderMenu";
-import Logo from "./Logo";
 import Container from "./Container";
 import MobileMenu from "./MobileMenu";
 import SearchBar from "./SearchBar";

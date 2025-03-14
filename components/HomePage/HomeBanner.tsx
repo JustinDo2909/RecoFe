@@ -1,5 +1,4 @@
 import React from "react";
-import Title from "../Title";
 import Image from "next/image";
 import banner from "@/images/Banner.jpg";
 import Logo from "../Logo";

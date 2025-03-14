@@ -7,11 +7,6 @@ import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
 import Providers from "../providers";
 
-const raleway = localFont({
-  src: "../fonts/Raleway.woff2",
-  variable: "--font-raleway",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "Reco Ecommerce app for shoppers",

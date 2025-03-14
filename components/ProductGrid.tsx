@@ -1,12 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import HomeTabbar from "./HomeTabbar";
 import { productType } from "@/constants";
-import { client } from "@/sanity/lib/client";
 import ProductCard from "./ProductCard";
 import NoProductsAvailable from "./NoProductsAvailable";
 import { motion, AnimatePresence } from "motion/react";
-import { Loader2 } from "lucide-react";
 import { Product } from "@/types";
 
 interface ProductSlideProps {

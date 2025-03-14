@@ -1,4 +1,4 @@
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { useRef, useState, useEffect } from "react";
 import "swiper/css";
@@ -15,16 +15,16 @@ interface ProductSlideProps {
 
 const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const swiperRef = useRef<any>(null);
+  const swiperRef = useRef<SwiperClass | null>(null);
   const swiperContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) {
-          swiperRef.current?.swiper.autoplay.stop();
+          swiperRef.current?.autoplay.stop();
         } else {
-          swiperRef.current?.swiper.autoplay.start();
+          swiperRef.current?.autoplay.start();
         }
       },
       { threshold: 0.2 }
@@ -47,7 +47,6 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
       className="relative w-full max-w-[95vw] mx-auto py-8 px-4"
     >
       <Swiper
-        ref={swiperRef}
         slidesPerView={1}
         centeredSlides={true}
         loop={true}
@@ -100,14 +99,14 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
       </Swiper>
 
       <button
-        onClick={() => swiperRef.current?.swiper.slidePrev()}
+        onClick={() => swiperRef.current?.slidePrev()}
         className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 p-2.5 rounded-full 
           shadow-lg hover:bg-white transition-all duration-300 z-20 group"
       >
         <ChevronLeft className="w-5 h-5 text-gray-800 group-hover:text-red-500" />
       </button>
       <button
-        onClick={() => swiperRef.current?.swiper.slideNext()}
+        onClick={() => swiperRef.current?.slideNext()}
         className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 p-2.5 rounded-full 
           shadow-lg hover:bg-white transition-all duration-300 z-20 group"
       >
@@ -118,7 +117,7 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
         {products.map((_, index) => (
           <button
             key={index}
-            onClick={() => swiperRef.current?.swiper.slideToLoop(index)}
+            onClick={() => swiperRef.current?.slideToLoop(index)}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
               activeIndex === index
                 ? "bg-black scale-125"

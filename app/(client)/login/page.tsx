@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 const LoginPage = () => {
   const [isUpdate, setIsUpdate] = useState(false);
-  const { login, signUp, user } = useUser();
+  const { login, signUp } = useUser();
   const router = useRouter();
   const handleSubmit = async (data: Record<string, string>) => {
     if (!isUpdate) {
@@ -25,7 +25,7 @@ const LoginPage = () => {
         console.log(res.message, "cut roi");
       }
     } else {
-      const res = await signUp({
+       await signUp({
         username: data.UserName,
         password: data.Password,
         email: data.Eamil,

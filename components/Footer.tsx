@@ -1,11 +1,9 @@
 import React from "react";
 import Container from "./Container";
-import FooterTop from "./FooterTop";
 import SocialMedia from "./SocialMedia";
 import { Input } from "./ui/input";
 import { categoriesData, quickLinksData } from "@/constants";
 import Link from "next/link";
-import Image from "next/image";
 import LogoReco from "./LogoReco";
 
 const Footer = () => {

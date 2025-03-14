@@ -3,8 +3,8 @@ import Container from "@/components/Container";
 import CustomServiceIntro from "@/components/HomePage/CustomServiceIntro";
 import FeedBack from "@/components/HomePage/FeedBack";
 import HomeBanner from "@/components/HomePage/HomeBanner";
-import HomeTitle from "@/components/HomePage/HomeTitle";
-import NewsAndBlog from "@/components/HomePage/NewsAndBlog";
+// import HomeTitle from "@/components/HomePage/HomeTitle";
+// import NewsAndBlog from "@/components/HomePage/NewsAndBlog";
 import ShareLove from "@/components/HomePage/ShareLove";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSlide from "@/components/ProductSlide";
@@ -13,9 +13,7 @@ import { useGetProductQuery } from "@/state/api";
 import feedback from "@/images/feedback.png";
 export default function Home() {
   const {
-    data: product,
-    isLoading: isLoading,
-    isError: isError,
+    data: product
   } = useGetProductQuery({});
   console.log(product);
   const feedbackList = [

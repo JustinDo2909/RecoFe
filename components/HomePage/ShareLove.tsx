@@ -11,7 +11,7 @@ const ShareLove = () => {
           {/* Phần Nội Dung */}
           <div className="w-full md:w-1/2 text-center md:text-left">
             <h2 className="text-3xl md:text-4xl font-semibold mb-3">
-              "Chia Sẻ Yêu Thương Cùng RECO"
+            &ldquo;Chia Sẻ Yêu Thương Cùng RECO&rdquo;
             </h2>
             <p className="text-gray-700 leading-relaxed">
               Chia Sẻ Yêu Thương Cùng RECO không chỉ là một chiến dịch mà là một
