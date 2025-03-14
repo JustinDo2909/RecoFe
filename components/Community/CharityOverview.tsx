@@ -3,9 +3,8 @@ import { useInView } from "framer-motion";
 import React, { useRef } from "react";
 import { countUpItems } from "@/constants/index";
 import MyCountUp from "../CountTip";
-import pic from "@/images/com3.jpg";
+import pic from "@/images/CustomBanner.jpg";
 import Image from "next/image";
-import Title from "../Title";
 
 const CharityOverview = () => {
   const ref = useRef(null);

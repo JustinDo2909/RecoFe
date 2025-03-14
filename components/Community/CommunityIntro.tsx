@@ -1,6 +1,6 @@
 import React from "react";
 import CustomIntro from "../CustomIntro";
-import banner from '@/images/com2.jpg'
+import banner from '@/images/CustomBanner.jpg'
 import Image from "next/image";
 const CommunityIntro = () => {
   return (
