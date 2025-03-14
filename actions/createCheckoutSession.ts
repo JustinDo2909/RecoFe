@@ -1,6 +1,6 @@
 "use server";
 import stripe from "@/lib/stripe";
-import { urlFor } from "@/sanity/lib/image";
+// import { urlFor } from "@/sanity/lib/image";
 import { CartItem } from "@/store";
 import Stripe from "stripe";
 
@@ -48,10 +48,10 @@ export async function createCheckoutSession(
             name: item.product.name || "Unnamed Product",
             description: item.product.description,
             metadata: { id: item.product._id },
-            images:
-              item.product.images && item.product.images.length > 0
-                ? [urlFor(item.product.images[0]).url()]
-                : undefined,
+            // images:
+            //   item.product.images && item.product.images.length > 0
+            //     ? [urlFor(item.product.images[0]).url()]
+            //     : undefined,
           },
         },
         quantity: item.quantity,

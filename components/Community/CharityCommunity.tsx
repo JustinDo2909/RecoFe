@@ -1,10 +1,10 @@
 import React from "react";
 import Title from "../Title";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { Button } from "../ui/button";
 
 interface Charity {
-  image: string;
+  image: string | StaticImageData
   title: string;
   description: string;
   button: string;

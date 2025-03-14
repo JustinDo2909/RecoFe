@@ -10,12 +10,10 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { client } from "@/sanity/lib/client";
-import { Product } from "@/sanity.types";
 import Link from "next/link";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
 import PriceView from "./PriceView";
 import AddToCartButton from "./AddToCartButton";
+import { Product } from "@/types";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
@@ -90,11 +88,11 @@ const SearchBar = () => {
                 >
                   <div className="flex items-center p-1">
                     <Link
-                      href={`/product/${product?.slug?.current}`}
+                      href={`/product/${product?._id}`}
                       className="h-20 w-20 md:h-24 md:w-24 flex-shrink-0 border border-darkColor/20 rounded-md overflow-hidden group"
                       onClick={() => setShowSearch(false)}
                     >
-                      {product?.images && (
+                      {/* {product?.images && (
                         <Image
                           width={200}
                           height={200}
@@ -102,18 +100,18 @@ const SearchBar = () => {
                           alt="productImage"
                           className="object-cover w-full h-full group-hover:scale-110 hoverEffect"
                         />
-                      )}
+                      )} */}
                     </Link>
                     <div className="px-4 py-2 flex-grow">
                       <Link
-                        href={`/product/${product?.slug?.current}`}
+                        href={`/product/${product?._id}`}
                         onClick={() => setShowSearch(false)}
                       >
                         <h3 className="text-sm md:text-lg font-semibold text-gray-800 line-clamp-1">
                           {product?.name}
                         </h3>
                         <p className="text-sm text-gray-600 line-clamp-1">
-                          {product?.intro}
+                          {product?.description}
                         </p>
                       </Link>
                       <PriceView

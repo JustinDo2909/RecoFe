@@ -6,16 +6,18 @@ export interface User {
   loginLocations?: string
   }
   
-  export interface Product  {
-    _id: number,
-    name: string,
-    decription: string,
-    price: number,
-    picture: string,
-    stock: number,
-    categorys:Category[],
-    pictureId: number
-}
+  export interface Product {
+    _id: string; // Changed from number to string
+    name: string;
+    description: string; // Fixed typo
+    price: number;
+    picture: string;
+    stock: number;
+    categorys: Category[]; // Ensure Category type is defined
+    pictureId: string;
+    discount: number
+  }
+  
 
 export interface Category {
   _id: number,

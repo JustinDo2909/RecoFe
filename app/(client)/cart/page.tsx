@@ -13,7 +13,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { urlFor } from "@/sanity/lib/image";
 import useCartStore from "@/store";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { Heart, ShoppingBag, Trash } from "lucide-react";
@@ -102,7 +101,7 @@ const CartPage = () => {
                           className="border-b p-2.5 last:border-b-0 flex items-center justify-between gap-5"
                         >
                           <div className="flex flex-1 items-center gap-2 h-36 md:h-44">
-                            {product?.images && (
+                            {/* {product?.images && (
                               <Link
                                 href={`/product/${product?.slug?.current}`}
                                 className="border p-0.5 md:p-1 mr-2 rounded-md overflow-hidden group"
@@ -116,25 +115,25 @@ const CartPage = () => {
                                   className="w-32 md:w-40 h-32 md:h-40 object-cover group-hover:scale-105 overflow-hidden hoverEffect"
                                 />
                               </Link>
-                            )}
+                            )} */}
                             <div className="h-full flex flex-1 items-start flex-col justify-between py-1">
                               <div className="space-y-1.5">
                                 <h2 className="font-semibold line-clamp-1">
                                   {product?.name}
                                 </h2>
                                 <p className="text-sm text-lightColor font-medium">
-                                  {product?.intro}
+                                  {product?.description}
                                 </p>
                                 <p className="text-sm capitalize">
                                   Variant:{" "}
                                   <span className="font-semibold">
-                                    {product.variant}
+                                    {product.stock}
                                   </span>
                                 </p>
                                 <p className="text-sm capitalize">
                                   Status:{" "}
                                   <span className="font-semibold">
-                                    {product?.status}
+                                    {product?.price}
                                   </span>
                                 </p>
                               </div>

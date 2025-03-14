@@ -83,7 +83,7 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
                     {product.name}
                   </h3>
                   <p className="text-xs md:text-sm text-black line-clamp-2 drop-shadow">
-                    {product.decription}
+                    {product.description}
                   </p>
                   <Button
                     className="mt-3 bg-black text-white font-medium

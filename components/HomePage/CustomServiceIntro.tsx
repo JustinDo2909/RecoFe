@@ -1,9 +1,9 @@
 import React from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import CustomIntro from "../CustomIntro";
 
 interface Custom {
-  image: string;
+  image: string | StaticImageData
   title?: string;
 }
 

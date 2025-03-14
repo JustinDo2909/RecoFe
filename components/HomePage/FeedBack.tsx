@@ -1,9 +1,9 @@
 import React from 'react'
 import Title from '../Title'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 
 interface FeedBack {
-  image: string
+  image: string | StaticImageData
   rate: number
   title: string
   name: string

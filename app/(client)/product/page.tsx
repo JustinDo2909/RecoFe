@@ -13,7 +13,7 @@ const Products = () => {
     } = useGetProductQuery({});
   return (
     <Container className="py-10 flex flex-col md:flex-row gap-10">
-      <ProductGrid products={product}/>
+      <ProductGrid products={product || []}/>
     </Container>
   );
 };
