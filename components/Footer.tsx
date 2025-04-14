@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 import Container from "./Container";
 import SocialMedia from "./SocialMedia";
 import { Input } from "./ui/input";
@@ -7,6 +8,15 @@ import Link from "next/link";
 import LogoReco from "./LogoReco";
 
 const Footer = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <footer className="bg-[#A0BBA7] border-t">
       <Container>

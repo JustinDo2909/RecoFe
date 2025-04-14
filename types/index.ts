@@ -1,41 +1,104 @@
 export interface User {
-  id: number
-  username: string,
-  email: string,
-  role: string,
-  loginLocations?: string
-  }
-  
-  export interface Product {
-    _id: string; // Changed from number to string
-    name: string;
-    description: string; // Fixed typo
-    price: number;
-    picture: string;
-    stock: number;
-    categorys: Category[]; // Ensure Category type is defined
-    pictureId: string;
-    discount: number
-  }
-  
+  id: number;
+  _id: string;
+  username: string;
+  email: string;
+  role: string;
+  loginLocations?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Product {
+  id?: number;
+  _id: string;
+  name: string;
+  description: string;
+  decription: string;
+  price: number;
+  picture: string;
+  stock: number;
+  categorys: Category[];
+  pictureId?: string;
+  discount?: number; // Make it optional here
+  discountts?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 export interface Category {
-  _id: number,
-  title: string,
-  decription: string,
-  products: Product[]
+  id: number;
+  _id: string;
+  title: string;
+  description: string; // Fixed typo
+  decription: string;
+  products: Product[]; // List of products in this category
 }
 
 export interface CountUpProps {
-  start: number,
-  end: number,
-  duration: number,
-  title : string, 
-  description : string
-};
+  start: number;
+  end: number;
+  duration: number;
+  title: string;
+  description: string;
+}
 
-export interface countUpItemsProps  {
+export interface countUpItemsProps {
   id: number;
   number: number;
   text: string;
-};
+}
+
+export interface Card {
+  productId: {
+    _id: string;
+    name: string;
+    description: string; // Fixed typo
+    decription: string;
+    price: number;
+    rating: number;
+    location: string;
+    picture: string;
+    pictureId?: string;
+    discount?: number;
+    stock: number;
+    categorys: Category[];
+  };
+  quantity: number;
+}
+
+export interface Order {
+  id: number;
+  _id: string;
+  userId: string;
+  items: [
+    {
+      productId: string;
+      quantity: number;
+      _id: string;
+    },
+  ];
+  totalPrice: number;
+  paymentMethod: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface Service {
+  id: number;
+  _id: string;
+  name: string;
+  price: number;
+  description: string;
+  createdAt: string;
+}
+
+export interface Request {
+  id: number;
+  _id: string;
+  type: string;
+  status: "Approved" | "Cannceled" | "Pending";
+  user: User;
+  message: string;
+  createdAt: string;
+}

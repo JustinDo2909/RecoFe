@@ -5,13 +5,12 @@ export async function getAuth() {
   const cookieStore = await cookies();
 
   const authToken = cookieStore.get("authToken")?.value;
-  const isSub = cookieStore.get("sub")?.value;
   const user: {
     ID: number;
     username: string;
-    role: "Parent" | "Tutor" | "Children";
+    Finduser: { role: "user" | "admin" };
   } = JSON.parse(cookieStore.get("user")?.value?.toString() || "{}");
   const isLogged = !!user;
 
-  return { authToken, user, isLogged, isSub };
+  return { authToken, user, isLogged };
 }

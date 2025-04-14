@@ -14,7 +14,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import useCartStore from "@/store";
-import { useAuth, useUser } from "@clerk/nextjs";
 import { Heart, ShoppingBag, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,11 +24,16 @@ import {
   createCheckoutSession,
   Metadata,
 } from "@/actions/createCheckoutSession";
+import { useUser } from "@/hooks/useUser";
+import {
+  useDeleteAllProductToCardMutation,
+  useGetCardQuery,
+} from "@/state/api";
+import PriceView from "@/components/PriceView";
 
 const CartPage = () => {
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { isSignedIn } = useAuth();
   const {
     deleteCartProduct,
     getTotalPrice,
@@ -39,14 +43,15 @@ const CartPage = () => {
     getGroupedItems,
   } = useCartStore();
   const { user } = useUser();
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  if (!isClient) {
-    return <Loading />;
-  }
-  const cartProducts = getGroupedItems();
 
+  useEffect(() => {
+    if (user) {
+      setIsClient(true);
+    }
+  }, [user]);
+  const { data: cartProducts, refetch } = useGetCardQuery({});
+  const [deleteAllCart] = useDeleteAllProductToCardMutation();
+  const [itemCount, setItemCount] = useState(0);
   const handleResetCart = () => {
     const confirmed = window.confirm("Are you sure to reset your Cart?");
     if (confirmed) {
@@ -62,15 +67,23 @@ const CartPage = () => {
   const handleCheckout = async () => {
     setLoading(true);
     try {
+      console.log(user);
+
       const metadata: Metadata = {
         orderNumber: crypto.randomUUID(),
-        customerName: user?.fullName ?? "Unknown",
-        customerEmail: user?.emailAddresses[0]?.emailAddress ?? "Unknown",
-        clerkUserId: user!.id,
+        customerName: user?.Finduser.username ?? "Unknown",
+        customerEmail: user?.Finduser.email ?? "Unknown",
+        UserId: user?.Finduser._id,
       };
-      const checkoutUrl = await createCheckoutSession(cartProducts, metadata);
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
+      if (cartProducts) {
+        const checkoutUrl = await createCheckoutSession(
+          cartProducts,
+          metadata,
+          () => deleteAllCart({})
+        );
+        if (checkoutUrl) {
+          window.location.href = checkoutUrl;
+        }
       }
     } catch (error) {
       console.error("Error creating checkout session:", error);
@@ -81,7 +94,7 @@ const CartPage = () => {
 
   return (
     <div className="bg-gray-50 pb-52 md:pb-10">
-      {isSignedIn ? (
+      {isClient ? (
         <Container>
           {cartProducts?.length ? (
             <>
@@ -93,21 +106,21 @@ const CartPage = () => {
                 {/* Products */}
                 <div className="lg:col-span-2 rounded-lg">
                   <div className="border bg-white rounded-md">
-                    {cartProducts?.map(({ product }) => {
-                      const itemCount = getItemCount(product?._id);
+                    {cartProducts?.map((product, index) => {
+                      // const itemCount = getItemCount(product?._id);
                       return (
                         <div
-                          key={product?._id}
+                          key={product?.productId._id || `product-${index}`}
                           className="border-b p-2.5 last:border-b-0 flex items-center justify-between gap-5"
                         >
                           <div className="flex flex-1 items-center gap-2 h-36 md:h-44">
-                            {/* {product?.images && (
+                            {product?.productId.picture && (
                               <Link
-                                href={`/product/${product?.slug?.current}`}
+                                href={`/product/${product?.productId?._id}`}
                                 className="border p-0.5 md:p-1 mr-2 rounded-md overflow-hidden group"
                               >
                                 <Image
-                                  src={urlFor(product?.images[0]).url()}
+                                  src={product?.productId.picture}
                                   alt="productImage"
                                   width={500}
                                   height={500}
@@ -115,25 +128,25 @@ const CartPage = () => {
                                   className="w-32 md:w-40 h-32 md:h-40 object-cover group-hover:scale-105 overflow-hidden hoverEffect"
                                 />
                               </Link>
-                            )} */}
+                            )}
                             <div className="h-full flex flex-1 items-start flex-col justify-between py-1">
                               <div className="space-y-1.5">
                                 <h2 className="font-semibold line-clamp-1">
-                                  {product?.name}
+                                  {product?.productId.name}
                                 </h2>
                                 <p className="text-sm text-lightColor font-medium">
-                                  {product?.description}
+                                  {product?.productId.description}
                                 </p>
                                 <p className="text-sm capitalize">
                                   Variant:{" "}
                                   <span className="font-semibold">
-                                    {product.stock}
+                                    {product?.productId.stock}
                                   </span>
                                 </p>
                                 <p className="text-sm capitalize">
-                                  Status:{" "}
+                                  Description:{" "}
                                   <span className="font-semibold">
-                                    {product?.price}
+                                    {product?.productId.decription}
                                   </span>
                                 </p>
                               </div>
@@ -151,7 +164,9 @@ const CartPage = () => {
                                     <TooltipTrigger>
                                       <Trash
                                         onClick={() =>
-                                          handleDeleteProduct(product?._id)
+                                          handleDeleteProduct(
+                                            product?.productId._id
+                                          )
                                         }
                                         className="w-4 h-4 md:w-5 md:h-5 hover:text-red-600 hoverEffect"
                                       />
@@ -164,11 +179,27 @@ const CartPage = () => {
                               </div>
                             </div>
                             <div className="flex flex-col items-start justify-between h-36 md:h-44 p-0.5 md:p-1">
-                              <PriceFormatter
-                                amount={(product?.price as number) * itemCount}
+                              {/* <PriceFormatter
+                                amount={
+                                  (product?.productId.price as number) *
+                                  (product?.quantity as number)
+                                }
                                 className="font-bold text-lg"
+                              /> */}
+                              <PriceView
+                                className="font-bold text-lg"
+                                price={
+                                  (product?.productId.price as number) *
+                                  (product?.quantity as number)
+                                }
+                                discount={20}
                               />
-                              <QuantityButtons product={product} />
+                              <QuantityButtons
+                                product={product?.productId}
+                                cartList={cartProducts || []}
+                                refetch={refetch}
+                                setItemCount={setItemCount}
+                              />
                             </div>
                           </div>
                         </div>
@@ -192,19 +223,56 @@ const CartPage = () => {
                     <div className="space-y-4">
                       <div className="flex justify-between">
                         <span>Subtotal</span>
-                        <PriceFormatter amount={getSubtotalPrice()} />
+                        <PriceFormatter
+                          amount={cartProducts?.reduce((total, item) => {
+                            const price = item.productId.price as number;
+                            const quantity = item.quantity as number;
+                            return total + price * quantity;
+                          }, 0)}
+                        />
                       </div>
                       <div className="flex justify-between">
                         <span>Discount</span>
                         <PriceFormatter
-                          amount={getSubtotalPrice() - getTotalPrice()}
+                          amount={
+                            cartProducts?.reduce((total, item) => {
+                              const price = item.productId.price ?? 0;
+                              const discount =
+                                ((item.productId.discount ?? 0) * price) / 100;
+                              const discountedPrice = price + discount;
+                              return total + discountedPrice * item.quantity;
+                            }, 0) -
+                            cartProducts?.reduce((total, item) => {
+                              const price = item.productId.price as number;
+                              const quantity = item.quantity as number;
+                              return total + price * quantity;
+                            }, 0)
+                          }
                         />
                       </div>
                       <Separator />
                       <div className="flex justify-between">
                         <span>Total</span>
                         <PriceFormatter
-                          amount={getTotalPrice()}
+                          amount={
+                            cartProducts?.reduce((total, item) => {
+                              const price = item.productId.price as number;
+                              const quantity = item.quantity as number;
+                              return total + price * quantity;
+                            }, 0) -
+                            (cartProducts?.reduce((total, item) => {
+                              const price = item.productId.price ?? 0;
+                              const discount =
+                                ((item.productId.discount ?? 0) * price) / 100;
+                              const discountedPrice = price + discount;
+                              return total + discountedPrice * item.quantity;
+                            }, 0) -
+                              cartProducts?.reduce((total, item) => {
+                                const price = item.productId.price as number;
+                                const quantity = item.quantity as number;
+                                return total + price * quantity;
+                              }, 0))
+                          }
                           className="text-lg font-bold text-black"
                         />
                       </div>

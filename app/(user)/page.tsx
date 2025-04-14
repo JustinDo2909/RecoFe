@@ -11,11 +11,13 @@ import ProductSlide from "@/components/ProductSlide";
 import Title from "@/components/Title";
 import { useGetProductQuery } from "@/state/api";
 import feedback from "@/images/feedback.png";
+import { useEffect, useState } from "react";
 export default function Home() {
-  const {
-    data: product
-  } = useGetProductQuery({});
-  console.log(product);
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  const { data: product } = useGetProductQuery({});
   const feedbackList = [
     {
       image: feedback,
@@ -60,6 +62,10 @@ export default function Home() {
       title: "Sẽ quay lại lần sau!",
     },
   ];
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <div>
       <HomeBanner />

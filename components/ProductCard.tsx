@@ -35,7 +35,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         <PriceView
           className="text-lg"
           price={product?.price}
-          discount={product?.price}
+          discount={20}
         />
         <AddToCartButton product={product} />
       </div>

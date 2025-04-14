@@ -6,20 +6,30 @@ import { useEffect } from "react";
 import { motion } from "motion/react";
 import { Check, Home, Package, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import {
+  useCreateOrderMutation,
+  useDeleteAllProductToCardMutation,
+} from "@/state/api";
 
 const SuccessPage = () => {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const sessionId = searchParams.get("session_id");
-  const { resetCart } = useCartStore();
+
+  const [deleteAllCart] = useDeleteAllProductToCardMutation();
+  const [createOrder] = useCreateOrderMutation();
   const router = useRouter();
   useEffect(() => {
-    if (!orderNumber && !sessionId) {
-      router.push("/");
-    } else {
-      resetCart();
-    }
-  }, [orderNumber, sessionId, resetCart, router]);
+    const fetch = async () => {
+      if (!orderNumber && !sessionId) {
+        router.push("/");
+      } else {
+        await createOrder({ paymentMethod: "Stripe" });
+        await deleteAllCart({});
+      }
+    };
+    fetch();
+  }, [orderNumber, sessionId, router]);
 
   return (
     <div className="py-10 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">

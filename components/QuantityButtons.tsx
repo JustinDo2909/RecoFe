@@ -1,28 +1,60 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import useCartStore from "@/store";
 import toast from "react-hot-toast";
-import { Product } from "@/types";
+import { Card, Product } from "@/types";
+import {
+  useAddProductToCardMutation,
+  useUpdateProductToCardMutation,
+} from "@/state/api";
+import { set } from "sanity";
 
 interface Props {
   product: Product;
   className?: string;
+  cartList: Card[];
+  refetch: () => void;
+  setItemCount: React.Dispatch<React.SetStateAction<number>>; 
 }
-const QuantityButtons = ({ product, className }: Props) => {
-  const { addItem, getItemCount, removeItem } = useCartStore();
-  const itemCount = getItemCount(product?._id);
-  const isOutOfStock = product?.stock === 0;
-  const handleRemoveProduct = () => {
-    removeItem(product?._id);
-    if (itemCount > 1) {
-      toast.success("Quantity Decreased successfully!");
+
+const QuantityButtons = ({ product, className, cartList, refetch, setItemCount }: Props) => {
+  const [updateQuantityProduct] = useUpdateProductToCardMutation();
+  const [itemCount, setItemCountLocal] = useState(0);
+  useEffect(() => {
+    const productInCart = cartList.find((item) => item.productId?._id === product._id);
+    if (productInCart) {
+      setItemCount(productInCart.quantity); 
+      setItemCountLocal(productInCart.quantity);
     } else {
-      toast.success(`${product?.name?.substring(0, 12)} removed successfully!`);
+      setItemCount(0); 
     }
+  }, [cartList, product._id, setItemCount]); 
+
+  const isOutOfStock = product?.stock === 0;
+
+  const handleRemoveProduct = async () => {
+    setItemCount((prevCount) => Math.max(prevCount - 1, 0)); 
+    await updateQuantityProduct({
+      productId: product?._id,
+      quantity: 1,
+      action: "decrease",
+    });
+    toast.success(`${product?.name?.substring(0, 12)} removed successfully!`);
+    refetch();
   };
+
+  const handleAddProduct = async () => {
+    setItemCount((prevCount) => prevCount + 1); 
+    await updateQuantityProduct({
+      productId: product?._id,
+      quantity: 1,
+      action: "increase",
+    });
+    toast.success(`${product?.name?.substring(0, 12)} added successfully!`);
+    refetch();
+  };
+
   return (
     <div className={cn("flex items-center gap-1 text-base pb-1", className)}>
       <Button
@@ -38,12 +70,7 @@ const QuantityButtons = ({ product, className }: Props) => {
         {itemCount}
       </span>
       <Button
-        onClick={() => {
-          addItem(product);
-          toast.success(
-            `${product?.name?.substring(0, 12)}... added successfully!`
-          );
-        }}
+        onClick={handleAddProduct}
         variant="outline"
         size="icon"
         className="w-6 h-6"
@@ -53,5 +80,6 @@ const QuantityButtons = ({ product, className }: Props) => {
     </div>
   );
 };
+
 
 export default QuantityButtons;

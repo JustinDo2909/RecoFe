@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Product } from "./types";
+import {  } from "./state/api";
+import { useOptimistic } from "react";
 
 
 export interface CartItem {
@@ -86,3 +88,15 @@ const useCartStore = create<CartState>()(
 );
 
 export default useCartStore;
+
+// export const getProductCount = (productId: string) => {
+//   const { data: cartList } = us({});
+
+//   const item = cartList?.find((item) =>
+//     item.productId?._id === productId
+//   );
+
+//   return item ? item.quantity  : 0; 
+// };
+
+

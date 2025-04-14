@@ -1,3 +1,4 @@
+"use client";
 import Container from "@/components/Container";
 import OrdersComponent from "@/components/OrdersComponent";
 import Title from "@/components/Title";
@@ -5,26 +6,37 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useUser } from "@/hooks/useUser";
 import { getMyOrders } from "@/sanity/helpers/queries";
-import { auth } from "@clerk/nextjs/server";
+import { useLazyGetOrderQuery } from "@/state/api";
+import { Order } from "@/types";
 import { FileX } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const OrdersPage = async () => {
-  const { userId } = await auth();
-  if (!userId) {
-    return redirect("/");
+const OrdersPage = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  const [getOrder, { data: OrderList }] = useLazyGetOrderQuery({});
+  const { user } = useUser();
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    getOrder({});
+  }, []);
+
+  const handleRefundOrder = (order: Order) => {
+    
+  };
+
+  if (!isMounted) {
+    return null;
   }
-  const orders = await getMyOrders(userId);
-
-  console.log(orders);
-  console.log(userId, "okkk");
-  
   return (
     <Container className="py-10">
-      {orders?.length ? (
+      {OrderList ? (
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="text-2xl md:text-3xl">Order List</CardTitle>
@@ -43,11 +55,14 @@ const OrdersPage = async () => {
                     <TableHead>Total</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="hidden sm:table-cell">
-                      Invoice Number
+                      Actions
                     </TableHead>
                   </TableRow>
                 </TableHeader>
-                <OrdersComponent orders={orders} />
+                <OrdersComponent
+                  orders={OrderList}
+                  refundOrder={handleRefundOrder}
+                />
                 <ScrollBar orientation="horizontal" />
               </Table>
             </ScrollArea>

@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "./ui/card";
 import Logo from "./Logo";
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 
 const NoAccessToCart = () => {
@@ -27,19 +26,15 @@ const NoAccessToCart = () => {
             Log in to view your cart items and checkout. Don&apos;t miss out on
             your favorite products!
           </p>
-          <SignInButton mode="modal">
             <Button className="w-full font-semibold" size="lg">
               Sign in
             </Button>
-          </SignInButton>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           <div>Don&apos;t have an account?</div>
-          <SignUpButton mode="modal">
             <Button variant="outline" className="w-full" size="lg">
               Create an account
             </Button>
-          </SignUpButton>
         </CardFooter>
       </Card>
     </div>

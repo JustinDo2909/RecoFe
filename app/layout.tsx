@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import "../globals.css";
+import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
-import Providers from "../providers";
+import Providers from "./providers";
 
 
 export const metadata: Metadata = {
@@ -18,13 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
       <html lang="en">
         <body>
           <Providers>
-          <Header />
           {children}
-          <Footer />
           </Providers>
           <Toaster
             position="bottom-right"
@@ -37,6 +34,5 @@ export default function RootLayout({
           />
         </body>
       </html>
-    </ClerkProvider>
   );
 }

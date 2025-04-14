@@ -12,32 +12,46 @@ import { format } from "date-fns";
 import PriceFormatter from "./PriceFormatter";
 
 import OrderDetailsDialog from "./OrderDetailsDialog";
-const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERYResult }) => {
-  const [selectedOrder, setSelectedOrder] = useState<
-    MY_ORDERS_QUERYResult[number] | null
-  >(null);
+import { Order } from "@/types";
+import { useUser } from "@/hooks/useUser";
 
+interface Props {
+  orders: Order[];
+  refundOrder?: (order: Order) => void;
+}
+
+const OrdersComponent = ({
+  orders,
+  refundOrder,
+}: {
+  orders: Props["orders"];
+  refundOrder: Props["refundOrder"];
+}) => {
+  console.log(orders, "fff");
+
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const { user } = useUser();
   return (
     <>
       <TableBody>
         <TooltipProvider>
-          {orders?.map((order) => (
-            <Tooltip key={order?.orderNumber}>
+          {orders?.map((order: any) => (
+            <Tooltip key={order?._id}>
               <TooltipTrigger asChild>
                 <TableRow
                   className=" cursor-pointer hover:bg-gray-100 h-12"
                   onClick={() => setSelectedOrder(order)}
                 >
                   <TableCell className="font-medium">
-                    {order.orderNumber?.slice(-10) ?? "N/A"}
+                    {order._id?.slice(-10) ?? "N/A"}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {order?.orderDate &&
-                      format(new Date(order.orderDate), "dd/MM/yyyy")}
+                    {order?.createdAt &&
+                      format(new Date(order.createdAt), "dd/MM/yyyy")}
                   </TableCell>
-                  <TableCell>{order?.customerName}</TableCell>
+                  <TableCell>{user?.Finduser.username}</TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {order?.email}
+                    {user?.Finduser.email}
                   </TableCell>
                   <TableCell>
                     <PriceFormatter
@@ -55,8 +69,13 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERYResult }) => {
                     )}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {order?.invoice && (
-                      <p>{order?.invoice ? order?.invoice?.number : "----"}</p>
+                    {refundOrder && (
+                      <button
+                        onClick={() => refundOrder(order)}
+                        className="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800"
+                      >
+                        Send Refund Request
+                      </button>
                     )}
                   </TableCell>
                 </TableRow>
@@ -67,6 +86,7 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERYResult }) => {
         </TooltipProvider>
       </TableBody>
       <OrderDetailsDialog
+        user={user}
         order={selectedOrder}
         isOpen={!!selectedOrder}
         onClose={() => setSelectedOrder(null)}

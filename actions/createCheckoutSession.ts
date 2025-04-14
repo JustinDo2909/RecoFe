@@ -1,14 +1,16 @@
 "use server";
 import stripe from "@/lib/stripe";
+import { urlFor } from "@/sanity/lib/image";
 // import { urlFor } from "@/sanity/lib/image";
 import { CartItem } from "@/store";
+import { Card } from "@/types";
 import Stripe from "stripe";
 
 export interface Metadata {
   orderNumber: string;
   customerName: string;
   customerEmail: string;
-  clerkUserId: string;
+  UserId: string;
 }
 interface CartItems {
   products: CartItem["product"];
@@ -16,8 +18,9 @@ interface CartItems {
 }
 
 export async function createCheckoutSession(
-  items: CartItem[],
-  metadata: Metadata
+  items: Card[],
+  metadata: Metadata,
+  deleteAllCart: () => void
 ) {
   try {
     const customers = await stripe.customers.list({
@@ -30,7 +33,7 @@ export async function createCheckoutSession(
         orderNumber: metadata?.orderNumber,
         customerName: metadata?.customerName,
         customerEmail: metadata?.customerEmail,
-        clerkUserId: metadata?.clerkUserId,
+        UserId: metadata?.UserId,
       },
       mode: "payment",
       allow_promotion_codes: true,
@@ -43,15 +46,19 @@ export async function createCheckoutSession(
       line_items: items.map((item) => ({
         price_data: {
           currency: "USD",
-          unit_amount: Math.round(item.product.price! * 100),
+          unit_amount: Math.round(item.productId.price! * 100),
           product_data: {
-            name: item.product.name || "Unnamed Product",
-            description: item.product.description,
-            metadata: { id: item.product._id },
-            // images:
-            //   item.product.images && item.product.images.length > 0
-            //     ? [urlFor(item.product.images[0]).url()]
-            //     : undefined,
+            name: item.productId.name || "Unnamed Product",
+            description: item.productId.description,
+            metadata: { id: item.productId._id },
+            images:
+              item.productId.picture && item.productId.picture.length > 0
+                ? [
+                    typeof item.productId.picture === "string"
+                      ? item.productId.picture // if it's a direct URL, use it directly
+                      : urlFor(item.productId.picture[0]).url(), // if it's an object/array, use urlFor
+                  ]
+                : undefined,
           },
         },
         quantity: item.quantity,

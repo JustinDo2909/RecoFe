@@ -41,7 +41,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         </Link>
         
       ))}
-      <Logo className="text-lg px-2 text-white font-normal  bg-black  rounded-full">AI Style</Logo>
+      <Logo className="text-lg px-2 text-white font-normal  bg-black  rounded-full hoverEffect">AI Style</Logo>
 
     </div>
   );

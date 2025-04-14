@@ -1,11 +1,14 @@
 import { Metadata } from "@/actions/createCheckoutSession";
 import stripe from "@/lib/stripe";
 import { backendClient } from "@/sanity/lib/backendClient";
+import { useCreateOrderMutation, useDeleteAllProductToCardMutation } from "@/state/api";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
+  // const [deleteAllCart] = useDeleteAllProductToCardMutation()
+  // const [createOrder] = useCreateOrderMutation()
   const body = await req.text();
   const headersList = await headers();
   const sig = headersList.get("stripe-signature");
@@ -48,9 +51,13 @@ export async function POST(req: NextRequest) {
     const invoice = session.invoice
       ? await stripe.invoices.retrieve(session.invoice as string)
       : null;
+      // await deleteAllCart({})
 
     try {
-      await createOrderInsanity(session, invoice);
+      // await createOrderInsanity(session, invoice);
+      // await createOrder({
+      //   paymentMethod: "stripe",
+      // });
     } catch (error) {
       console.error("Error creating order in sanity:", error);
       return NextResponse.json(
@@ -76,7 +83,7 @@ async function createOrderInsanity(
     payment_intent,
     total_details,
   } = session;
-  const { orderNumber, customerName, customerEmail, clerkUserId } =
+  const { orderNumber, customerName, customerEmail, UserId } =
     metadata as unknown as Metadata;
 
   const lineItemsWithProduct = await stripe.checkout.sessions.listLineItems(
@@ -100,7 +107,7 @@ async function createOrderInsanity(
     stripePaymentIntentId: payment_intent,
     customerName,
     stripeCustomerId: customerEmail,
-    clerkUserId,
+    UserId,
     email: customerEmail,
     currency,
     amountDiscount: total_details?.amount_discount

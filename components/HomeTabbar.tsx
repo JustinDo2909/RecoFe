@@ -1,4 +1,4 @@
-import { productType } from "@/constants";
+import { useGetCategoryQuery } from "@/state/api";
 import { Repeat } from "lucide-react";
 import React from "react";
 
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const HomeTabbar = ({ selectedTab, onTabSelect }: Props) => {
+  const { data: productType , isLoading, isError } = useGetCategoryQuery({})
   return (
     <div className="flex items-center gap-1.5 text-sm font-semibold">
       <div className="flex items-center gap-1.5">

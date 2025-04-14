@@ -3,9 +3,14 @@
 import CustomInput from "@/components/CustomInput";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const LoginPage = () => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const [isUpdate, setIsUpdate] = useState(false);
   const { login, signUp } = useUser();
   const router = useRouter();
@@ -19,23 +24,27 @@ const LoginPage = () => {
       });
 
       if (res.success === true) {
-        router.push('/');
+        router.push("/");
         router.refresh();
       } else {
         console.log(res.message, "cut roi");
       }
     } else {
-       await signUp({
+      await signUp({
         username: data.UserName,
         password: data.Password,
         email: data.Eamil,
         role: "user",
         passwordConfirm: data.Password,
       });
-     
-      setIsUpdate(!isUpdate)
+
+      setIsUpdate(!isUpdate);
     }
   };
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
