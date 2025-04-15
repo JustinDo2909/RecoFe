@@ -68,12 +68,13 @@ export const api = createApi({
   ],
   endpoints: (build) => ({
     //login
-    authLogin: build.mutation<any, { username: string; password: string }>({
+    authLogin: build.mutation<any, { email: string; password: string }>({
       query: (body) => ({
         url: `/auth/login`,
         method: "POST",
         body,
       }),
+      transformResponse: (response: any): User[] => response.data,
       invalidatesTags: ["Users"],
     }),
     //register

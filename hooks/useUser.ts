@@ -40,17 +40,18 @@ export const useUser = () => {
   }, [triggerGetMe]);
 
   const login = async ({
-    username,
+    email,
     password,
   }: {
-    username: string;
+    email: string;
     password: string;
   }) => {
     setLoading(true);
     try {
-      const data = await loginAPI({ username, password }).unwrap();
+      const data = await loginAPI({ email, password }).unwrap();
       const { token } = data;
-
+      console.log(data, "ggg");
+      
       Cookies.set("authToken", token, {
         expires: 7,
         secure: true,
@@ -109,6 +110,7 @@ export const useUser = () => {
   const logout = async () => {
     await logoutUser();
     Cookies.remove("authToken");
+    Cookies.remove("user");
     setUser(null);
     
   };

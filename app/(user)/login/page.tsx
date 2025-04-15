@@ -19,11 +19,12 @@ const LoginPage = () => {
       console.log(data.Password, data.UserName);
 
       const res = await login({
-        username: data.UserName,
+        email: data.Email,
         password: data.Password,
       });
-
-      if (res.success === true) {
+      console.log(res, "cut fff");
+      
+      if (res.token) {
         router.push("/");
         router.refresh();
       } else {
@@ -65,7 +66,7 @@ const LoginPage = () => {
             fields={
               isUpdate
                 ? ["UserName", "Eamil", "Password", "Confirm Password"]
-                : ["UserName", "Password"]
+                : ["Email", "Password"]
             }
             onSubmit={handleSubmit}
             title={isUpdate ? `Register Your Account` : `Login to Your Account`}
