@@ -388,7 +388,7 @@ export const api = createApi({
         body: { status },
       }),
       transformResponse: (response: any): Request => response.data,
-      invalidatesTags: ["Requests"],
+      invalidatesTags: ["Requests", "Order"],
     }),
   }),
 });

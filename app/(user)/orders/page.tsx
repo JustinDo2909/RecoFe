@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useUser } from "@/hooks/useUser";
+import { useWebSocket } from "@/hooks/useWebSocket";
 import { getMyOrders } from "@/sanity/helpers/queries";
 import {
   useCreateRefundRequestMutation,
@@ -17,17 +18,42 @@ import { FileX } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+
+interface OrderS {
+  _id: string;
+  statusOrder: string;
+  // other properties of the order...
+}
+
+// Kết nối Socket.IO
+const socket = io("http://localhost:9999", { withCredentials: true });
 
 const OrdersPage = () => {
+  const [order, setOrder] = useState<OrderS | null>(null); // Allow order to be either null or an Order object
   const [isMounted, setIsMounted] = useState(false);
   const [getOrder, { data: OrderList }] = useLazyGetOrderQuery({});
   const [createRefunRequest] = useCreateRefundRequestMutation();
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
+    // Fetch orders when the page loads
     getOrder({});
+  }, []);
+
+  useEffect(() => {
+    socket.on("orderStatusUpdated", (updatedOrder) => {
+      console.log("Received updated order:", updatedOrder); // Log the incoming data
+
+      getOrder({});
+    });
+
+    return () => {
+      socket.off("orderStatusUpdated");
+    };
   }, []);
 
   const handleRefundOrder = async (order: Order) => {
@@ -41,11 +67,10 @@ const OrdersPage = () => {
     }
   };
 
-  
-
   if (!isMounted) {
     return null;
   }
+
   return (
     <Container className="py-10">
       {OrderList ? (

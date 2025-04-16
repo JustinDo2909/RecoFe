@@ -41,6 +41,7 @@
     "react-hot-toast": "^2.4.1",
     "react-redux": "^9.2.0",
     "sanity": "^3.67.1",
+    "socket.io-client": "^4.8.1",
     "sonner": "^2.0.1",
     "state": "^0.2.0",
     "stripe": "^17.5.0",
