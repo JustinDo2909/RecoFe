@@ -16,19 +16,20 @@ const LoginPage = () => {
   const router = useRouter();
   const handleSubmit = async (data: Record<string, string>) => {
     if (!isUpdate) {
-      console.log(data.Password, data.UserName);
+     
 
       const res = await login({
         email: data.Email,
         password: data.Password,
       });
-      console.log(res, "cut fff");
+      console.log(res, "fff");
+      
       
       if (res.token) {
         router.push("/");
         router.refresh();
       } else {
-        console.log(res.message, "cut roi");
+        alert(res.message);
       }
     } else {
       await signUp({

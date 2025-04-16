@@ -38,7 +38,6 @@ const AppSidebar = () => {
   const { logout, user } = useUser();
 
   const navLinks = {
-    
     admin: [
       { icon: User, label: "Users", href: "/dashboard/user" },
       { icon: BookOpen, label: "Categorys", href: "/dashboard/category" },
@@ -52,11 +51,11 @@ const AppSidebar = () => {
   const handleLogout = async () => {
     await logout();
     redirect("/login");
-  }
+  };
   // if (!loading) return <Loading />;
   if (!user) return <div>User not found</div>;
 
-  const userType:  "admin" = user?.Finduser.role;
+  const userType: "admin" = user?.user.role;
   const currentNavLinks = navLinks[userType];
   return (
     <Sidebar

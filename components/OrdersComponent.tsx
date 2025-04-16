@@ -27,7 +27,7 @@ const OrdersComponent = ({
   orders: Props["orders"];
   refundOrder: Props["refundOrder"];
 }) => {
-  console.log(orders, "fff");
+
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { user } = useUser();
@@ -49,9 +49,9 @@ const OrdersComponent = ({
                     {order?.createdAt &&
                       format(new Date(order.createdAt), "dd/MM/yyyy")}
                   </TableCell>
-                  <TableCell>{user?.Finduser.username}</TableCell>
+                  <TableCell>{user?.username}</TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {user?.Finduser.email}
+                    {user?.email}
                   </TableCell>
                   <TableCell>
                     <PriceFormatter
@@ -60,13 +60,18 @@ const OrdersComponent = ({
                     />
                   </TableCell>
                   <TableCell>
-                    {order?.status && (
+                    {order?.statusPayment && (
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${order?.status === "paid" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${order?.statusPayment === "Paid" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}
                       >
-                        {order?.status}
+                        {order?.statusPayment}
                       </span>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+                      {order?.statusOrder}
+                    </span>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {refundOrder && (

@@ -3,9 +3,11 @@ import { getAuth } from './services/get-token';
 
 export async function middleware(req: NextRequest) {
   const {user , authToken , isLogged} = await getAuth()
+
+  
   const {pathname} = req.nextUrl
   if (pathname.startsWith('/dashboard')) {
-    if (!isLogged || user.Finduser.role !== 'admin') {
+    if (!isLogged || user.role !== 'admin') {
       const url = new URL("/", req.url)
       return NextResponse.redirect(url)
     }

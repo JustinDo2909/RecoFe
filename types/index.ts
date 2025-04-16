@@ -80,7 +80,8 @@ export interface Order {
   ];
   totalPrice: number;
   paymentMethod: string;
-  status: string;
+  statusOrder: string;
+  statusPayment: string;
   createdAt: string;
 }
 

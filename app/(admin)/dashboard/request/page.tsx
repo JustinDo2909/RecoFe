@@ -1,18 +1,36 @@
 "use client";
 import CustomTable from "@/components/CustomTable2";
 import Loading from "@/components/Loading";
-import { useGetAllRequestQuery } from "@/state/api";
+import {
+  useGetAllRequestQuery,
+  useUpdateStatusRequestMutation,
+} from "@/state/api";
 import { Request } from "@/types";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const DashboardRequest = () => {
   const { data: requests, isLoading } = useGetAllRequestQuery({});
   const [requestList, setRequestList] = React.useState<Request[]>([]);
+  const [updateStatus] = useUpdateStatusRequestMutation();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   useEffect(() => {
     if (requests) {
       setRequestList(requests as Request[]);
     }
   }, [requests]);
+  const handleUpdateRequestStatus = async (id: string, status: string) => {
+    console.log(id, status);
+
+    await updateStatus({ id, status }).unwrap();
+  };
+
+  if (!isMounted) {
+    return null;
+  }
   return (
     <div>
       {isLoading && (
@@ -31,6 +49,7 @@ const DashboardRequest = () => {
           { key: "status", label: "Status" },
           { key: "createdAt", label: "Date Created" },
         ]}
+        onUpdateStatus={handleUpdateRequestStatus}
       />
     </div>
   );

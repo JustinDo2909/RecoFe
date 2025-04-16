@@ -8,7 +8,10 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useUser } from "@/hooks/useUser";
 import { getMyOrders } from "@/sanity/helpers/queries";
-import { useLazyGetOrderQuery } from "@/state/api";
+import {
+  useCreateRefundRequestMutation,
+  useLazyGetOrderQuery,
+} from "@/state/api";
 import { Order } from "@/types";
 import { FileX } from "lucide-react";
 import Link from "next/link";
@@ -18,7 +21,7 @@ import React, { useEffect, useState } from "react";
 const OrdersPage = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [getOrder, { data: OrderList }] = useLazyGetOrderQuery({});
-  const { user } = useUser();
+  const [createRefunRequest] = useCreateRefundRequestMutation();
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -27,9 +30,18 @@ const OrdersPage = () => {
     getOrder({});
   }, []);
 
-  const handleRefundOrder = (order: Order) => {
-    
+  const handleRefundOrder = async (order: Order) => {
+    const response = await createRefunRequest({
+      order: order._id,
+      type: "refund",
+      message: "I want to Refund this",
+    });
+    if (response) {
+      getOrder({});
+    }
   };
+
+  
 
   if (!isMounted) {
     return null;
@@ -53,7 +65,8 @@ const OrdersPage = () => {
                       Email
                     </TableHead>
                     <TableHead>Total</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Status Payment</TableHead>
+                    <TableHead>Status Order</TableHead>
                     <TableHead className="hidden sm:table-cell">
                       Actions
                     </TableHead>

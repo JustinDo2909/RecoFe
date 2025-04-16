@@ -25,8 +25,6 @@ interface Props {
 
 const OrderDetailsDialog: FC<Props> = ({ order, user , isOpen, onClose }) => {
   if (!order) return null;
-  console.log(order);
-  console.log(user, "gg");
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -49,7 +47,7 @@ const OrderDetailsDialog: FC<Props> = ({ order, user , isOpen, onClose }) => {
           <p>
             <strong>Status:</strong>{" "}
             <span className="capitalize text-green-600 font-medium">
-              {order?.status}
+              {order?.statusOrder}
             </span>
           </p>
           {/* <p>

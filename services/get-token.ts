@@ -5,11 +5,13 @@ export async function getAuth() {
   const cookieStore = await cookies();
 
   const authToken = cookieStore.get("authToken")?.value;
-  const user: {
-    ID: number;
-    username: string;
-    Finduser: { role: "user" | "admin" };
-  } = JSON.parse(cookieStore.get("user")?.value?.toString() || "{}");
+
+  // Giải mã cookie user từ dạng URL encoded → JSON object
+  const rawUserCookie = cookieStore.get("user")?.value || "";
+
+  const decodedUser = decodeURIComponent(rawUserCookie);
+  const user = decodedUser ? JSON.parse(decodedUser) : null;
+  
   const isLogged = !!user;
 
   return { authToken, user, isLogged };

@@ -67,13 +67,14 @@ const CartPage = () => {
   const handleCheckout = async () => {
     setLoading(true);
     try {
-      console.log(user);
+      
 
       const metadata: Metadata = {
         orderNumber: crypto.randomUUID(),
-        customerName: user?.Finduser.username ?? "Unknown",
-        customerEmail: user?.Finduser.email ?? "Unknown",
-        UserId: user?.Finduser._id,
+        
+        customerName: user?.username ?? "Unknown",
+        customerEmail: user?.user.email ?? "Unknown",
+        UserId: user?._id,
       };
       if (cartProducts) {
         const checkoutUrl = await createCheckoutSession(

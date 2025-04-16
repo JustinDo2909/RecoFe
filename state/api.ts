@@ -11,9 +11,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { FetchArgs, BaseQueryApi } from "@reduxjs/toolkit/query";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import { add } from "date-fns";
 import { create } from "domain";
-import { use } from "react";
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -41,7 +39,6 @@ const customBaseQuery = async (
       return { error: result.error }; // Trả về lỗi ngay lập tức
     }
 
-    console.log("API Response:", result.data); // ✅ Kiểm tra dữ liệu
 
     return result; // ✅ Không truy cập result.data.data
   } catch (error) {
@@ -74,7 +71,7 @@ export const api = createApi({
         method: "POST",
         body,
       }),
-      transformResponse: (response: any): User[] => response.data,
+      transformResponse: (response: any): User => response.data,
       invalidatesTags: ["Users"],
     }),
     //register
@@ -99,6 +96,7 @@ export const api = createApi({
     getMe: build.query<any, void>({
       query: () => "/auth/me",
       providesTags: ["Users"],
+      transformResponse: (response: any): User => response.data,
     }),
     //logout
     authLogout: build.mutation<any, void>({
@@ -165,7 +163,10 @@ export const api = createApi({
       transformResponse: (response: any): Card[] => response.data,
     }),
     //Create Order
-    createOrder: build.mutation<Order[], { paymentMethod: string }>({
+    createOrder: build.mutation<
+      Order[],
+      { paymentMethod: string; statusPayment: string; statusOrder: string }
+    >({
       query: (body) => ({
         url: "/order/create",
         method: "POST",
@@ -182,7 +183,17 @@ export const api = createApi({
       providesTags: ["Order"],
       transformResponse: (response: any): Order[] => response.data,
     }),
-
+    //Update OrderStatus
+    updateOrderStatus: build.mutation<any, { id: string; statusOrder: string }>(
+      {
+        query: (body) => ({
+          url: `/order/updateStatus/${body.id}`,
+          method: "PUT",
+          body: body,
+        }),
+        invalidatesTags: ["Order"],
+      }
+    ),
     ///*** Admin */
 
     //get Users
@@ -343,16 +354,40 @@ export const api = createApi({
       providesTags: ["Requests"],
       transformResponse: (response: any): Request[] => response.data,
     }),
-    //create Request
-    createRequest: build.mutation<
+    //create Refund Request
+    createRefundRequest: build.mutation<
       Request,
-      { type: string; status: string; message: string }
+      { type: string; message: string; order: string }
     >({
       query: (body) => ({
-        url: "/request/create",
+        url: "/request/createRefundRequest",
         method: "POST",
         body: body,
       }),
+      transformResponse: (response: any): Request => response.data,
+      invalidatesTags: ["Requests"],
+    }),
+    //create Service Request
+    createServiceRequest: build.mutation<
+      Request,
+      { type: string; message: string; service: string }
+    >({
+      query: (body) => ({
+        url: "/request/createServiceRequest",
+        method: "POST",
+        body: body,
+      }),
+      transformResponse: (response: any): Request => response.data,
+      invalidatesTags: ["Requests"],
+    }),
+    //update Status Request
+    updateStatusRequest: build.mutation<any, { id: string; status: string }>({
+      query: ({ id, status }) => ({
+        url: `/request/updateStatus/${id}`,
+        method: "PUT",
+        body: { status },
+      }),
+      transformResponse: (response: any): Request => response.data,
       invalidatesTags: ["Requests"],
     }),
   }),
@@ -387,6 +422,8 @@ export const {
   useUpdateServiceMutation,
   useCreateServiceMutation,
   useGetAllRequestQuery,
-  useCreateRequestMutation,
   useGetRequestQuery,
+  useCreateRefundRequestMutation,
+  useCreateServiceRequestMutation,
+  useUpdateStatusRequestMutation,
 } = api;

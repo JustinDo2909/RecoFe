@@ -20,7 +20,6 @@ const SingleProductPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
-  console.log(id , "fffffffffffffffff");
   
   const product = await getProductBySlug(id);
   if (!product) {

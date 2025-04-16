@@ -10,7 +10,7 @@ interface TableProps<T> {
   onDelete?: (_id: string) => void;
   onUpdate?: (_id: string) => void;
   onCreate?: () => void;
-  onUpdateStatus?: (_id: string) => void;
+  onUpdateStatus?: (_id: string, status: string) => void;
   ITEMS_PER_PAGE: number;
 }
 
@@ -146,12 +146,20 @@ const CustomTable = <T extends { _id: string }>({
                       </button>
                     )}
                     {onUpdateStatus && (
-                      <button
-                        onClick={() => onUpdateStatus(row._id)}
-                        className="mr-2 px-2 py-1 bg-red-500 text-white rounded"
-                      >
-                        Update Status
-                      </button>
+                      <>
+                        <button
+                          onClick={() => onUpdateStatus(row._id , "Approved")}
+                          className="mr-2 px-2 py-1 bg-green-500 text-white rounded"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => onUpdateStatus(row._id, "Rejected")}
+                          className="mr-2 px-2 py-1 bg-red-500 text-white rounded"
+                        >
+                          Reject
+                        </button>
+                      </>
                     )}
                   </td>
                 </tr>

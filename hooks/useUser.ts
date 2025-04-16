@@ -50,18 +50,20 @@ export const useUser = () => {
     try {
       const data = await loginAPI({ email, password }).unwrap();
       const { token } = data;
-      console.log(data, "ggg");
-      
+      console.log(data, "dv");
+
       Cookies.set("authToken", token, {
         expires: 7,
         secure: true,
         sameSite: "strict",
       });
 
-      // Gọi getMe sau khi login để lấy thông tin user
-      const me = await triggerGetMe().unwrap();
-      setUser(me);
-      Cookies.set("user", JSON.stringify(me), {
+      // // Gọi getMe sau khi login để lấy thông tin user
+      // const me = await triggerGetMe().unwrap();
+      // const userInfo = me.data.user;
+
+      setUser(data.user);
+      Cookies.set("user", encodeURIComponent(JSON.stringify(data.user)), {
         expires: 7,
         secure: true,
         sameSite: "strict",
@@ -88,7 +90,7 @@ export const useUser = () => {
     role: string;
     passwordConfirm: string;
   }) => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const data = await signUpApi({
         username,
@@ -112,7 +114,6 @@ export const useUser = () => {
     Cookies.remove("authToken");
     Cookies.remove("user");
     setUser(null);
-    
   };
 
   const isLogged = !!user;
