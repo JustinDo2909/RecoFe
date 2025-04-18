@@ -5,10 +5,10 @@ interface Props {
   className?: string;
 }
 const PriceFormatter = ({ amount, className }: Props) => {
-  const formattedPrice = new Number(amount).toLocaleString("en-US", {
-    currency: "USD",
+  const formattedPrice = new Number(amount).toLocaleString("vi-VN", {
+    currency: "VND",
     style: "currency",
-    minimumFractionDigits: 2,
+    // minimumFractionDigits: 2,
   });
   return (
     <span className={cn("text-sm font-semibold text-darkColor", className)}>

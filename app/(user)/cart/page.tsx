@@ -30,6 +30,13 @@ import {
   useGetCardQuery,
 } from "@/state/api";
 import PriceView from "@/components/PriceView";
+import {
+  useGetDistrictsQuery,
+  useGetProvincesQuery,
+  useGetShippingFeeMutation,
+  useGetWardsQuery,
+} from "@/state/apiGHN";
+import { SelectFiled } from "@/components/SelectFiled";
 
 const CartPage = () => {
   const [isClient, setIsClient] = useState(false);
@@ -52,6 +59,63 @@ const CartPage = () => {
   const { data: cartProducts, refetch } = useGetCardQuery({});
   const [deleteAllCart] = useDeleteAllProductToCardMutation();
   const [itemCount, setItemCount] = useState(0);
+  const [districSelected, setDistricSelected] = useState("");
+  const [provinceSelected, setProvinceSelected] = useState("");
+  const [wardSelected, setWardSelected] = useState("");
+  const [feeShipping, setFeeShipping] = useState(0);
+  const [getFeeShipping] = useGetShippingFeeMutation();
+  const { data: province } = useGetProvincesQuery({});
+  const { data: district } = useGetDistrictsQuery(
+    {
+      provinceId: provinceSelected ? parseInt(provinceSelected) : 0,
+    },
+    {
+      skip: !provinceSelected,
+    }
+  );
+  const { data: ward, error: wardError } = useGetWardsQuery(
+    { districtId: districSelected ? parseInt(districSelected) : 0 },
+    { skip: !districSelected } // Only fetch wards if a district is selected
+  );
+  useEffect(() => {
+    const fetchFee = async () => {
+      if (wardSelected && districSelected) {
+        const fromDistrictId = parseInt(districSelected);
+        const fromWardCode = parseInt(wardSelected);
+
+        if (!isNaN(fromDistrictId) && !isNaN(fromWardCode)) {
+          try {
+            const res = await getFeeShipping({
+              service_type_id: 2,
+              // from_district_id: 202,
+              // from_ward_code: "3695",
+              to_ward_code: wardSelected,
+              to_district_id: fromDistrictId,
+              weight: 1000,
+              items: [
+                {
+                  name: "TEST1",
+                  quantity: 1,
+                  length: 200,
+                  width: 200,
+                  height: 200,
+                  weight: 1000,
+                },
+              ],
+            });
+
+            setFeeShipping(res.data.data.total);
+            console.log(res.data.data.total);
+          } catch (error) {
+            console.error("Failed to fetch fee:", error);
+          }
+        }
+      }
+    };
+
+    fetchFee();
+  }, [wardSelected]);
+
   const handleResetCart = () => {
     const confirmed = window.confirm("Are you sure to reset your Cart?");
     if (confirmed) {
@@ -67,17 +131,16 @@ const CartPage = () => {
   const handleCheckout = async () => {
     setLoading(true);
     try {
-      
-
       const metadata: Metadata = {
         orderNumber: crypto.randomUUID(),
-        
+
         customerName: user?.username ?? "Unknown",
         customerEmail: user?.user.email ?? "Unknown",
         UserId: user?._id,
       };
-      if (cartProducts) {
+      if (cartProducts && feeShipping > 0) {
         const checkoutUrl = await createCheckoutSession(
+          feeShipping,
           cartProducts,
           metadata,
           () => deleteAllCart({})
@@ -215,86 +278,114 @@ const CartPage = () => {
                     </Button>
                   </div>
                 </div>
-                {/* summary */}
-                <div className="lg:col-span-1">
-                  <div className="hidden md:inline-block w-full bg-white p-6 rounded-lg border">
-                    <h2 className="text-xl font-semibold mb-4">
-                      Order Summary
-                    </h2>
-                    <div className="space-y-4">
-                      <div className="flex justify-between">
-                        <span>Subtotal</span>
-                        <PriceFormatter
-                          amount={cartProducts?.reduce((total, item) => {
-                            const price = item.productId.price as number;
-                            const quantity = item.quantity as number;
-                            return total + price * quantity;
-                          }, 0)}
-                        />
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Discount</span>
-                        <PriceFormatter
-                          amount={
-                            cartProducts?.reduce((total, item) => {
-                              const price = item.productId.price ?? 0;
-                              const discount =
-                                ((item.productId.discount ?? 0) * price) / 100;
-                              const discountedPrice = price + discount;
-                              return total + discountedPrice * item.quantity;
-                            }, 0) -
-                            cartProducts?.reduce((total, item) => {
+                {/* Address */}
+                <div className="flex-col">
+                  <div className="flex">
+                    <SelectFiled
+                      lists={province || []}
+                      title="Province"
+                      onSelect={(value: string) => setProvinceSelected(value)}
+                    />
+                    <SelectFiled
+                      lists={district || []}
+                      title="District"
+                      onSelect={(value: string) => setDistricSelected(value)}
+                    />
+                    <SelectFiled
+                      lists={ward || []}
+                      title="Ward"
+                      onSelect={(value: string) => setWardSelected(value)}
+                    />
+                  </div>
+                  {/* summary */}
+                  <div className="lg:col-span-1">
+                    <div className="hidden md:inline-block w-full bg-white p-6 rounded-lg border">
+                      <h2 className="text-xl font-semibold mb-4">
+                        Order Summary
+                      </h2>
+                      <div className="space-y-4">
+                        <div className="flex justify-between">
+                          <span>Subtotal</span>
+                          <PriceFormatter
+                            amount={cartProducts?.reduce((total, item) => {
                               const price = item.productId.price as number;
                               const quantity = item.quantity as number;
                               return total + price * quantity;
-                            }, 0)
-                          }
-                        />
-                      </div>
-                      <Separator />
-                      <div className="flex justify-between">
-                        <span>Total</span>
-                        <PriceFormatter
-                          amount={
-                            cartProducts?.reduce((total, item) => {
-                              const price = item.productId.price as number;
-                              const quantity = item.quantity as number;
-                              return total + price * quantity;
-                            }, 0) -
-                            (cartProducts?.reduce((total, item) => {
-                              const price = item.productId.price ?? 0;
-                              const discount =
-                                ((item.productId.discount ?? 0) * price) / 100;
-                              const discountedPrice = price + discount;
-                              return total + discountedPrice * item.quantity;
-                            }, 0) -
+                            }, 0)}
+                          />
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Discount</span>
+                          <PriceFormatter
+                            amount={
+                              cartProducts?.reduce((total, item) => {
+                                const price = item.productId.price ?? 0;
+                                const discount =
+                                  ((item.productId.discount ?? 0) * price) /
+                                  100;
+                                const discountedPrice = price + discount;
+                                return total + discountedPrice * item.quantity;
+                              }, 0) -
                               cartProducts?.reduce((total, item) => {
                                 const price = item.productId.price as number;
                                 const quantity = item.quantity as number;
                                 return total + price * quantity;
-                              }, 0))
-                          }
-                          className="text-lg font-bold text-black"
-                        />
+                              }, 0)
+                            }
+                          />
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Fee Shipping</span>
+
+                          <PriceFormatter amount={feeShipping} />
+                        </div>
+                        <Separator />
+                        <div className="flex justify-between">
+                          <span>Total</span>
+                          <PriceFormatter
+                            amount={
+                              cartProducts?.reduce((total, item) => {
+                                const price = item.productId.price as number;
+                                const quantity = item.quantity as number;
+                                return total + price * quantity;
+                              }, 0) -
+                              (cartProducts?.reduce((total, item) => {
+                                const price = item.productId.price ?? 0;
+                                const discount =
+                                  ((item.productId.discount ?? 0) * price) /
+                                  100;
+                                const discountedPrice = price + discount;
+                                return total + discountedPrice * item.quantity;
+                              }, 0) -
+                                cartProducts?.reduce((total, item) => {
+                                  const price = item.productId.price as number;
+                                  const quantity = item.quantity as number;
+                                  return total + price * quantity;
+                                }, 0)) +
+                              feeShipping
+                            }
+                            className="text-lg font-bold text-black"
+                          />
+                        </div>
+                        <Button
+                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          onClick={handleCheckout}
+                          className="w-full rounded-full font-semibold tracking-wide"
+                          size="lg"
+                        >
+                          Proceed to Checkout
+                        </Button>
+                        <Link
+                          href={"/"}
+                          className="flex items-center justify-center py-2 border border-darkColor/50 rounded-full hover:border-darkColor hover:bg-darkColor/5 hoverEffect"
+                        >
+                          <Image
+                            src={paypalLogo}
+                            alt="paypalLogo"
+                            className="w-20"
+                          />
+                        </Link>
                       </div>
-                      <Button
-                        disabled={loading}
-                        onClick={handleCheckout}
-                        className="w-full rounded-full font-semibold tracking-wide"
-                        size="lg"
-                      >
-                        Proceed to Checkout
-                      </Button>
-                      <Link
-                        href={"/"}
-                        className="flex items-center justify-center py-2 border border-darkColor/50 rounded-full hover:border-darkColor hover:bg-darkColor/5 hoverEffect"
-                      >
-                        <Image
-                          src={paypalLogo}
-                          alt="paypalLogo"
-                          className="w-20"
-                        />
-                      </Link>
                     </div>
                   </div>
                 </div>

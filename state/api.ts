@@ -165,7 +165,7 @@ export const api = createApi({
     //Create Order
     createOrder: build.mutation<
       Order[],
-      { paymentMethod: string; statusPayment: string; statusOrder: string }
+      { paymentMethod: string; statusPayment: string; statusOrder: string ; feeShipping : number}
     >({
       query: (body) => ({
         url: "/order/create",

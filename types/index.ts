@@ -68,7 +68,7 @@ export interface Card {
 }
 
 export interface Order {
-  id: number;
+id: number;
   _id: string;
   userId: string;
   items: [
@@ -80,6 +80,7 @@ export interface Order {
   ];
   totalPrice: number;
   paymentMethod: string;
+  feeShipping: number;
   statusOrder: string;
   statusPayment: string;
   createdAt: string;
