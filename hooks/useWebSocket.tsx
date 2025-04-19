@@ -1,36 +1,17 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import socket from "../state/socket";
-import { useUpdateStatusRequestMutation } from "../state/api";  // Giả sử bạn có một endpoint trong RTK Query để cập nhật trạng thái đơn hàng
+// hooks/useSocket.ts
+import { useEffect, useRef } from "react";
+import { io, Socket } from "socket.io-client";
 
-export const useWebSocket = () => {
-  const [updateRequest, { isLoading, isError, isSuccess }] = useUpdateStatusRequestMutation();
+export const useSocket = () => {
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    // Lắng nghe sự kiện từ WebSocket
-    socket.on("statusUpdated", (updatedStatus) => {
-      console.log("Status updated:", updatedStatus);
+    socketRef.current = io("http://localhost:9999");
 
-      // Gọi trực tiếp mutation để cập nhật trạng thái
-      updateRequest({ id: updatedStatus.id, status: updatedStatus.status });
-    });
-
-    // Dọn dẹp khi component unmount
     return () => {
-      socket.off("statusUpdated");
+      socketRef.current?.disconnect();
     };
-  }, [updateRequest]);
+  }, []);
 
-  // Có thể xử lý các trạng thái như loading, error, success ở đây
-  if (isLoading) {
-    console.log("Updating status...");
-  }
-
-  if (isError) {
-    console.log("Error updating status.");
-  }
-
-  if (isSuccess) {
-    console.log("Status updated successfully.");
-  }
+  return socketRef.current;
 };

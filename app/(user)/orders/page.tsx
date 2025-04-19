@@ -6,9 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useUser } from "@/hooks/useUser";
-import { useWebSocket } from "@/hooks/useWebSocket";
-import { getMyOrders } from "@/sanity/helpers/queries";
 import {
   useCreateRefundRequestMutation,
   useLazyGetOrderQuery,
@@ -40,7 +37,6 @@ const OrdersPage = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch orders when the page loads
     getOrder({});
   }, []);
 

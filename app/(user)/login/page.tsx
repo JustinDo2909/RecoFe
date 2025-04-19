@@ -16,18 +16,18 @@ const LoginPage = () => {
   const router = useRouter();
   const handleSubmit = async (data: Record<string, string>) => {
     if (!isUpdate) {
-     
-
       const res = await login({
         email: data.Email,
         password: data.Password,
       });
-      console.log(res, "fff");
-      
-      
+
       if (res.token) {
-        router.push("/");
-        router.refresh();
+        if (res.user.role === "admin") {
+          router.push("/dashboard/user");
+        } else {
+          router.push("/");
+          router.refresh();
+        }
       } else {
         alert(res.message);
       }

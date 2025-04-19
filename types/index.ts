@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export interface User {
   id: number;
   _id: string;
@@ -103,4 +105,9 @@ export interface Request {
   user: User;
   message: string;
   createdAt: string;
+}
+
+export interface Wallet {
+  id: number;
+  amount: number
 }

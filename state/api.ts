@@ -6,12 +6,14 @@ import {
   Order,
   Service,
   Request,
+  Wallet,
 } from "@/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { FetchArgs, BaseQueryApi } from "@reduxjs/toolkit/query";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { create } from "domain";
+import { transform } from "next/dist/build/swc/generated-native";
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -39,7 +41,6 @@ const customBaseQuery = async (
       return { error: result.error }; // Trả về lỗi ngay lập tức
     }
 
-
     return result; // ✅ Không truy cập result.data.data
   } catch (error) {
     return {
@@ -62,6 +63,7 @@ export const api = createApi({
     "Order",
     "Requests",
     "Services",
+    "Wallet",
   ],
   endpoints: (build) => ({
     //login
@@ -165,7 +167,12 @@ export const api = createApi({
     //Create Order
     createOrder: build.mutation<
       Order[],
-      { paymentMethod: string; statusPayment: string; statusOrder: string ; feeShipping : number}
+      {
+        paymentMethod: string;
+        statusPayment: string;
+        statusOrder: string;
+        feeShipping: number;
+      }
     >({
       query: (body) => ({
         url: "/order/create",
@@ -390,6 +397,11 @@ export const api = createApi({
       transformResponse: (response: any): Request => response.data,
       invalidatesTags: ["Requests", "Order"],
     }),
+    //get Wallet
+    getWallet: build.query<Wallet, {}>({
+      query: () => ({ url: "/wallet" }),
+      providesTags: ["Wallet"],
+      transformResponse: (response: any): Wallet => response.wallet}),
   }),
 });
 
@@ -426,4 +438,5 @@ export const {
   useCreateRefundRequestMutation,
   useCreateServiceRequestMutation,
   useUpdateStatusRequestMutation,
+  useGetWalletQuery,
 } = api;

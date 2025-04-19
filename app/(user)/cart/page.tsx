@@ -28,6 +28,7 @@ import { useUser } from "@/hooks/useUser";
 import {
   useDeleteAllProductToCardMutation,
   useGetCardQuery,
+  useGetWalletQuery,
 } from "@/state/api";
 import PriceView from "@/components/PriceView";
 import {
@@ -37,6 +38,7 @@ import {
   useGetWardsQuery,
 } from "@/state/apiGHN";
 import { SelectFiled } from "@/components/SelectFiled";
+import { useSocket } from "@/hooks/useWebSocket";
 
 const CartPage = () => {
   const [isClient, setIsClient] = useState(false);
@@ -77,6 +79,22 @@ const CartPage = () => {
     { districtId: districSelected ? parseInt(districSelected) : 0 },
     { skip: !districSelected } // Only fetch wards if a district is selected
   );
+  const { data: wallet, refetch: refetchWallet } = useGetWalletQuery({});
+  const socket = useSocket();
+  useEffect(() => {
+    if (!socket) return;
+    const handler = (wallet: { refundAmount: number }) => {
+      refetchWallet();
+      toast.success(
+        `Bạn vừa được hoàn ${wallet.refundAmount} VNĐ vào ví!`
+      );
+    };
+    socket.on("refundToWallet", handler);
+
+    return () => {
+      socket.off("refundToWallet", handler);
+    };
+  }, [socket]);
   useEffect(() => {
     const fetchFee = async () => {
       if (wardSelected && districSelected) {
@@ -165,6 +183,9 @@ const CartPage = () => {
               <div className="flex items-center gap-2 py-5">
                 <ShoppingBag />
                 <h1 className="text-2xl font-semibold">Shopping Cart</h1>
+                <div className="text-2xl font-semibold">
+                  Wallet : <PriceFormatter amount={wallet?.amount ?? 0} />
+                </div>
               </div>
               <div className="grid lg:grid-cols-3 md:gap-8">
                 {/* Products */}
@@ -368,7 +389,9 @@ const CartPage = () => {
                           />
                         </div>
                         <Button
-                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
                           onClick={handleCheckout}
                           className="w-full rounded-full font-semibold tracking-wide"
                           size="lg"

@@ -31,7 +31,8 @@ const DashboardOrder = () => {
           { key: "userId", label: "User ID" },
           { key: "totalPrice", label: "Price" },
           { key: "paymentMethod", label: "PaymentMethod" },
-          { key: "status", label: "Status" },
+          { key: "statusOrder", label: "Status Order" },
+          { key: "statusPayment", label: "Status Payment" },
           { key: "createdAt", label: "Date Created" },
         ]}
         onCreate={() => {}}
