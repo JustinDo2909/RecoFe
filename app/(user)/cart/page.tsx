@@ -14,7 +14,14 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import useCartStore from "@/store";
-import { Heart, ShoppingBag, Trash } from "lucide-react";
+import {
+  BanknoteIcon,
+  DollarSign,
+  Heart,
+  ShoppingBag,
+  StrikethroughIcon,
+  Trash,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -26,6 +33,7 @@ import {
 } from "@/actions/createCheckoutSession";
 import { useUser } from "@/hooks/useUser";
 import {
+  useCreateOrderMutation,
   useDeleteAllProductToCardMutation,
   useGetCardQuery,
   useGetWalletQuery,
@@ -58,7 +66,7 @@ const CartPage = () => {
       setIsClient(true);
     }
   }, [user]);
-  const { data: cartProducts, refetch } = useGetCardQuery({});
+  const { data: cartProducts = [], refetch: cartRefetch } = useGetCardQuery({});
   const [deleteAllCart] = useDeleteAllProductToCardMutation();
   const [itemCount, setItemCount] = useState(0);
   const [districSelected, setDistricSelected] = useState("");
@@ -66,6 +74,7 @@ const CartPage = () => {
   const [wardSelected, setWardSelected] = useState("");
   const [feeShipping, setFeeShipping] = useState(0);
   const [getFeeShipping] = useGetShippingFeeMutation();
+  const [createOrder] = useCreateOrderMutation();
   const { data: province } = useGetProvincesQuery({});
   const { data: district } = useGetDistrictsQuery(
     {
@@ -85,9 +94,7 @@ const CartPage = () => {
     if (!socket) return;
     const handler = (wallet: { refundAmount: number }) => {
       refetchWallet();
-      toast.success(
-        `Bạn vừa được hoàn ${wallet.refundAmount} VNĐ vào ví!`
-      );
+      toast.success(`Bạn vừa được hoàn ${wallet.refundAmount} VNĐ vào ví!`);
     };
     socket.on("refundToWallet", handler);
 
@@ -134,6 +141,7 @@ const CartPage = () => {
     fetchFee();
   }, [wardSelected]);
 
+
   const handleResetCart = () => {
     const confirmed = window.confirm("Are you sure to reset your Cart?");
     if (confirmed) {
@@ -169,6 +177,28 @@ const CartPage = () => {
       }
     } catch (error) {
       console.error("Error creating checkout session:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckoutCash = async () => {
+    try {
+      setLoading(true);
+
+      await createOrder({
+        paymentMethod: "Cash",
+        statusOrder: "",
+        statusPayment: "Pending",
+        feeShipping: Number(feeShipping) || 0,
+      });
+
+      await deleteAllCart({}).unwrap();
+      toast.success("Order created successfully!");
+      window.location.reload();
+
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi tạo đơn hàng!");
     } finally {
       setLoading(false);
     }
@@ -282,7 +312,7 @@ const CartPage = () => {
                               <QuantityButtons
                                 product={product?.productId}
                                 cartList={cartProducts || []}
-                                refetch={refetch}
+                                refetch={cartRefetch}
                                 setItemCount={setItemCount}
                               />
                             </div>
@@ -392,22 +422,22 @@ const CartPage = () => {
                           disabled={
                             loading || !cartProducts?.length || !feeShipping
                           }
-                          onClick={handleCheckout}
-                          className="w-full rounded-full font-semibold tracking-wide"
+                          onClick={handleCheckoutCash}
+                          className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
                           size="lg"
                         >
-                          Proceed to Checkout
+                          Pay With Cash <DollarSign />
                         </Button>
-                        <Link
-                          href={"/"}
-                          className="flex items-center justify-center py-2 border border-darkColor/50 rounded-full hover:border-darkColor hover:bg-darkColor/5 hoverEffect"
+                        <Button
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
+                          onClick={handleCheckout}
+                          className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
+                          size="lg"
                         >
-                          <Image
-                            src={paypalLogo}
-                            alt="paypalLogo"
-                            className="w-20"
-                          />
-                        </Link>
+                          Pay With Stripe <BanknoteIcon />
+                        </Button>
                       </div>
                     </div>
                   </div>

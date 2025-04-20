@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import React from "react";
 import Logo from "./Logo";
+import { Button } from "./ui/button";
 
 interface Header {
   title: string;
@@ -41,7 +42,7 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
         </Link>
         
       ))}
-      <Logo className="text-lg px-2 text-white font-normal  bg-black  rounded-full hoverEffect">AI Style</Logo>
+      <Button onClick={() => redirect("/chatbot")} className="text-lg px-2 p-5 text-white font-normal  bg-black  rounded-full hoverEffect">AI Style</Button>
 
     </div>
   );

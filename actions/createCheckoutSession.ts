@@ -47,11 +47,10 @@ export async function createCheckoutSession(
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}&customerName=${metadata.customerName}&customerEmail=${metadata.customerEmail}&UserId=${metadata.UserId}&feeShipping=${feeShipping}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
       line_items: [
-        // Danh sách sản phẩm
         ...items.map((item) => ({
           price_data: {
-            currency: "VND", // Đổi sang VND
-            unit_amount: Math.round(item.productId.price!), // KHÔNG nhân 100
+            currency: "VND", 
+            unit_amount: Math.round(item.productId.price!),
             product_data: {
               name: item.productId.name || "Unnamed Product",
               description: item.productId.description,
@@ -68,7 +67,6 @@ export async function createCheckoutSession(
           },
           quantity: item.quantity,
         })),
-        // Thêm phí vận chuyển
         {
           price_data: {
             currency: "VND",

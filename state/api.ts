@@ -130,6 +130,10 @@ export const api = createApi({
       }),
       providesTags: ["Card"],
       transformResponse: (response: any): Card[] => response.data,
+      transformErrorResponse: (error: any): Card[] => {
+        if (error?.status === 404) return []; 
+        throw error; 
+      }
     }),
     //addProductToCard
     addProductToCard: build.mutation<
