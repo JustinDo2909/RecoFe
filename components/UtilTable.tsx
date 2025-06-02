@@ -1,40 +1,46 @@
 import { Button } from "@/components/ui/button";
-import { useDisableUserMutation, useEnableUserMutation } from "@/state/api";
 import { format } from "date-fns";
 import { PlusCircleIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
+type Column<T> = {
+  key: keyof T;
+  label: string;
+  render?: (value: any, row: T) => React.ReactNode;
+};
+
 interface TableProps<T> {
   data: T[];
-  columns: { key: keyof T; label: string }[];
+  columns: Column<T>[];
 
-  onCreate?: () => void;
   onUpdateStatus?: (_id: string, status: string) => void;
   ITEMS_PER_PAGE: number;
-  getIsActive?: (row: unknown) => boolean;
+  getIsActive?: (row: T) => boolean;
+  onDisable: (_id: string, reason: string) => void;
+  onEnable: (_id: string) => void;
+  onCreate?: () => void;
+  onUpdate?: (row: T) => void;
 }
 
-const CustomTable = <T extends { _id: string }>({
+const UitlTable = <T extends { _id: string }>({
   data,
   columns,
   ITEMS_PER_PAGE,
-
-  onCreate,
   getIsActive,
+  onDisable,
+  onEnable,
+  onCreate,
+  onUpdate,
 }: TableProps<T>) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [updatedRowId, setUpdatedRowId] = useState<string | null>(null);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [reason, setReason] = useState("");
-
-  const [disableUser] = useDisableUserMutation();
-  const [enableUser] = useEnableUserMutation();
 
   const filteredData = data.filter((row) =>
     columns.some((col) => String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()))
@@ -59,18 +65,21 @@ const CustomTable = <T extends { _id: string }>({
     }
   };
 
-  const hanleClickUpdateStatus = async (id: string) => {
-    const confirmed = window.confirm("Bạn có chắc muốn kích hoạt người dùng này?");
+  const handleClickEnable = async (id: string) => {
+    const confirmed = window.confirm("Bạn có chắc muốn kích hoạt ?");
     if (!confirmed) return;
 
     try {
-      await enableUser({ id }).unwrap();
-      toast.success("Đã kích hoạt người dùng!");
-      setUpdatedRowId(id);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.log("onEnable", id);
+
+      onEnable(id); // <--- Sai: onEnable nhận 1 param kiểu string (id), bạn đang truyền object {id}
     } catch (err) {
       toast.error("Kích hoạt thất bại!");
     }
+  };
+
+  const handleClickCreate = () => {
+    onCreate();
   };
 
   const openReasonModal = (id: string) => {
@@ -81,12 +90,12 @@ const CustomTable = <T extends { _id: string }>({
 
   const handleSaveReason = async () => {
     if (selectedRowId) {
-      const confirmed = window.confirm("Bạn có chắc muốn đình chỉ người dùng này?");
+      const confirmed = window.confirm("Bạn có chắc muốn đình chỉ?");
       if (!confirmed) return;
 
       try {
-        await disableUser({ id: selectedRowId, message: reason }).unwrap();
-        toast.success("Đã đình chỉ người dùng!");
+        onDisable(selectedRowId, reason);
+
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         toast.error("Đình chỉ thất bại!");
@@ -109,17 +118,18 @@ const CustomTable = <T extends { _id: string }>({
       <div className="flex items-center gap-5 justify-center">
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Tìm..."
           className="mb-4 p-2 border rounded w-full"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {/* {onCreate && (
-          <button onClick={onCreate} className="mb-4 text-green-600 p-3">
+        {onCreate && (
+          <button onClick={handleClickCreate} className="mb-4 text-green-600 p-3">
             <PlusCircleIcon size={35} />
           </button>
-        )} */}
+        )}
       </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full border border-gray-300 rounded-lg">
           <thead>
@@ -138,50 +148,62 @@ const CustomTable = <T extends { _id: string }>({
           </thead>
           <tbody>
             {paginatedData.length > 0 ? (
-              paginatedData.map((row, rowIndex) => {
+              paginatedData.map((row) => {
                 const isActive = getIsActive ? getIsActive(row) : false;
-
+                console.log("Row ID:", row._id, "isActive:", isActive);
                 return (
-                  <tr key={rowIndex} className="border">
-                    {columns.map((col) => {
-                      return (
-                        <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
-                          {typeof row[col.key] === "object" && React.isValidElement(row[col.key]) ? (
-                            row[col.key]
-                          ) : col.key === "picture" ? (
-                            <Image
-                              src={String(row[col.key])}
-                              alt={String(row[col.key])}
-                              width={50}
-                              height={50}
-                              className="w-10 h-10 rounded-full"
-                            />
-                          ) : col.key === "createdAt" || col.key === "updatedAt" ? (
-                            format(new Date(String(row[col.key])), "dd/MM/yyyy")
-                          ) : typeof row[col.key] === "object" && row[col.key] !== null ? (
-                            "name" in (row[col.key] as object) ? (
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              (row[col.key] as any).name
-                            ) : (
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              ((row[col.key] as any)._id ?? "-")
-                            )
+                  <tr key={row._id} className="border">
+                    {columns.map((col) => (
+                      <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
+                        {typeof row[col.key] === "object" && React.isValidElement(row[col.key]) ? (
+                          row[col.key]
+                        ) : col.key === "picture" ? (
+                          <Image
+                            src={String(row[col.key])}
+                            alt={String(row[col.key])}
+                            width={50}
+                            height={50}
+                            className="w-10 h-10 rounded-full"
+                          />
+                        ) : col.key === "createdAt" || col.key === "updatedAt" ? (
+                          format(new Date(String(row[col.key])), "dd/MM/yyyy")
+                        ) : typeof row[col.key] === "object" && row[col.key] !== null ? (
+                          "name" in (row[col.key] as object) ? (
+                            (row[col.key] as any).name
                           ) : (
-                            String(row[col.key])
-                          )}
-                        </td>
-                      );
-                    })}
-                    <td className="px-4 py-2 border text-center">
+                            ((row[col.key] as any)._id ?? "-")
+                          )
+                        ) : (
+                          String(row[col.key])
+                        )}
+                      </td>
+                    ))}
+                    <td className="px-4 py-2 border text-center flex justify-center gap-3">
                       {isActive ? (
-                        <Button onClick={() => openReasonModal(row._id)} className="bg-red-500 text-white">
+                        <button
+                          onClick={() => openReasonModal(row._id)}
+                          className="bg-red-600 hover:bg-red-700 transition text-white font-semibold py-1.5 px-4 rounded-md shadow"
+                          title="Đình chỉ"
+                        >
                           Đình chỉ
-                        </Button>
+                        </button>
                       ) : (
-                        <Button onClick={() => hanleClickUpdateStatus(row._id)} className="bg-green-500 text-white">
+                        <button
+                          onClick={() => handleClickEnable(row._id)}
+                          className="bg-green-600 hover:bg-green-700 transition text-white font-semibold py-1.5 px-4 rounded-md shadow"
+                          title="Kích hoạt"
+                        >
                           Kích hoạt
-                        </Button>
+                        </button>
                       )}
+
+                      <button
+                        onClick={() => onUpdate?.(row)}
+                        className="bg-yellow-500 hover:bg-yellow-600 transition text-white font-semibold py-1.5 px-4 rounded-md shadow"
+                        title="Chỉnh sửa"
+                      >
+                        Chỉnh sửa
+                      </button>
                     </td>
                   </tr>
                 );
@@ -203,17 +225,17 @@ const CustomTable = <T extends { _id: string }>({
           disabled={currentPage === 1}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >
-          Prev
+          Trước
         </button>
         <span>
-          Page {currentPage} of {totalPages}
+          Trang {currentPage} / {totalPages}
         </span>
         <button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >
-          Next
+          Kế
         </button>
       </div>
 
@@ -242,4 +264,4 @@ const CustomTable = <T extends { _id: string }>({
   );
 };
 
-export default CustomTable;
+export default UitlTable;

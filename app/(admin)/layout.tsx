@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
-import "../globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "react-hot-toast";
 import Providers from "@/app/providers";
 import AppSidebar from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import type { Metadata } from "next";
+import { Toaster } from "sonner";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Reco Ecommerce app for shoppers",

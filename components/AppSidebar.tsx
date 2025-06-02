@@ -1,6 +1,5 @@
 "use client";
-import { redirect, usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import LogoReco from "@/components/LogoReco";
 import {
   Sidebar,
   SidebarContent,
@@ -11,26 +10,22 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useUser } from "@/hooks/useUser";
+import { cn } from "@/lib/utils";
 import {
   Bell,
   BookOpen,
-  Calendar,
-  Clock,
   LayoutDashboard,
   LogOut,
   Package,
   Package2Icon,
   PanelLeft,
-  ReceiptText,
   ServerIcon,
-  SubscriptIcon,
   User,
-  Users,
+  TicketPercent,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useUser } from "@/hooks/useUser";
-import Loading from "./Loading";
+import { redirect, usePathname } from "next/navigation";
 
 const AppSidebar = () => {
   const pathname = usePathname();
@@ -39,12 +34,14 @@ const AppSidebar = () => {
 
   const navLinks = {
     admin: [
+      { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard/overview" },
       { icon: User, label: "Users", href: "/dashboard/user" },
       { icon: BookOpen, label: "Categorys", href: "/dashboard/category" },
       { icon: Package, label: "Orders", href: "/dashboard/order" },
       { icon: Package2Icon, label: "Products", href: "/dashboard/product" },
       { icon: ServerIcon, label: "Services", href: "/dashboard/service" },
       { icon: Bell, label: "Requests", href: "/dashboard/request" },
+      { icon: TicketPercent, label: "Discount", href: "/dashboard/discount" },
     ],
   };
 
@@ -58,11 +55,7 @@ const AppSidebar = () => {
   const userType: "admin" = user?.user.role;
   const currentNavLinks = navLinks[userType];
   return (
-    <Sidebar
-      collapsible="icon"
-      style={{ height: "100vh" }}
-      className="bg-customgreys-primarybg border-none shadow-lg"
-    >
+    <Sidebar collapsible="icon" style={{ height: "100vh" }} className="bg-white border-none shadow-lg">
       <SidebarHeader>
         <SidebarMenu className="mt-5 group-data-[collapsible=icon]:mt-7">
           <SidebarMenuItem>
@@ -73,14 +66,9 @@ const AppSidebar = () => {
             >
               <div className="flex justify-between items-center gap-5 pl-3 pr-1 h-10 w-full group-data-[collapsible=icon]:ml-1 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:px-0">
                 <div className="flex items-center gap-5">
-                  <LayoutDashboard
-                    width={25}
-                    height={20}
-                    className="transition duration-200 group-data-[collapsible=icon]:group-hover:brightness-75 w-auto"
-                  />
-                  <p className="text-lg font-extrabold group-data-[collapsible=icon]:hidden">
-                    DASHBOARD
-                  </p>
+                  <LogoReco className="transition duration-200 group-data-[collapsible=icon]:group-hover:brightness-75 w-auto" />
+
+                  <p className="text-lg font-extrabold group-data-[collapsible=icon]:hidden">RECORD</p>
                 </div>
                 <PanelLeft className="text-gray-400 w-5 h-5 group-data-[collapsible=icon]:hidden" />
               </div>
@@ -108,14 +96,8 @@ const AppSidebar = () => {
                     !isActive && "text-customgreys-dirtyGrey"
                   )}
                 >
-                  <Link
-                    href={link.href}
-                    className="relative flex items-center"
-                    scroll={false}
-                  >
-                    <link.icon
-                      className={isActive ? "text-white-50" : "text-gray-500"}
-                    />
+                  <Link href={link.href} className="relative flex items-center" scroll={false}>
+                    <link.icon className={isActive ? "text-white-50" : "text-gray-500"} />
                     <span
                       className={cn(
                         "font-medium text-md ml-4 group-data-[collapsible=icon]:hidden",
@@ -126,9 +108,7 @@ const AppSidebar = () => {
                     </span>
                   </Link>
                 </SidebarMenuButton>
-                {isActive && (
-                  <div className="absolute right-0 top-0 h-full w-[4px] bg-primary-750" />
-                )}
+                {isActive && <div className="absolute right-0 top-0 h-full w-[4px] bg-primary-750" />}
               </SidebarMenuItem>
             );
           })}
