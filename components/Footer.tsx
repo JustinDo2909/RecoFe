@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Container from "./Container";
 import SocialMedia from "./SocialMedia";
@@ -23,10 +23,9 @@ const Footer = () => {
         {/* <FooterTop /> */}
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <LogoReco className="justify-center flex md:justify-start"/>
+            <LogoReco className="justify-center flex md:justify-start" />
             <p className="text-gray-600 text-sm">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem ex ad
-              at vitae esse. Vero fuga laborum disti.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem ex ad at vitae esse. Vero fuga laborum disti.
             </p>
             <SocialMedia
               className="text-darkColor/60"
@@ -65,8 +64,7 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-darkColor mb-4">Newsletter</h3>
             <p className="text-gray-600 text-sm mb-4">
-              Subscribe to our newsletter to receive updates and exclusive
-              offers.
+              Subscribe to our newsletter to receive updates and exclusive offers.
             </p>
             <form className="space-y-3">
               <Input

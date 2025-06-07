@@ -2,12 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import {
-  useAuthLoginMutation,
-  useAuthLogoutMutation,
-  useAuthRegisterMutation,
-  useLazyGetMeQuery,
-} from "@/state/api";
+import { useAuthLoginMutation, useAuthLogoutMutation, useAuthRegisterMutation, useLazyGetMeQuery } from "@/state/api";
 
 export const useUser = () => {
   const [user, setUser] = useState<any>(null);
@@ -39,13 +34,7 @@ export const useUser = () => {
     fetchUser();
   }, [triggerGetMe]);
 
-  const login = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
+  const login = async ({ email, password }: { email: string; password: string }) => {
     setLoading(true);
     try {
       const data = await loginAPI({ email, password }).unwrap();

@@ -1,5 +1,3 @@
-import exp from "constants";
-
 export interface User {
   id: number;
   _id: string;
@@ -9,21 +7,48 @@ export interface User {
   loginLocations?: string;
   createdAt?: string;
   updatedAt?: string;
+  date_of_birth: Date;
+  isActive: boolean;
+  phone: string;
+  address: string;
+  deactivatedReason: string;
+}
+
+export interface Discount {
+  _id: string;
+  name: string;
+  description?: string;
+  discountType: "percentage" | "fixed";
+  value: number;
+  applicableProducts: string[]; // hoặc Product[] nếu populate
+  applicableOrders: string[]; // hoặc Order[] nếu populate
+  startDate: string; // ISO date string từ BE
+  endDate: string;
+  isActive: boolean;
+  code?: string;
+  createdBy?: string;
+  editBy?: string;
+  reason?: string | null;
+  targetType: "product" | "order";
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Product {
-  id?: number;
   _id: string;
   name: string;
-  description: string;
-  decription: string;
+  description?: string;
   price: number;
+  rating?: number;
+  location?: string;
   picture: string;
   stock: number;
-  categorys: Category[];
-  pictureId?: string;
-  discount?: number; // Make it optional here
-  discountts?: number;
+  categories: string[]; // đúng tên theo BE là `categories`
+  editby?: string;
+  isActive: boolean;
+  currentDiscount?: Discount | string; // có thể populate hoặc chỉ chứa ObjectId
+  deactivationReason?: string;
+  finalPrice: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -33,7 +58,6 @@ export interface Category {
   _id: string;
   title: string;
   description: string; // Fixed typo
-  decription: string;
   products: Product[]; // List of products in this category
 }
 
@@ -70,7 +94,7 @@ export interface Card {
 }
 
 export interface Order {
-id: number;
+  id: number;
   _id: string;
   userId: string;
   items: [
@@ -109,5 +133,46 @@ export interface Request {
 
 export interface Wallet {
   id: number;
-  amount: number
+  amount: number;
+}
+
+export interface DashboardStats {
+  totalProducts: number;
+  totalOrders: number;
+  totalRevenue: number;
+}
+
+export interface DashboardParams {
+  start: string;
+  end: string;
+}
+
+export interface DiscountRequestProduct {
+  name: string;
+  description?: string;
+  discountType: string;
+  value: number;
+  applicableProducts: string[];
+  startDate: string;
+  endDate: string;
+  code: string;
+  targetType: string;
+}
+
+export interface DiscountRequestOrder {
+  name: string;
+  description?: string;
+  discountType: string;
+  value: number;
+  applicableOrders: string[];
+  startDate: string;
+  endDate: string;
+  code: string;
+  targetType: string;
+}
+
+export interface Response<T> {
+  message: string;
+  data?: T;
+  success: boolean;
 }
