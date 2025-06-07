@@ -54,11 +54,15 @@ export interface Product {
 }
 
 export interface Category {
-  id: number;
+  id?: number;
   _id: string;
   title: string;
-  description: string; // Fixed typo
-  products: Product[]; // List of products in this category
+  description?: string;
+  products: string[];
+  isActive: boolean;
+  reason?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CountUpProps {

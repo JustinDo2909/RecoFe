@@ -518,6 +518,41 @@ export const api = createApi({
         body: { discountId },
       }),
     }),
+
+    createCate: build.mutation({
+      query: (newCate) => ({
+        url: "/category/create",
+        method: "POST",
+        body: newCate,
+      }),
+      invalidatesTags: ["Categories"],
+    }),
+
+    updateCate: build.mutation({
+      query: ({ id, data }) => ({
+        url: `/category/update/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Categories"],
+    }),
+
+    deactivateCate: build.mutation<Response<Product>, { id: string; reason: string }>({
+      query: ({ id, reason }) => ({
+        url: `/category/disable/${id}`,
+        method: "PATCH",
+        body: { reason },
+      }),
+      invalidatesTags: ["Categories"],
+    }),
+
+    EnableCate: build.mutation<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/category/enable/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Categories"],
+    }),
   }),
 });
 
@@ -572,4 +607,9 @@ export const {
 
   useRemoveDiscountProductMutation,
   useAddDiscountProductMutation,
+
+  useCreateCateMutation,
+  useUpdateCateMutation,
+  useDeactivateCateMutation,
+  useEnableCateMutation,
 } = api;
