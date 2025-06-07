@@ -27,15 +27,15 @@ const DashboardProduct = () => {
         ITEMS_PER_PAGE={10}
         data={ProductList}
         columns={[
-          { key: "_id", label: "ID" },
-          { key: "name", label: "Product Name" },
-          { key: "decription", label: "Decription" },
-          { key: "price", label: "Price" },
-          { key: "picture", label: "Picture" },
-          { key: "stock", label: "Stock" },
-          { key: "categorys", label: "Categorys" },
-          { key: "createdAt", label: "Date Created" },
-          { key: "updatedAt", label: "Date Updated" },
+          { key: "_id", label: "ID" , type: "text"},
+          { key: "name", label: "Product Name",  type: "text"},
+          { key: "decription", label: "Decription" , type: "text"},
+          { key: "price", label: "Price" , type: "number"},
+          { key: "picture", label: "Picture" , type: "image"},
+          { key: "stock", label: "Stock" , type: "number"},
+          { key: "categorys", label: "Categorys", type: "text"},
+          { key: "createdAt", label: "Date Created", type: "date"},
+          { key: "updatedAt", label: "Date Updated", type: "date"},
         ]}
         onCreate={() => {}}
         onDelete={() => {}}

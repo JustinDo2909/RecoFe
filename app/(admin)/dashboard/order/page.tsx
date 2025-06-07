@@ -20,20 +20,38 @@ const DashboardOrder = () => {
   if (!isMounted) {
     return null;
   }
+
   return (
     <div>
-        {isLoading && <div><Loading/></div>}
+      {isLoading && (
+        <div>
+          <Loading />
+        </div>
+      )}
       <CustomTable
         ITEMS_PER_PAGE={10}
         data={OrderList}
         columns={[
           { key: "_id", label: "ID" },
           { key: "userId", label: "User ID" },
-          { key: "totalPrice", label: "Price" },
-          { key: "paymentMethod", label: "PaymentMethod" },
-          { key: "statusOrder", label: "Status Order" },
-          { key: "statusPayment", label: "Status Payment" },
-          { key: "createdAt", label: "Date Created" },
+          { key: "totalPrice", label: "Price", type: "number" },
+          { key: "paymentMethod", label: "PaymentMethod", type: "text" },
+          { key: "statusOrder", label: "Status Order", type: "status" },
+          { key: "statusPayment", label: "Status Payment", type: "status" },
+          { key: "createdAt", label: "Date Created", type: "date" },
+        ]}
+        statusOptions={[
+          {
+            value: "Processing",
+            label: "Mark as Processing",
+            color: "bg-yellow-500",
+          },
+          { value: "Shipped", label: "Mark as Shipped", color: "bg-blue-500" },
+          {
+            value: "Delivered",
+            label: "Mark as Delivered",
+            color: "bg-green-500",
+          },
         ]}
         onCreate={() => {}}
         onDelete={() => {}}

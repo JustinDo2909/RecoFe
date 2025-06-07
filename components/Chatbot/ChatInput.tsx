@@ -1,34 +1,42 @@
+"use client";
 import React, { useState } from "react";
 
-interface Props {
-  onSendMessage: (msg: string) => void;
+interface ChatInputProps {
+  onSendMessage: (message: string) => void;
+  onImageSelect?: (file: File) => void;
   isLoading?: boolean;
 }
 
-const ChatInput: React.FC<Props> = ({ onSendMessage, isLoading }) => {
-  const [input, setInput] = useState("");
+const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, onImageSelect, isLoading }) => {
+  const [message, setMessage] = useState("");
 
   const handleSend = () => {
-    if (input.trim()) {
-      onSendMessage(input);
-      setInput("");
+    if (!message.trim()) return;
+    onSendMessage(message);
+    setMessage("");
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0] && onImageSelect) {
+      onImageSelect(e.target.files[0]);
     }
   };
 
   return (
-    <div className="mt-auto flex gap-2 p-2 bg-white rounded-lg shadow">
+    <div className="flex gap-2 mt-4">
       <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleSend()}
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="flex-1 p-2 border rounded"
         placeholder="Nhập tin nhắn..."
-        className="flex-1 px-4 py-2 border rounded-lg outline-none"
         disabled={isLoading}
       />
+      <input type="file" accept="image/*" onChange={handleImageChange} />
       <button
         onClick={handleSend}
+        className="bg-blue-500 text-white px-4 py-2 rounded"
         disabled={isLoading}
-        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
       >
         Gửi
       </button>
