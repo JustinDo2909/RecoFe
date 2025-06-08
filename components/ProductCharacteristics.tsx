@@ -1,14 +1,12 @@
-import { Product } from "@/sanity.types";
-import React from "react";
+import { useGetCategoryQuery } from "@/state/api";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { useGetCategoryQuery } from "@/state/api";
 
-const ProductCharacteristics = ({ product }: { product: Product }) => {
+const ProductCharacteristics = ({ product }: { product: any }) => {
   console.log("product", product);
   const { data: categories } = useGetCategoryQuery({});
   return (
@@ -19,22 +17,25 @@ const ProductCharacteristics = ({ product }: { product: Product }) => {
           <p className="flex items-center justify-between">
             Loại:
             <span className="font-semibold tracking-wide">
-              {categories?.find((item) => item._id === (product?.categories? product?.categories[0] : ""))
-                ?.title || "Không xác định"}
+              {categories?.find(
+                (item) =>
+                  item._id ===
+                  (product?.categories ? product?.categories[0] : "")
+              )?.title || "Không xác định"}
             </span>
           </p>
           <p className="flex items-center justify-between">
             Xản xuất: <span className="font-semibold tracking-wide">2024</span>
           </p>
-         
+
           <p className="flex items-center justify-between">
-            Stock:{" "}
+            Số lượng còn lại:{" "}
             <span className="font-semibold tracking-wide">
               {product?.stock}
             </span>
           </p>
           <p className="flex items-center justify-between">
-            Intro:{" "}
+            Mô tả:{" "}
             <span className="font-semibold tracking-wide">
               {product?.description}
             </span>

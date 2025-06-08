@@ -5,12 +5,7 @@ import Container from "@/components/Container";
 import PriceView from "@/components/PriceView";
 import ProductCharacteristics from "@/components/ProductCharacteristics";
 import { useGetProductByIdQuery } from "@/state/api";
-import {
-  BoxIcon,
-  FileQuestion,
-  ListOrderedIcon,
-  Share,
-} from "lucide-react";
+import { BoxIcon, FileQuestion, ListOrderedIcon, Share } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 
@@ -18,7 +13,7 @@ const SingleProductPage = () => {
   const params = useParams();
   const id = params.id;
   const router = useRouter();
-  const { data: product } = useGetProductByIdQuery({ id });
+  const { data: product } = useGetProductByIdQuery({ id  });
 
   return (
     <Container className="py-10 flex flex-col md:flex-row gap-10">
@@ -53,8 +48,8 @@ const SingleProductPage = () => {
           <p className="bg-green-100 w-fit px-4 py-2 text-green-600 text-sm font-semibold rounded-lg">
             Còn hàng
           </p>
-        )}  
-           <AddToCartButton product={product?? {}} />
+        )}
+        <AddToCartButton product={product ?? {}} />
 
         {/* Mô tả sản phẩm */}
         <p className="text-sm text-gray-700 leading-relaxed">
@@ -62,17 +57,42 @@ const SingleProductPage = () => {
         </p>
 
         {/* Nút yêu thích */}
-       
 
         {/* Đặc điểm sản phẩm */}
-        <ProductCharacteristics product={product || ""} />
+        <ProductCharacteristics product={product || {}} />
 
         {/* Các tùy chọn */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 py-5 mt-5">
-          <OptionItem onClick={() => router.push(`/product`)}  icon={<BoxIcon />} text="Các sản phẩm khác" />
-          <OptionItem  onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} icon={<FileQuestion />} text="Đặt câu hỏi" />
-          <OptionItem  onClick={() => router.push(`/chatbot`)} icon={<ListOrderedIcon />} text="AI-Style" />
-          <OptionItem onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} icon={<Share />} text="Chia sẻ" />
+          <OptionItem
+            onClick={() => router.push(`/product`)}
+            icon={<BoxIcon />}
+            text="Các sản phẩm khác"
+          />
+          <OptionItem
+            onClick={() =>
+              window.open(
+                "https://www.facebook.com/profile.php?id=61576419491353",
+                "_blank"
+              )
+            }
+            icon={<FileQuestion />}
+            text="Đặt câu hỏi"
+          />
+          <OptionItem
+            onClick={() => router.push(`/chatbot`)}
+            icon={<ListOrderedIcon />}
+            text="AI-Style"
+          />
+          <OptionItem
+            onClick={() =>
+              window.open(
+                "https://www.facebook.com/profile.php?id=61576419491353",
+                "_blank"
+              )
+            }
+            icon={<Share />}
+            text="Chia sẻ"
+          />
         </div>
 
         {/* Chính sách */}
@@ -95,8 +115,19 @@ const SingleProductPage = () => {
   );
 };
 
-const OptionItem = ({ icon, text , onClick }: { icon: React.ReactNode; text: string , onClick?: () => void }) => (
-  <div onClick={onClick} className="flex items-center gap-2 text-sm text-gray-700 hover:text-red-600 cursor-pointer transition-all">
+const OptionItem = ({
+  icon,
+  text,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  text: string;
+  onClick?: () => void;
+}) => (
+  <div
+    onClick={onClick}
+    className="flex items-center gap-2 text-sm text-gray-700 hover:text-red-600 cursor-pointer transition-all"
+  >
     {icon}
     <p>{text}</p>
   </div>
@@ -109,7 +140,7 @@ const PolicyCard = ({
   title: string;
   description: string;
 }) => (
-  <div  className="border border-gray-300 text-center p-4 rounded-md hover:border-blue-500 transition-all">
+  <div className="border border-gray-300 text-center p-4 rounded-md hover:border-blue-500 transition-all">
     <p className="text-base font-semibold text-gray-800">{title}</p>
     <p className="text-sm text-gray-500">{description}</p>
   </div>

@@ -169,7 +169,7 @@ export const api = createApi({
       providesTags: ["Products"],
       transformResponse: (response: any): Product[] => response.data,
     }),
-    getProductById: build.query<Product, { id: string }>({
+    getProductById: build.query<Product, { id: any }>({
       query: ({ id }) => ({
         url: `/product/${id}`,
       }),
