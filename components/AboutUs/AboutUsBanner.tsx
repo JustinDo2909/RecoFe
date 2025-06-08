@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import banner from "@/images/usBanner.jpg";
 import Image from "next/image";
@@ -23,8 +24,8 @@ const AboutUsBanner = () => {
         </p>
 
         <div className="flex gap-3">
-          <Button className="rounded-full px-6 py-3">LIÊN HỆ</Button>
-          <Button className="bg-transparent border border-black text-black rounded-full px-6 py-3">
+          <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className="rounded-full px-6 py-3">LIÊN HỆ</Button>
+          <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className="bg-transparent border border-black text-black rounded-full px-6 py-3">
             TÌM HIỂU
           </Button>
         </div>

@@ -19,7 +19,7 @@ const CustomPage = () => {
         <Engraving/>
         <Renewal/>
         <Feedback/>
-        <Consultation/>
+        {/* <Consultation/> */}
     </Container>
   )
 }

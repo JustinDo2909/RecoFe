@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Image, { StaticImageData } from "next/image";
 import CustomIntro from "../CustomIntro";
@@ -12,6 +13,7 @@ interface CustomProps {
   description: string;
   button: string;
   customList: Custom[];
+  onClick?: () => void
 }
 
 const CustomServiceIntro = ({ CustomProps }: { CustomProps: CustomProps }) => {
@@ -19,7 +21,7 @@ const CustomServiceIntro = ({ CustomProps }: { CustomProps: CustomProps }) => {
     <div className="py-6">
       <div className="flex flex-col md:flex-row gap-6">
        
-        <CustomIntro button={CustomProps.button} cusTitle={CustomProps.cusTitle} description={CustomProps.description}/>
+        <CustomIntro onClick={CustomProps.onClick} button={CustomProps.button} cusTitle={CustomProps.cusTitle} description={CustomProps.description}/>
         <div className="relative w-full md:w-1/2 overflow-hidden">
           <div className="flex space-x-4 overflow-x-auto  p-2">
             {CustomProps.customList.map((item, index) => (

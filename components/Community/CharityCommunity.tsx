@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Title from "../Title";
 import Image, { StaticImageData } from "next/image";
@@ -42,7 +43,7 @@ const CharityCommunity = ({ charityList }: { charityList: Charity[] }) => {
 
             {/* Button */}
             <div className="mt-4">
-              <Button className=" text-white px-4 py-2 rounded-md">
+              <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className=" text-white px-4 py-2 rounded-md">
                 {item.button}
               </Button>
             </div>

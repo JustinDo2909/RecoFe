@@ -24,10 +24,9 @@ export const quickLinksData = [
 ];
 
 export const categoriesData = [
-  { title: "AI Stylist", href: "/" },
-  { title: "Tài Khoản Của Tôi", href: "/" },
-  { title: "Liên Hệ", href: "/" },
-  { title: "Đổi trả hàng", href: "/" },
+  { title: "AI Stylist", href: "/chatbot" },
+  { title: "Tài Khoản Của Tôi", href: "/profile" },
+  { title: "Liên Hệ", href: "/about" },
 ];
 export const faqsData = [
   {

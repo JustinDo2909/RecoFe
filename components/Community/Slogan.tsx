@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { Button } from "../ui/button";
 
@@ -11,8 +12,8 @@ const Slogan = () => {
         </p>
       </div>
       <div className="flex gap-5 my-10 p-4">
-        <Button className="p-4">QUYÊN GÓP NGAY</Button>
-        <Button className="bg-transparent border border-black text-black">
+        <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className="p-4">QUYÊN GÓP NGAY</Button>
+        <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className="bg-transparent border border-black text-black">
           TÌM HIỂU THÊM
         </Button>
       </div>

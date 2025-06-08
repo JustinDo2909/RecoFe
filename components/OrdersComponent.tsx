@@ -27,6 +27,7 @@ const OrdersComponent = ({
 }) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { user } = useUser();
+  console.log("user", user);
 
   const handleRowClick = (order: Order) => {
     setSelectedOrder(order);
@@ -55,10 +56,10 @@ const OrdersComponent = ({
                     {order?.createdAt &&
                       format(new Date(order.createdAt), "dd/MM/yyyy")}
                   </TableCell>
-                  <TableCell>{user?.username}</TableCell>
+                  {/* <TableCell>{user?.username}</TableCell>
                   <TableCell className="hidden md:table-cell">
                     {user?.email}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <PriceFormatter
                       amount={order?.totalPrice}
@@ -74,13 +75,34 @@ const OrdersComponent = ({
                             : "bg-yellow-100 text-yellow-800"
                         }`}
                       >
-                        {order?.statusPayment}
+                        {order?.statusPayment === "Paid"
+                          ? "Đã thanh toán"
+                          : "Thanh toán lúc nhận hàng"}
                       </span>
                     )}
                   </TableCell>
                   <TableCell>
                     <span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
-                      {order?.statusOrder}
+                      {(() => {
+                        switch (order?.statusOrder) {
+                          case "Processing":
+                            return "Đang xử lý";
+                          case "Shipping":
+                            return "Đang giao hàng";
+                          case "Done":
+                            return "Hoàn thành";
+                          case "Refund Approved":
+                            return "Đã chấp nhận hoàn tiền";
+                          case "Cancel":
+                            return "Đã hủy";
+                          case "Refund Requested":
+                            return "Yêu cầu hoàn tiền";
+                          case "Refund Rejected":
+                            return "Từ chối hoàn tiền";
+                          default:
+                            return "Không xác định";
+                        }
+                      })()}
                     </span>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
@@ -89,13 +111,13 @@ const OrdersComponent = ({
                         onClick={(e) => handleRefundClick(e, order)}
                         className="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800 hover:bg-red-200 transition-colors"
                       >
-                        Send Refund Request
+                        Gửi yêu cầu hoàn tiền
                       </button>
                     )}
                   </TableCell>
                 </TableRow>
               </TooltipTrigger>
-              <TooltipContent>Click to see order details</TooltipContent>
+              <TooltipContent>Nhấn vào để xem chi tiết</TooltipContent>
             </Tooltip>
           ))}
         </TooltipProvider>

@@ -11,6 +11,13 @@ import ProductSlide from "@/components/ProductSlide";
 import Title from "@/components/Title";
 import { useGetProductQuery } from "@/state/api";
 import feedback from "@/images/feedback.png";
+import feedback2 from "@/images/feedback2.png";
+import feedback3 from "@/images/feedback3.png";
+import feedback4 from "@/images/feedback4.png";
+import cus1 from "@/images/cus1.png";
+import cus2 from "@/images/cus2.png";
+import cus3 from "@/images/cus3.png";
+import cus4 from "@/images/cus4.png";
 import { useEffect, useState } from "react";
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
@@ -26,19 +33,19 @@ export default function Home() {
       name: "Nguyễn Văn A",
     },
     {
-      image: feedback,
+      image: feedback2,
       rate: 4,
       title: "Rất hài lòng",
       name: "Trần Thị B",
     },
     {
-      image: feedback,
+      image: feedback3,
       rate: 4.5,
       title: "Chất lượng tốt!",
       name: "Lê Văn C",
     },
     {
-      image: feedback,
+      image: feedback4,
       rate: 5,
       title: "Sẽ quay lại lần sau!",
       name: "Phạm Thị D",
@@ -46,20 +53,20 @@ export default function Home() {
   ];
   const customList = [
     {
-      image: feedback,
-      title: "Dịch vụ tuyệt vời!",
+      image: cus1,
+      title: "Áo Thun Patchwork",
     },
     {
-      image: feedback,
-      title: "Rất hài lòng",
+      image: cus2,
+      title: "Quần Jeans Cá Tính",
     },
     {
-      image: feedback,
-      title: "Chất lượng tốt!",
+      image: cus3,
+      title: "Túi Tote Vải ",
     },
     {
-      image: feedback,
-      title: "Sẽ quay lại lần sau!",
+      image: cus4,
+      title: "Quần Jeans Thêu",
     },
   ];
 

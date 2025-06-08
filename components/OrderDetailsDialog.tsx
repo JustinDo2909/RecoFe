@@ -1,8 +1,7 @@
-import { MY_ORDERS_QUERYResult } from "@/sanity.types";
+import { Order, User } from "@/types";
 import { FC } from "react";
+import PriceFormatter from "./PriceFormatter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Button } from "./ui/button";
-import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -11,41 +10,37 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
-import PriceFormatter from "./PriceFormatter";
-import { Order, User } from "@/types";
 
 interface Props {
   order: Order | null;
-  user : User | null
+  user: User | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const OrderDetailsDialog: FC<Props> = ({ order, user , isOpen, onClose }) => {
+const OrderDetailsDialog: FC<Props> = ({ order, user, isOpen, onClose }) => {
   if (!order) return null;
-  
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-scroll">
         <DialogHeader>
-          <DialogTitle>Order Details - {order?._id}</DialogTitle>
+          <DialogTitle>Chi tiết đơn hàng - {order?._id}</DialogTitle>
         </DialogHeader>
         <div className="mt-4 space-y-1">
-          <p>
+          {/* <p>
             <strong>Customer:</strong> {user?.username}
           </p>
           <p>
             <strong>Email:</strong> {user?.email}
-          </p>
+          </p> */}
           <p>
-            <strong>Date:</strong>{" "}
+            <strong>Ngày:</strong>{" "}
             {order?.createdAt &&
               new Date(order?.createdAt).toLocaleDateString()}
           </p>
           <p>
-            <strong>Status:</strong>{" "}
+            <strong>Trạng thái:</strong>{" "}
             <span className="capitalize text-green-600 font-medium">
               {order?.statusOrder}
             </span>
@@ -66,9 +61,9 @@ const OrderDetailsDialog: FC<Props> = ({ order, user , isOpen, onClose }) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Product</TableHead>
-              <TableHead>Quantity</TableHead>
-              <TableHead>Price</TableHead>
+              <TableHead>Sản phẩm</TableHead>
+              <TableHead>Số lượng</TableHead>
+              <TableHead>Giá</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -122,7 +117,7 @@ const OrderDetailsDialog: FC<Props> = ({ order, user , isOpen, onClose }) => {
             )} */}
 
             <div className="w-full flex items-center justify-between">
-              <strong>Total:</strong>
+              <strong>Tổng đơn:</strong>
               <PriceFormatter
                 amount={order?.totalPrice}
                 className="text-black font-bold"

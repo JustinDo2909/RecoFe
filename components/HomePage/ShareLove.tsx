@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
-import feedback from "@/images/feedback.png";
+import lantoa from "@/images/lantoa.jpg";
 
 const ShareLove = () => {
   return (
@@ -29,7 +29,7 @@ const ShareLove = () => {
           <div className="w-full md:w-1/2 flex justify-center">
             <Image
               alt="custom"
-              src={feedback}
+              src={lantoa}
               width={350}
               height={350}
               className="object-contain rounded-lg shadow-lg"

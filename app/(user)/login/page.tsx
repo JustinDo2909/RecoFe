@@ -6,7 +6,8 @@ import { useForgotPasswordMutation } from "@/state/api";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
+import Image from "next/image";
+import loginImage from "@/images/login.jpg"; 
 const LoginPage = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -81,16 +82,16 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden min-h-[400px]">
-        <div
-          className={`hidden md:flex flex-col duration-1000 transition-all justify-center items-center bg-gradient-to-br from-teal-500 to-teal-700 text-white p-8 md:w-1/2 ${
-            isUpdate || isForgotPassword ? "translate-x-[100%]" : "translate-x-0"
-          }`}
-        >
-          <h1 className="text-3xl font-bold">Welcome to Reco</h1>
-          <p className="mt-2 text-lg text-center">
-            Join us and experience the best services!
-          </p>
-        </div>
+     <Image
+  src={loginImage}
+  alt="Welcome to Reco"
+  height={300}
+  width={0}
+  className={`hidden md:flex duration-1000 transition-all md:w-1/2 h-full object-cover ${
+    isUpdate || isForgotPassword ? "translate-x-[100%]" : "translate-x-0"
+  }`}
+/>
+
 
         <div
           className={`min-h-[500px] w-full md:w-1/2 p-8 duration-1000 transition-all ${
@@ -185,7 +186,7 @@ const LoginPage = () => {
                   className="flex items-center gap-2 px-4 py-2 rounded-lg transition-transform duration-500 hover:bg-gray-200"
                 >
                   <p className="hover:underline">
-                    {isUpdate ? "I Already Have Account" : "I forgot Password"}
+                    {isUpdate ? "I forgot Password" : "I forgot Password"}
                   </p>
                 </div>
               </div>

@@ -13,9 +13,9 @@ const AboutPage = () => {
      <AboutUsBanner/>
      <AboutUsIntro/>
      <Mission/>
-     <Feather/>
+     {/* <Feather/>
      <Question/>
-     <Commitment/>
+     <Commitment/> */}
     </Container>
   );
 };

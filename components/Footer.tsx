@@ -53,7 +53,7 @@ const Footer = () => {
               {categoriesData?.map((item) => (
                 <Link
                   key={item?.title}
-                  href={`/category${item?.href}`}
+                  href={`http://localhost:3000/${item?.href}`}
                   className="text-gray-600 hover:text-darkColor text-sm font-medium hoverEffect"
                 >
                   {item?.title}
