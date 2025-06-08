@@ -113,6 +113,7 @@ export interface Order {
   feeShipping: number;
   statusOrder: string;
   statusPayment: string;
+  reason: string;
   createdAt: string;
 }
 
