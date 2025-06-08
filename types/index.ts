@@ -126,11 +126,12 @@ export interface Service {
 }
 
 export interface Request {
-  id: number;
   _id: string;
-  type: string;
-  status: "Approved" | "Cannceled" | "Pending";
+  type: "refund" | "other"; // hoặc có thể mở rộng nếu cần
+  status: "Pending" | "Approved" | "Rejected";
   user: User;
+  order?: Order;
+  service?: Service;
   message: string;
   createdAt: string;
 }
