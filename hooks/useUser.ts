@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import {
+  useAuthLoginMutation,
+  useAuthLogoutMutation,
+  useAuthRegisterMutation,
+  useLazyGetMeQuery,
+} from "@/state/api";
 import Cookies from "js-cookie";
-import { useAuthLoginMutation, useAuthLogoutMutation, useAuthRegisterMutation, useLazyGetMeQuery } from "@/state/api";
+import { useEffect, useState } from "react";
 
 export const useUser = () => {
   const [user, setUser] = useState<any>(null);
@@ -34,7 +39,13 @@ export const useUser = () => {
     fetchUser();
   }, [triggerGetMe]);
 
-  const login = async ({ email, password }: { email: string; password: string }) => {
+  const login = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     setLoading(true);
     try {
       const data = await loginAPI({ email, password }).unwrap();
@@ -71,12 +82,14 @@ export const useUser = () => {
     password,
     email,
     role,
+    phone,
     passwordConfirm,
   }: {
     username: string;
     password: string;
     email: string;
     role: string;
+    phone: string;
     passwordConfirm: string;
   }) => {
     setLoading(true);
@@ -86,6 +99,7 @@ export const useUser = () => {
         password,
         email,
         role,
+        phone,
         passwordConfirm,
       }).unwrap();
 

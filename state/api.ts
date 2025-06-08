@@ -1,27 +1,25 @@
 import {
-  DiscountRequestOrder,
-  DiscountRequestProduct,
-  Response,
-} from "./../types/index";
-import {
   Card,
   Category,
   DashboardParams,
   DashboardStats,
   Discount,
-  DiscountRequest,
   Order,
   Product,
   Request,
   Service,
   User,
-  Wallet,
+  Wallet
 } from "@/types";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
-import build from "next/dist/build";
 import { toast } from "sonner";
+import {
+  DiscountRequestOrder,
+  DiscountRequestProduct,
+  Response,
+} from "./../types/index";
 
 const customBaseQuery = async (
   args: string | FetchArgs,
@@ -92,6 +90,7 @@ export const api = createApi({
       {
         username: string;
         password: string;
+        phone: string;
         passwordConfirm: string;
         email: string;
         role: string;
@@ -136,9 +135,9 @@ export const api = createApi({
       { resetToken: string; newPassword: string }
     >({
       query: ({ resetToken, newPassword }) => ({
-        url: `/auth/reset-password/${resetToken}`, 
+        url: `/auth/reset-password/${resetToken}`,
         method: "POST",
-        body: { newPassword }, 
+        body: { newPassword },
       }),
     }),
 

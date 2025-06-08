@@ -8,7 +8,7 @@ interface CustomInputProps {
   onSubmit: (data: Record<string, string>) => void;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({ fields, title, typeSubmit, onSubmit }) => {
+const CustomInput2: React.FC<CustomInputProps> = ({ fields, title, typeSubmit, onSubmit }) => {
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -73,4 +73,4 @@ const CustomInput: React.FC<CustomInputProps> = ({ fields, title, typeSubmit, on
   );
 };
 
-export default CustomInput;
+export default CustomInput2;
