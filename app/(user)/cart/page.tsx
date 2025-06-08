@@ -204,15 +204,13 @@ const CartPage = () => {
                   <ShoppingBag />
                   <h1 className="text-2xl font-semibold">Shopping Cart</h1>
                 </div>
-                {wallet?.amount > 0 && (
                   <div className="text-2xl font-semibold flex justify-center items-center gap-1">
                     <WalletIcon /> :{" "}
                     <PriceFormatter
                       className="text-red-500 text-2xl"
-                      amount={wallet?.amount ?? 0}
+                      amount={wallet?.wallet ?? 0}
                     />
                   </div>
-                )}  
               </div>
               <div className="grid lg:grid-cols-3 md:gap-8">
                 {/* Products */}

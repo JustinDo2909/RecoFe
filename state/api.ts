@@ -110,10 +110,43 @@ export const api = createApi({
       providesTags: ["Users"],
       transformResponse: (response: any): User => response.data,
     }),
-    
-    
+    changePassword: build.mutation<
+      any,
+      {
+        confirmNewPassword: string;
+        newPassword: string;
+        currentPassword: string;
+      }
+    >({
+      query: (body) => ({
+        url: `/auth/changePassword`,
+        method: "PUT",
+        body,
+      }),
+    }),
+    forgotPassword: build.mutation<any, { email: string }>({
+      query: (body) => ({
+        url: `/auth/forgot-password`,
+        method: "POST",
+        body,
+      }),
+    }),
+    resetPassword: build.mutation<
+      any,
+      { resetToken: string; newPassword: string }
+    >({
+      query: ({ resetToken, newPassword }) => ({
+        url: `/auth/reset-password/${resetToken}`, 
+        method: "POST",
+        body: { newPassword }, 
+      }),
+    }),
+
     //updateProfile
-    updateProfile: build.mutation<any, { phone: string , email: string  , username: string }>({
+    updateProfile: build.mutation<
+      any,
+      { phone: string; email: string; username: string }
+    >({
       query: (body) => ({
         url: `/auth/update`,
         method: "PUT",
@@ -436,7 +469,7 @@ export const api = createApi({
     getWallet: build.query<Wallet, {}>({
       query: () => ({ url: "/wallet" }),
       providesTags: ["Wallet"],
-      transformResponse: (response: any): Wallet => response.wallet,
+      transformResponse: (response: any): Wallet => response.data,
     }),
 
     getDashboard: build.query<DashboardStats, DashboardParams>({
@@ -691,5 +724,8 @@ export const {
   useUpdateCateMutation,
   useDeactivateCateMutation,
   useEnableCateMutation,
-  useUpdateProfileMutation
+  useUpdateProfileMutation,
+  useForgotPasswordMutation,
+  useChangePasswordMutation,
+  useResetPasswordMutation,
 } = api;

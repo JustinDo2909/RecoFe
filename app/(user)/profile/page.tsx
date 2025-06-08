@@ -3,29 +3,39 @@ import { useUser } from '@/hooks/useUser'
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { useUpdateProfileMutation } from '@/state/api'
-
+import { useChangePasswordMutation, useUpdateProfileMutation } from '@/state/api'
+import dayjs from 'dayjs';
 const Profile = () => {
   const { user } = useUser();
-  const [updateProfile, { isLoading, isError, error }] = useUpdateProfileMutation();
+  const [updateProfile, { isLoading: isProfileLoading, isError: isProfileError, error: profileError }] = useUpdateProfileMutation();
+  const [changePassword, { isLoading: isPasswordLoading, isError: isPasswordError, error: passwordError }] = useChangePasswordMutation();
   const [isEditing, setIsEditing] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: user?.user?.username || '',
     phone: user?.user?.phone || '',
     address: user?.user?.address || '',
     email: user?.user?.email || '',
-    date_of_birth: user?.user?.date_of_birth || ''
+    date_of_birth: dayjs(user?.user?.date_of_birth).format('DD/MM/YYYY') || ''
+  });
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
   });
   const [successMessage, setSuccessMessage] = useState('');
+  const [passwordSuccessMessage, setPasswordSuccessMessage] = useState('');
 
   // Update formData when user data changes
   React.useEffect(() => {
     setFormData({
       username: user?.user?.username || '',
-      phone: user?.user?.phone || '',
-      address: user?.user?.address || '',
-       email: user?.user?.email || '',
-      date_of_birth: user?.user?.date_of_birth || ''
+      phone: user?.user?.phone === "Không có số điện thoại" ? '' : user?.user?.phone || '',
+      address:  user?.user?.address === "Không có địa chỉ" ? '' : user?.user?.address || '',
+      email: user?.user?.email || '',
+      date_of_birth: user?.user?.date_of_birth
+  ? dayjs(user.user.date_of_birth).format('DD/MM/YYYY')
+  : ''
     });
   }, [user]);
 
@@ -60,6 +70,14 @@ const Profile = () => {
     }));
   };
 
+  const handlePasswordInputChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -73,9 +91,38 @@ const Profile = () => {
     }
   };
 
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
+      setPasswordSuccessMessage('');
+      setPasswordSuccessMessage('New passwords do not match.');
+      return;
+    }
+    try {
+      await changePassword({
+        confirmNewPassword: passwordData.confirmNewPassword,
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword
+      }).unwrap();
+      setPasswordSuccessMessage('Password changed successfully!');
+      setIsChangingPassword(false);
+      setPasswordData({ currentPassword: '', newPassword: '', confirmNewPassword: '' });
+      setTimeout(() => setPasswordSuccessMessage(''), 3000);
+    } catch (err) {
+      console.error('Failed to change password:', err);
+    }
+  };
+
   const toggleEdit = () => {
     setIsEditing(!isEditing);
     setSuccessMessage('');
+    setIsChangingPassword(false);
+  };
+
+  const toggleChangePassword = () => {
+    setIsChangingPassword(!isChangingPassword);
+    setPasswordSuccessMessage('');
+    setIsEditing(false);
   };
 
   return (
@@ -145,13 +192,33 @@ const Profile = () => {
             </motion.div>
           )}
           
-          {isError && (
+          {isProfileError && (
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               className="mb-6 p-4 bg-red-100 text-red-800 rounded-lg"
             >
-              Error updating profile: {error?.data?.message || 'Something went wrong'}
+              Error updating profile: {profileError?.data?.message || 'Something went wrong'}
+            </motion.div>
+          )}
+
+          {passwordSuccessMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-green-100 text-green-800 rounded-lg"
+            >
+              {passwordSuccessMessage}
+            </motion.div>
+          )}
+          
+          {isPasswordError && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-red-100 text-red-800 rounded-lg"
+            >
+              Error changing password: {passwordError?.data?.message || 'Something went wrong'}
             </motion.div>
           )}
 
@@ -169,10 +236,10 @@ const Profile = () => {
               
               {isEditing ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                   <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">User ID</p>
-                <p className="font-mono text-sm text-gray-600 mt-1">{user?.user?.email}</p>
-              </div>
+                  <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Email</p>
+                    <p className="font-mono text-sm text-gray-600 mt-1">{user?.user?.email}</p>
+                  </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Username</label>
                     <input
@@ -184,7 +251,6 @@ const Profile = () => {
                       placeholder="Enter username"
                     />
                   </div>
-                
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</label>
                     <input
@@ -201,7 +267,7 @@ const Profile = () => {
                     <input
                       type="date"
                       name="date_of_birth"
-                      value={formData.date_of_birth}
+                      value={dayjs(formData.date_of_birth).format('DD/MM/YYYY')}
                       onChange={handleInputChange}
                       className="mt-1 w-full p-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                     />
@@ -220,7 +286,7 @@ const Profile = () => {
                   <div className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition">
                     <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Birth</p>
                     <p className="font-medium text-gray-800 mt-1">
-                      {user?.user?.date_of_birth || 'Not specified'}
+                      {dayjs(user?.user?.date_of_birth).format('DD/MM/YYYY') || 'Not specified'}
                     </p>
                   </div>
                 </>
@@ -273,6 +339,88 @@ const Profile = () => {
             </motion.div>
           </div>
 
+          {isChangingPassword && (
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="mt-8 p-6 bg-gray-50 rounded-lg"
+            >
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <svg className="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                Change Password
+              </h2>
+              <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                <div className="bg-white p-4 rounded-lg">
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Current Password</label>
+                  <input
+                    type="password"
+                    name="currentPassword"
+                    value={passwordData.currentPassword}
+                    onChange={handlePasswordInputChange}
+                    className="mt-1 w-full p-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Enter current password"
+                    required
+                  />
+                </div>
+                <div className="bg-white p-4 rounded-lg">
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">New Password</label>
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={passwordData.newPassword}
+                    onChange={handlePasswordInputChange}
+                    className="mt-1 w-full p-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Enter new password"
+                    required
+                  />
+                </div>
+                <div className="bg-white p-4 rounded-lg">
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Confirm New Password</label>
+                  <input
+                    type="password"
+                    name="confirmNewPassword"
+                    value={passwordData.confirmNewPassword}
+                    onChange={handlePasswordInputChange}
+                    className="mt-1 w-full p-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Confirm new password"
+                    required
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <motion.button
+                    type="submit"
+                    variants={itemVariants}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    disabled={isPasswordLoading}
+                    className={`px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:shadow-lg transition-all flex items-center ${isPasswordLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    {isPasswordLoading ? 'Saving...' : 'Save Password'}
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    variants={itemVariants}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={toggleChangePassword}
+                    className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:shadow-lg transition-all flex items-center"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancel
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
+          )}
+
           <motion.div 
             variants={containerVariants}
             className="mt-12 flex flex-wrap gap-4 justify-center md:justify-start"
@@ -284,13 +432,13 @@ const Profile = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:shadow-lg transition-all flex items-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isProfileLoading}
+                  className={`px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:shadow-lg transition-all flex items-center ${isProfileLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                   </svg>
-                  {isLoading ? 'Saving...' : 'Save Changes'}
+                  {isProfileLoading ? 'Saving...' : 'Save Changes'}
                 </motion.button>
                 <motion.button 
                   variants={itemVariants}
@@ -323,7 +471,8 @@ const Profile = () => {
                   variants={itemVariants}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:shadow-lg transition-all dagger flex items-center"
+                  onClick={toggleChangePassword}
+                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 hover:shadow-lg transition-all flex items-center"
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
