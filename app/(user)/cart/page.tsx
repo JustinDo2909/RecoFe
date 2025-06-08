@@ -26,6 +26,7 @@ import {
   useDeleteAllProductToCardMutation,
   useGetCardQuery,
   useGetWalletQuery,
+  useWalletPayMutation,
 } from "@/state/api";
 import {
   useGetDistrictsQuery,
@@ -68,6 +69,7 @@ const CartPage = () => {
   const [feeShipping, setFeeShipping] = useState(0);
   const [getFeeShipping] = useGetShippingFeeMutation();
   const [createOrder] = useCreateOrderMutation();
+  const [payByWallet] = useWalletPayMutation();
   const { data: province } = useGetProvincesQuery({});
   const { data: district } = useGetDistrictsQuery(
     {
@@ -79,10 +81,11 @@ const CartPage = () => {
   );
   const { data: ward, error: wardError } = useGetWardsQuery(
     { districtId: districSelected ? parseInt(districSelected) : 0 },
-    { skip: !districSelected } // Only fetch wards if a district is selected
+    { skip: !districSelected }
   );
   const { data: wallet, refetch: refetchWallet } = useGetWalletQuery({});
   const socket = useSocket();
+
   useEffect(() => {
     if (!socket) return;
     const handler = (wallet: { refundAmount: number }) => {
@@ -94,7 +97,8 @@ const CartPage = () => {
     return () => {
       socket.off("refundToWallet", handler);
     };
-  }, [socket]);
+  }, [socket, refetchWallet]);
+
   useEffect(() => {
     const fetchFee = async () => {
       if (wardSelected && districSelected) {
@@ -130,7 +134,7 @@ const CartPage = () => {
     };
 
     fetchFee();
-  }, [wardSelected]);
+  }, [wardSelected, districSelected, getFeeShipping]);
 
   const handleResetCart = () => {
     const confirmed = window.confirm("Are you sure to reset your Cart?");
@@ -139,20 +143,42 @@ const CartPage = () => {
       toast.success("Your cart reset successfully!");
     }
   };
+
   const handleDeleteProduct = (id: string) => {
     deleteCartProduct(id);
     toast.success("Product deleted successfully!");
   };
 
   const handleCheckout = async () => {
+    const selectedProvince = province?.find(
+      (p: { codeId: string }) => p.codeId === provinceSelected
+    );
+    const selectedDistrict = district?.find(
+      (d: { codeId: string }) => d.codeId === districSelected
+    );
+    const selectedWard = ward?.find(
+      (w: { codeId: string }) => w.codeId === wardSelected
+    );
+
+    if (!selectedProvince || !selectedDistrict || !selectedWard) {
+      toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
+      console.error("Missing selection:", {
+        province: !!selectedProvince,
+        district: !!selectedDistrict,
+        ward: !!selectedWard,
+      });
+      return;
+    }
+
+    const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`;
     setLoading(true);
     try {
       const metadata: Metadata = {
         orderNumber: crypto.randomUUID(),
-
         customerName: user?.username ?? "Unknown",
         customerEmail: user?.user.email ?? "Unknown",
         UserId: user?._id,
+        address: addressString,
       };
       if (cartProducts && feeShipping > 0) {
         const checkoutUrl = await createCheckoutSession(
@@ -167,27 +193,135 @@ const CartPage = () => {
       }
     } catch (error) {
       console.error("Error creating checkout session:", error);
+      toast.error("Có lỗi xảy ra khi thanh toán bằng Stripe!");
     } finally {
       setLoading(false);
     }
   };
 
   const handleCheckoutCash = async () => {
+    const selectedProvince = province?.find(
+      (p: { codeId: string }) => p.codeId === provinceSelected
+    );
+    const selectedDistrict = district?.find(
+      (d: { codeId: string }) => d.codeId === districSelected
+    );
+    const selectedWard = ward?.find(
+      (w: { codeId: string }) => w.codeId === wardSelected
+    );
+
+    if (!selectedProvince || !selectedDistrict || !selectedWard) {
+      toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
+      console.error("Missing selection:", {
+        province: !!selectedProvince,
+        district: !!selectedDistrict,
+        ward: !!selectedWard,
+      });
+      return;
+    }
+
+    const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`;
+
     try {
       setLoading(true);
-
       await createOrder({
         paymentMethod: "Cash",
         statusOrder: "",
-        statusPayment: "Pending",
+        statusPayment: "Failed",
         feeShipping: Number(feeShipping) || 0,
+        address: addressString,
       });
-
       await deleteAllCart({}).unwrap();
       toast.success("Order created successfully!");
       window.location.reload();
     } catch (error: any) {
       toast.error("Có lỗi xảy ra khi tạo đơn hàng!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckoutWallet = async () => {
+    try {
+      setLoading(true);
+      const totalPrice =
+        cartProducts?.reduce((total, item) => {
+          const price = item.productId.price as number;
+          const quantity = item.quantity as number;
+          return total + price * quantity;
+        }, 0) -
+        (cartProducts?.reduce((total, item) => {
+          const price = item.productId.price ?? 0;
+          const discount = ((item.productId.discount ?? 0) * price) / 100;
+          const discountedPrice = price + discount;
+          return total + discountedPrice * item.quantity;
+        }, 0) -
+          cartProducts?.reduce((total, item) => {
+            const price = item.productId.price as number;
+            const quantity = item.quantity as number;
+            return total + price * quantity;
+          }, 0));
+
+      if (wallet?.wallet < totalPrice) {
+        toast.error("Số dư ví không đủ để thanh toán!");
+        return;
+      }
+
+      const selectedProvince = province?.find(
+        (p: { codeId: string }) => p.codeId === provinceSelected
+      );
+      const selectedDistrict = district?.find(
+        (d: { codeId: string }) => d.codeId === districSelected
+      );
+      const selectedWard = ward?.find(
+        (w: { codeId: string }) => w.codeId === wardSelected
+      );
+
+      if (!selectedProvince || !selectedDistrict || !selectedWard) {
+        toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
+        console.error("Missing selection:", {
+          province: !!selectedProvince,
+          district: !!selectedDistrict,
+          ward: !!selectedWard,
+        });
+        return;
+      }
+
+      const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`;
+      await payByWallet({
+        items: cartProducts,
+        totalPrice: totalPrice,
+        feeShipping: Number(feeShipping) || 0,
+        currentDiscount:
+          cartProducts?.reduce((total, item) => {
+            const price = item.productId.price ?? 0;
+            const discount = ((item.productId.discount ?? 0) * price) / 100;
+            const discountedPrice = price + discount;
+            return total + discountedPrice * item.quantity;
+          }, 0) -
+          cartProducts?.reduce((total, item) => {
+            const price = item.productId.price as number;
+            const quantity = item.quantity as number;
+            return total + price * quantity;
+          }, 0),
+        address: addressString,
+      }).unwrap();
+
+      await createOrder({
+        paymentMethod: "Wallet",
+        statusOrder: "",
+        statusPayment: "Paid",
+        feeShipping: Number(feeShipping) ,
+        address: addressString,
+      });
+
+      await deleteAllCart({}).unwrap();
+      toast.success("Thanh toán bằng ví thành công!");
+      refetchWallet();
+      window.location.reload();
+    } catch (error: any) {
+      toast.error("Có lỗi xảy ra khi thanh toán bằng ví!");
+      console.error("Wallet payment error:", error);
     } finally {
       setLoading(false);
     }
@@ -204,20 +338,19 @@ const CartPage = () => {
                   <ShoppingBag />
                   <h1 className="text-2xl font-semibold">Shopping Cart</h1>
                 </div>
-                  <div className="text-2xl font-semibold flex justify-center items-center gap-1">
-                    <WalletIcon /> :{" "}
-                    <PriceFormatter
-                      className="text-red-500 text-2xl"
-                      amount={wallet?.wallet ?? 0}
-                    />
-                  </div>
+                <div className="text-2xl font-semibold flex justify-center items-center gap-1">
+                  <WalletIcon /> :{" "}
+                  <PriceFormatter
+                    className="text-red-500 text-2xl"
+                    amount={wallet?.wallet ?? 0}
+                  />
+                </div>
               </div>
               <div className="grid lg:grid-cols-3 md:gap-8">
                 {/* Products */}
                 <div className="lg:col-span-2 rounded-lg">
                   <div className="border bg-white rounded-md">
                     {cartProducts?.map((product, index) => {
-                      // const itemCount = getItemCount(product?._id);
                       return (
                         <div
                           key={product?.productId._id || `product-${index}`}
@@ -289,13 +422,6 @@ const CartPage = () => {
                               </div>
                             </div>
                             <div className="flex flex-col items-start justify-between h-36 md:h-44 p-0.5 md:p-1">
-                              {/* <PriceFormatter
-                                amount={
-                                  (product?.productId.price as number) *
-                                  (product?.quantity as number)
-                                }
-                                className="font-bold text-lg"
-                              /> */}
                               <PriceView
                                 className="font-bold text-lg"
                                 price={
@@ -343,7 +469,7 @@ const CartPage = () => {
                       onSelect={(value: string) => setWardSelected(value)}
                     />
                   </div>
-                  {/* summary */}
+                  {/* Summary */}
                   <div className="lg:col-span-1">
                     <div className="hidden md:inline-block w-full bg-white p-6 rounded-lg border">
                       <h2 className="text-xl font-semibold mb-4">
@@ -382,7 +508,6 @@ const CartPage = () => {
                         </div>
                         <div className="flex justify-between">
                           <span>Fee Shipping</span>
-
                           <PriceFormatter amount={feeShipping} />
                         </div>
                         <Separator />
@@ -413,6 +538,16 @@ const CartPage = () => {
                             className="text-lg font-bold text-black"
                           />
                         </div>
+                        <Button
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
+                          onClick={handleCheckoutWallet}
+                          className="w-full rounded-full font-semibold tracking-wide bg-green-500"
+                          size="lg"
+                        >
+                          Pay With Wallet <WalletIcon />
+                        </Button>
                         <Button
                           disabled={
                             loading || !cartProducts?.length || !feeShipping
@@ -454,20 +589,47 @@ const CartPage = () => {
                           amount={getSubtotalPrice() - getTotalPrice()}
                         />
                       </div>
+                      <div className="flex justify-between">
+                        <span>Fee Shipping</span>
+                        <PriceFormatter amount={feeShipping} />
+                      </div>
                       <Separator />
                       <div className="flex justify-between">
                         <span>Total</span>
                         <PriceFormatter
-                          amount={getTotalPrice()}
+                          amount={getTotalPrice() + feeShipping}
                           className="text-lg font-bold text-black"
                         />
                       </div>
                       <Button
-                        onClick={handleCheckout}
-                        className="w-full rounded-full font-semibold tracking-wide"
+                        disabled={
+                          loading || !cartProducts?.length || !feeShipping
+                        }
+                        onClick={handleCheckoutWallet}
+                        className="w-full rounded-full font-semibold tracking-wide bg-green-500"
                         size="lg"
                       >
-                        Proceed to Checkout
+                        Pay With Wallet <WalletIcon />
+                      </Button>
+                      <Button
+                        disabled={
+                          loading || !cartProducts?.length || !feeShipping
+                        }
+                        onClick={handleCheckoutCash}
+                        className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
+                        size="lg"
+                      >
+                        Pay With Cash <DollarSign />
+                      </Button>
+                      <Button
+                        disabled={
+                          loading || !cartProducts?.length || !feeShipping
+                        }
+                        onClick={handleCheckout}
+                        className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
+                        size="lg"
+                      >
+                        Pay With Stripe <BanknoteIcon />
                       </Button>
                       <Link
                         href={"/"}

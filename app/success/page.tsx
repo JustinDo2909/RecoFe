@@ -16,6 +16,7 @@ const SuccessPage = () => {
   const orderNumber = searchParams.get("orderNumber");
   const sessionId = searchParams.get("session_id");
   const feeShipping = searchParams.get("feeShipping");
+  const address = searchParams.get("address");
 
   const [deleteAllCart] = useDeleteAllProductToCardMutation();
   const [createOrder] = useCreateOrderMutation();
@@ -25,7 +26,7 @@ const SuccessPage = () => {
       if (!orderNumber && !sessionId) {
         router.push("/");
       } else {
-        await createOrder({ paymentMethod: "Stripe" , statusOrder: "" , statusPayment : "Paid" , feeShipping: Number(feeShipping) || 0 });
+        await createOrder({ paymentMethod: "Stripe" , statusOrder: "" , statusPayment : "Paid" , feeShipping: Number(feeShipping) || 0 , address: address?.toString() });
         await deleteAllCart({});
       }
     };

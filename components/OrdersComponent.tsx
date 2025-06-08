@@ -34,7 +34,7 @@ const OrdersComponent = ({
   };
 
   const handleRefundClick = (e: React.MouseEvent, order: Order) => {
-    e.stopPropagation(); // Ngăn sự kiện lan ra row
+    e.stopPropagation();
     refundOrder?.(order);
   };
 
