@@ -1,12 +1,13 @@
+"use client";
 import { useResetPasswordMutation } from "@/state/api";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
 const ResetPassword = () => {
-  const { resetToken } = useParams(); // Lấy token từ URL
+ const params = useParams();
+  const resetToken = params.id;
   const navigate = useRouter();
-
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -20,7 +21,7 @@ const ResetPassword = () => {
 
     if (newPassword !== confirmPassword)
       return toast.error("Mật khẩu xác nhận không khớp");
-
+    
     try {
       const res = await resetPassword({
         resetToken ,
@@ -39,6 +40,7 @@ const ResetPassword = () => {
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Đặt lại mật khẩu
         </h2>
+      
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-gray-600 font-medium">Mật khẩu mới</label>

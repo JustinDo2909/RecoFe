@@ -13,21 +13,14 @@ import {
 import { Order } from "@/types";
 import { FileX } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-interface OrderS {
-  _id: string;
-  statusOrder: string;
-  // other properties of the order...
-}
 
 // Kết nối Socket.IO
 const socket = io("http://localhost:9999", { withCredentials: true });
 
 const OrdersPage = () => {
-  const [order, setOrder] = useState<OrderS | null>(null); // Allow order to be either null or an Order object
   const [isMounted, setIsMounted] = useState(false);
   const [getOrder, { data: OrderList }] = useLazyGetOrderQuery({});
   const [createRefunRequest] = useCreateRefundRequestMutation();
