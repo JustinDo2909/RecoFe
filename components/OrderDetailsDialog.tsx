@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import Image from "next/image";
 
 interface Props {
   order: Order | null;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const OrderDetailsDialog: FC<Props> = ({ order, user, isOpen, onClose }) => {
+  console.log("order", order);
   if (!order) return null;
 
   return (
@@ -70,20 +72,20 @@ const OrderDetailsDialog: FC<Props> = ({ order, user, isOpen, onClose }) => {
             {order?.items?.map((product, index) => (
               <TableRow key={index}>
                 <TableCell className="flex items-center gap-2">
-                  {/* {product?.images && (
-                    <Image
-                      src={urlFor(product?.product?.images[0]).url()}
-                      alt="productImage"
-                      width={50}
-                      height={50}
-                      className="border rounded-sm w-14 h-14 object-contain"
-                    />
-                  )} */}
-                  {product?.productId && (
-                    <p className=" line-clamp-1">{product?.productId}</p>
-                  )}
+                  <Image
+                    src={product?.productId?.picture || ""}
+                    alt="productImage"
+                    width={50}
+                    height={50}
+                    className="border rounded-sm w-14 h-14 object-contain"
+                  />
+
+                  <p className=" line-clamp-1">{product?.productId?.name || ""}</p>
+
+                
                 </TableCell>
                 <TableCell>{product?.quantity}</TableCell>
+                <TableCell>{product?.productId?.finalPrice}</TableCell>
                 {/* {product?.product?.price && product?.quantity && (
                   <TableCell>
                     <PriceFormatter
