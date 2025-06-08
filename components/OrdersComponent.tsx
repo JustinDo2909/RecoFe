@@ -106,7 +106,7 @@ const OrdersComponent = ({
                     </span>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {refundOrder && order?.statusOrder === "Processing" && (
+                    {refundOrder && order?.statusOrder === "Processing" && order?.statusPayment === "Paid" && (
                       <button
                         onClick={(e) => handleRefundClick(e, order)}
                         className="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800 hover:bg-red-200 transition-colors"
