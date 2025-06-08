@@ -116,7 +116,7 @@ const SearchBar = () => {
                       </Link>
                       <PriceView
                         price={product?.price}
-                        discount={product?.discount}
+                        discount={20}
                         className="md:text-lg"
                       />
                     </div>

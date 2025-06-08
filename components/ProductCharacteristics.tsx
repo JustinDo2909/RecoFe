@@ -8,13 +8,14 @@ import {
 } from "./ui/accordion";
 
 const ProductCharacteristics = ({ product }: { product: Product }) => {
+  console.log('product', product)
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
         <AccordionTrigger>{product?.name}: Characteristics</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-1">
           <p className="flex items-center justify-between">
-            Brand: <span className="font-semibold tracking-wide">Unknown</span>
+            Brand: <span className="font-semibold tracking-wide">{product?.categories || "Viet Name"}</span>
           </p>
           <p className="flex items-center justify-between">
             Collection:{" "}
@@ -23,7 +24,7 @@ const ProductCharacteristics = ({ product }: { product: Product }) => {
           <p className="flex items-center justify-between">
             Type:{" "}
             <span className="font-semibold tracking-wide">
-              {product?.variant}
+              {product?.variant || "Túi đeo"}
             </span>
           </p>
           <p className="flex items-center justify-between">
@@ -35,11 +36,11 @@ const ProductCharacteristics = ({ product }: { product: Product }) => {
           <p className="flex items-center justify-between">
             Intro:{" "}
             <span className="font-semibold tracking-wide">
-              {product?.intro}
+              {product?.decription}
             </span>
           </p>
-        </AccordionContent>
-      </AccordionItem>
+        </AccordionContent> 
+      </AccordionItem>  
     </Accordion>
   );
 };

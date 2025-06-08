@@ -25,7 +25,7 @@ const Footer = () => {
           <div className="space-y-4">
             <LogoReco className="justify-center flex md:justify-start" />
             <p className="text-gray-600 text-sm">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem ex ad at vitae esse. Vero fuga laborum disti.
+              Mỗi sản phẩm của RECO đều được thiết kế lại, từ những chiếc áo cũ, túi xách đã qua sử dụng đến các phụ kiện, tất cả đều được biến hóa để mang lại sự tươi mới và độc đáo.
             </p>
             <SocialMedia
               className="text-darkColor/60"
@@ -34,7 +34,7 @@ const Footer = () => {
             />
           </div>
           <div>
-            <h3 className="font-semibold text-darkColor mb-4">Quick Links</h3>
+            <h3 className="font-semibold text-darkColor mb-4">RECO</h3>
             <div className="flex flex-col gap-3">
               {quickLinksData?.map((item) => (
                 <Link
@@ -48,7 +48,7 @@ const Footer = () => {
             </div>
           </div>
           <div>
-            <h3 className="font-semibold text-darkColor mb-4">Categories</h3>
+            <h3 className="font-semibold text-darkColor mb-4">Trợ Giúp</h3>
             <div className="flex flex-col gap-3">
               {categoriesData?.map((item) => (
                 <Link
@@ -62,14 +62,14 @@ const Footer = () => {
             </div>
           </div>
           <div>
-            <h3 className="font-semibold text-darkColor mb-4">Newsletter</h3>
+            <h3 className="font-semibold text-darkColor mb-4">Tham Gia Ngay</h3>
             <p className="text-gray-600 text-sm mb-4">
-              Subscribe to our newsletter to receive updates and exclusive offers.
+             Trở thành thành viên của RECO để được tích điểm & nhận ưu đãi cho lần mua hàng tiếp theo!
             </p>
             <form className="space-y-3">
               <Input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Nhập Email của bạn"
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
               />
@@ -77,7 +77,7 @@ const Footer = () => {
                 type="submit"
                 className="w-full bg-darkColor text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
               >
-                Subscribe
+                Đăng Ký Ngay
               </button>
             </form>
           </div>

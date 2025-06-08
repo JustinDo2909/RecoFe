@@ -19,7 +19,7 @@ const AddToCartButton = ({ product, className }: Props) => {
   const [itemCount, setItemCount] = useState(0);
 
   useEffect(() => {
-    const item = cartList?.find((item) => item.productId?._id === product._id);
+    const item = cartList?.find((item) => item?.productId?._id === product._id);
     setItemCount(item?.quantity ?? 0);
   }, [cartList, product._id]); // Re-sync item count when cartList changes
 
@@ -27,7 +27,7 @@ const AddToCartButton = ({ product, className }: Props) => {
 
   const handleAdd = async () => {
     await addProduct({
-      productId: product._id,
+      productId: product._id || "",
       quantity: 1,
     });
     toast.success(`${product.name?.substring(0, 12)}... added successfully!`);

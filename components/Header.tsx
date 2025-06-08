@@ -1,17 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import HeaderMenu from "./HeaderMenu";
-import Container from "./Container";
-import MobileMenu from "./MobileMenu";
-import SearchBar from "./SearchBar";
-import CartIcon from "./CartIcon";
-import Link from "next/link";
-import Cookies from "js-cookie";
-import { useUser } from "@/hooks/useUser";
 import { headerData } from "@/constants";
+import { useUser } from "@/hooks/useUser";
+import Cookies from "js-cookie";
+import { UserIcon } from "lucide-react";
+import Link from "next/link";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import CartIcon from "./CartIcon";
+import Container from "./Container";
+import HeaderMenu from "./HeaderMenu";
 import LogoReco from "./LogoReco";
+import MobileMenu from "./MobileMenu";
 import OrderIcon from "./OrderIcon";
-import { redirect } from "next/navigation";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -21,7 +22,7 @@ const Header = () => {
   }, []);
   const { logout } = useUser();
   const token = Cookies.get("authToken");
-
+  const router = useRouter();
   const handleLogout = async () => {
     await logout();
     redirect("/login");
@@ -48,7 +49,13 @@ const Header = () => {
             <>
               <CartIcon />
               <OrderIcon />
-              <button onClick={handleLogout}>Logout</button>
+              <div className="flex gap-1">
+                <UserIcon
+                  className="cursor-pointer"
+                  onClick={() => router.push("/profile")}
+                />
+                <button onClick={handleLogout}>Logout</button>
+              </div>
             </>
           )}
         </div>

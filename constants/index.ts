@@ -1,4 +1,3 @@
-import { countUpItemsProps } from "@/types";
 
 export const headerData = [
   { title: "Trang Chủ", href: "/" },
@@ -17,47 +16,44 @@ export const productType = [
 ];
 
 export const quickLinksData = [
-  { title: "About us", href: "/about" },
-  { title: "Contact us", href: "/contact" },
-  { title: "Terms & Conditions", href: "/terms" },
-  { title: "Privacy Policy", href: "/privacy" },
-  { title: "FAQs", href: "/faqs" },
+  { title: "Trang Chủ", href: "/" },
+  { title: "Sản Phẩm", href: "/product" },
+  { title: "Dịch Vụ Custom", href: "/custom" },
+  { title: "Cộng Đồng", href: "/community" },
+  { title: "Về Chúng Tôi", href: "/about" },
 ];
 
 export const categoriesData = [
-  { title: "Men's Fashion", href: "/men" },
-  { title: "Women's Fashion", href: "/women" },
-  { title: "Kids corner", href: "/kids" },
-  { title: "Tshirt", href: "/t-shirt" },
-  { title: "Accessories", href: "/accessories" },
-  { title: "Household", href: "/household" },
-  { title: "Others", href: "/others" },
+  { title: "AI Stylist", href: "/" },
+  { title: "Tài Khoản Của Tôi", href: "/" },
+  { title: "Liên Hệ", href: "/" },
+  { title: "Đổi trả hàng", href: "/" },
 ];
 export const faqsData = [
   {
-    question: "What services does Reco offer?",
+    question: "Reco cung cấp những dịch vụ gì?",
     answer:
-      "Reco offers a wide range of technology solutions including custom software development, cloud services, and digital transformation consulting.",
+      "Reco cung cấp nhiều giải pháp công nghệ bao gồm phát triển phần mềm tùy chỉnh, dịch vụ đám mây và tư vấn chuyển đổi số.",
   },
   {
-    question: "How can I get support for Reco products?",
+    question: "Làm cách nào để tôi nhận được hỗ trợ cho các sản phẩm của Reco?",
     answer:
-      "You can reach our support team through our contact page or by emailing support@Reco.com.",
+      "Bạn có thể liên hệ với đội ngũ hỗ trợ của chúng tôi thông qua trang liên hệ hoặc gửi email tới support@Reco.com.",
   },
   {
-    question: "Does Reco offer training for its products?",
+    question: "Reco có cung cấp đào tạo cho các sản phẩm của mình không?",
     answer:
-      "Yes, we offer comprehensive training programs for all our products and services. Please contact our sales team for more information.",
+      "Có, chúng tôi cung cấp các chương trình đào tạo toàn diện cho tất cả sản phẩm và dịch vụ của mình. Vui lòng liên hệ đội ngũ kinh doanh để biết thêm thông tin.",
   },
   {
-    question: "What industries does Reco serve?",
+    question: "Reco phục vụ những ngành công nghiệp nào?",
     answer:
-      "Reco serves a wide range of industries including finance, healthcare, retail, and manufacturing.",
+      "Reco phục vụ nhiều ngành công nghiệp bao gồm tài chính, y tế, bán lẻ và sản xuất.",
   },
   {
-    question: "How does Reco ensure data security?",
+    question: "Reco đảm bảo an toàn dữ liệu như thế nào?",
     answer:
-      "We employ industry-standard security measures and comply with all relevant data protection regulations to ensure the security of our clients' data.",
+      "Chúng tôi áp dụng các biện pháp bảo mật theo tiêu chuẩn ngành và tuân thủ tất cả các quy định về bảo vệ dữ liệu liên quan để đảm bảo an toàn cho dữ liệu của khách hàng.",
   },
 ];
 

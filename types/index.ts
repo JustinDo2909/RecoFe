@@ -35,20 +35,20 @@ export interface Discount {
 }
 
 export interface Product {
-  _id: string;
-  name: string;
+  _id?: string;
+  name?: string;
   description?: string;
-  price: number;
+  price?: number;
   rating?: number;
   location?: string;
-  picture: string;
-  stock: number;
-  categories: string[]; // đúng tên theo BE là `categories`
+  picture?: string;
+  stock?: number;
+  categories?: string[]; // đúng tên theo BE là `categories`
   editby?: string;
-  isActive: boolean;
+  isActive?: boolean;
   currentDiscount?: Discount | string; // có thể populate hoặc chỉ chứa ObjectId
   deactivationReason?: string;
-  finalPrice: number;
+  finalPrice?: number;
   createdAt?: string;
   updatedAt?: string;
 }

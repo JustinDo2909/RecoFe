@@ -1,5 +1,8 @@
 "use client";
-import { createCheckoutSession, Metadata } from "@/actions/createCheckoutSession";
+import {
+  createCheckoutSession,
+  Metadata,
+} from "@/actions/createCheckoutSession";
 import Container from "@/components/Container";
 import EmptyCart from "@/components/EmptyCart";
 import NoAccessToCart from "@/components/NoAccessToCart";
@@ -9,7 +12,12 @@ import QuantityButtons from "@/components/QuantityButtons";
 import { SelectFiled } from "@/components/SelectFiled";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useUser } from "@/hooks/useUser";
 import { useSocket } from "@/hooks/useWebSocket";
 import paypalLogo from "@/images/paypalLogo.png";
@@ -26,7 +34,14 @@ import {
   useGetWardsQuery,
 } from "@/state/apiGHN";
 import useCartStore from "@/store";
-import { BanknoteIcon, DollarSign, Heart, ShoppingBag, Trash } from "lucide-react";
+import {
+  BanknoteIcon,
+  DollarSign,
+  Heart,
+  ShoppingBag,
+  Trash,
+  WalletIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -35,7 +50,8 @@ import toast from "react-hot-toast";
 const CartPage = () => {
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { deleteCartProduct, getTotalPrice, getSubtotalPrice, resetCart } = useCartStore();
+  const { deleteCartProduct, getTotalPrice, getSubtotalPrice, resetCart } =
+    useCartStore();
   const { user } = useUser();
 
   useEffect(() => {
@@ -89,8 +105,6 @@ const CartPage = () => {
           try {
             const res = await getFeeShipping({
               service_type_id: 2,
-              // from_district_id: 202,
-              // from_ward_code: "3695",
               to_ward_code: wardSelected,
               to_district_id: fromDistrictId,
               weight: 1000,
@@ -141,7 +155,12 @@ const CartPage = () => {
         UserId: user?._id,
       };
       if (cartProducts && feeShipping > 0) {
-        const checkoutUrl = await createCheckoutSession(feeShipping, cartProducts, metadata, () => deleteAllCart({}));
+        const checkoutUrl = await createCheckoutSession(
+          feeShipping,
+          cartProducts,
+          metadata,
+          () => deleteAllCart({})
+        );
         if (checkoutUrl) {
           window.location.href = checkoutUrl;
         }
@@ -180,12 +199,20 @@ const CartPage = () => {
         <Container>
           {cartProducts?.length ? (
             <>
-              <div className="flex items-center gap-2 py-5">
-                <ShoppingBag />
-                <h1 className="text-2xl font-semibold">Shopping Cart</h1>
-                <div className="text-2xl font-semibold">
-                  Wallet : <PriceFormatter amount={wallet?.amount ?? 0} />
+              <div className="flex items-center gap-10 py-5 ">
+                <div className=" flex justify-center items-center gap-4">
+                  <ShoppingBag />
+                  <h1 className="text-2xl font-semibold">Shopping Cart</h1>
                 </div>
+                {wallet?.amount > 0 && (
+                  <div className="text-2xl font-semibold flex justify-center items-center gap-1">
+                    <WalletIcon /> :{" "}
+                    <PriceFormatter
+                      className="text-red-500 text-2xl"
+                      amount={wallet?.amount ?? 0}
+                    />
+                  </div>
+                )}  
               </div>
               <div className="grid lg:grid-cols-3 md:gap-8">
                 {/* Products */}
@@ -216,13 +243,23 @@ const CartPage = () => {
                             )}
                             <div className="h-full flex flex-1 items-start flex-col justify-between py-1">
                               <div className="space-y-1.5">
-                                <h2 className="font-semibold line-clamp-1">{product?.productId.name}</h2>
-                                <p className="text-sm text-lightColor font-medium">{product?.productId.description}</p>
-                                <p className="text-sm capitalize">
-                                  Variant: <span className="font-semibold">{product?.productId.stock}</span>
+                                <h2 className="font-semibold line-clamp-1">
+                                  {product?.productId.name}
+                                </h2>
+                                <p className="text-sm text-lightColor font-medium">
+                                  {product?.productId.description}
                                 </p>
                                 <p className="text-sm capitalize">
-                                  Description: <span className="font-semibold">{product?.productId.decription}</span>
+                                  Variant:{" "}
+                                  <span className="font-semibold">
+                                    {product?.productId.stock}
+                                  </span>
+                                </p>
+                                <p className="text-sm capitalize">
+                                  Description:{" "}
+                                  <span className="font-semibold">
+                                    {product?.productId.decription}
+                                  </span>
                                 </p>
                               </div>
                               <div className="text-gray-500 flex items-center gap-2">
@@ -231,16 +268,24 @@ const CartPage = () => {
                                     <TooltipTrigger>
                                       <Heart className="w-4 h-4 md:w-5 md:h-5 hover:text-green-600 hoverEffect" />
                                     </TooltipTrigger>
-                                    <TooltipContent className="font-bold">Add to Favorite</TooltipContent>
+                                    <TooltipContent className="font-bold">
+                                      Add to Favorite
+                                    </TooltipContent>
                                   </Tooltip>
                                   <Tooltip>
                                     <TooltipTrigger>
                                       <Trash
-                                        onClick={() => handleDeleteProduct(product?.productId._id)}
+                                        onClick={() =>
+                                          handleDeleteProduct(
+                                            product?.productId._id
+                                          )
+                                        }
                                         className="w-4 h-4 md:w-5 md:h-5 hover:text-red-600 hoverEffect"
                                       />
                                     </TooltipTrigger>
-                                    <TooltipContent className="font-bold bg-red-600">Delete product</TooltipContent>
+                                    <TooltipContent className="font-bold bg-red-600">
+                                      Delete product
+                                    </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
                               </div>
@@ -255,7 +300,10 @@ const CartPage = () => {
                               /> */}
                               <PriceView
                                 className="font-bold text-lg"
-                                price={(product?.productId.price as number) * (product?.quantity as number)}
+                                price={
+                                  (product?.productId.price as number) *
+                                  (product?.quantity as number)
+                                }
                                 discount={20}
                               />
                               <QuantityButtons
@@ -269,7 +317,11 @@ const CartPage = () => {
                         </div>
                       );
                     })}
-                    <Button onClick={handleResetCart} className="m-5 font-semibold" variant="destructive">
+                    <Button
+                      onClick={handleResetCart}
+                      className="m-5 font-semibold"
+                      variant="destructive"
+                    >
                       Reset Cart
                     </Button>
                   </div>
@@ -287,12 +339,18 @@ const CartPage = () => {
                       title="District"
                       onSelect={(value: string) => setDistricSelected(value)}
                     />
-                    <SelectFiled lists={ward || []} title="Ward" onSelect={(value: string) => setWardSelected(value)} />
+                    <SelectFiled
+                      lists={ward || []}
+                      title="Ward"
+                      onSelect={(value: string) => setWardSelected(value)}
+                    />
                   </div>
                   {/* summary */}
                   <div className="lg:col-span-1">
                     <div className="hidden md:inline-block w-full bg-white p-6 rounded-lg border">
-                      <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                      <h2 className="text-xl font-semibold mb-4">
+                        Order Summary
+                      </h2>
                       <div className="space-y-4">
                         <div className="flex justify-between">
                           <span>Subtotal</span>
@@ -310,7 +368,9 @@ const CartPage = () => {
                             amount={
                               cartProducts?.reduce((total, item) => {
                                 const price = item.productId.price ?? 0;
-                                const discount = ((item.productId.discount ?? 0) * price) / 100;
+                                const discount =
+                                  ((item.productId.discount ?? 0) * price) /
+                                  100;
                                 const discountedPrice = price + discount;
                                 return total + discountedPrice * item.quantity;
                               }, 0) -
@@ -339,7 +399,9 @@ const CartPage = () => {
                               }, 0) -
                               (cartProducts?.reduce((total, item) => {
                                 const price = item.productId.price ?? 0;
-                                const discount = ((item.productId.discount ?? 0) * price) / 100;
+                                const discount =
+                                  ((item.productId.discount ?? 0) * price) /
+                                  100;
                                 const discountedPrice = price + discount;
                                 return total + discountedPrice * item.quantity;
                               }, 0) -
@@ -354,7 +416,9 @@ const CartPage = () => {
                           />
                         </div>
                         <Button
-                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
                           onClick={handleCheckoutCash}
                           className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
                           size="lg"
@@ -362,7 +426,9 @@ const CartPage = () => {
                           Pay With Cash <DollarSign />
                         </Button>
                         <Button
-                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
                           onClick={handleCheckout}
                           className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
                           size="lg"
@@ -376,7 +442,9 @@ const CartPage = () => {
                 {/* Order summary for mobile view */}
                 <div className="md:hidden fixed bottom-0 left-0 w-full bg-white pt-2">
                   <div className="p-4 rounded-lg border mx-4">
-                    <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                    <h2 className="text-xl font-semibold mb-4">
+                      Order Summary
+                    </h2>
                     <div className="space-y-4">
                       <div className="flex justify-between">
                         <span>Subtotal</span>
@@ -384,12 +452,17 @@ const CartPage = () => {
                       </div>
                       <div className="flex justify-between">
                         <span>Discount</span>
-                        <PriceFormatter amount={getSubtotalPrice() - getTotalPrice()} />
+                        <PriceFormatter
+                          amount={getSubtotalPrice() - getTotalPrice()}
+                        />
                       </div>
                       <Separator />
                       <div className="flex justify-between">
                         <span>Total</span>
-                        <PriceFormatter amount={getTotalPrice()} className="text-lg font-bold text-black" />
+                        <PriceFormatter
+                          amount={getTotalPrice()}
+                          className="text-lg font-bold text-black"
+                        />
                       </div>
                       <Button
                         onClick={handleCheckout}
@@ -402,7 +475,11 @@ const CartPage = () => {
                         href={"/"}
                         className="flex items-center justify-center py-2 border border-darkColor/50 rounded-full hover:border-darkColor hover:bg-darkColor/5 hoverEffect"
                       >
-                        <Image src={paypalLogo} alt="paypalLogo" className="w-20" />
+                        <Image
+                          src={paypalLogo}
+                          alt="paypalLogo"
+                          className="w-20"
+                        />
                       </Link>
                     </div>
                   </div>
