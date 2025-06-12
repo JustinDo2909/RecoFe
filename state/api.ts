@@ -1,4 +1,3 @@
-import { DiscountRequestOrder, DiscountRequestProduct, Response } from "./../types/index";
 import {
   Card,
   Category,
@@ -10,13 +9,13 @@ import {
   Request,
   Service,
   User,
-  Wallet
+  Wallet,
 } from "@/types";
 import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
-
+import { DiscountRequestOrder, DiscountRequestProduct, Response } from "./../types/index";
 
 const customBaseQuery = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: any) => {
   const baseQuery = fetchBaseQuery({
@@ -156,7 +155,7 @@ export const api = createApi({
       providesTags: ["Products"],
       transformResponse: (response: any): Product[] => response.data,
     }),
-    getProductById: build.query<Product, { id: string }>({
+    getProductById: build.query<Product, { id: any }>({
       query: ({ id }) => ({
         url: `/product/${id}`,
       }),
@@ -219,6 +218,7 @@ export const api = createApi({
         statusPayment: string;
         statusOrder: string;
         feeShipping: number;
+        address: any;
       }
     >({
       query: (body) => ({
@@ -604,6 +604,24 @@ export const api = createApi({
       }),
       invalidatesTags: ["Categories"],
     }),
+    walletPay: build.mutation<
+      any,
+      {
+        items: any;
+        totalPrice: any;
+        feeShipping: any;
+        currentDiscount: any;
+        address: any;
+      }
+    >({
+      query: (body) => ({
+        url: "/wallet/pay",
+        method: "POST",
+        body: body,
+        transformResponse: (response: any) => response.data,
+      }),
+      invalidatesTags: ["Wallet"],
+    }),
   }),
 });
 
@@ -670,4 +688,5 @@ export const {
   useResetPasswordMutation,
 
   useUpdateOrderStatusMutation,
+  useWalletPayMutation,
 } = api;

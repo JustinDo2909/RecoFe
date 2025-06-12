@@ -10,6 +10,7 @@ export interface Metadata {
   customerName: string;
   customerEmail: string;
   UserId: string;
+  address: any;
 }
 
 interface CartItems {
@@ -37,6 +38,7 @@ export async function createCheckoutSession(
         customerName: metadata?.customerName,
         customerEmail: metadata?.customerEmail,
         UserId: metadata?.UserId,
+        address: metadata?.address,
       },
       mode: "payment",
       allow_promotion_codes: true,
@@ -44,12 +46,12 @@ export async function createCheckoutSession(
       invoice_creation: {
         enabled: true,
       },
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}&customerName=${metadata.customerName}&customerEmail=${metadata.customerEmail}&UserId=${metadata.UserId}&feeShipping=${feeShipping}`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}&customerName=${metadata.customerName}&customerEmail=${metadata.customerEmail}&UserId=${metadata.UserId}&feeShipping=${feeShipping}&address=${encodeURIComponent(metadata.address)}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
       line_items: [
         ...items.map((item) => ({
           price_data: {
-            currency: "VND", 
+            currency: "VND",
             unit_amount: Math.round(item.productId.price!),
             product_data: {
               name: item.productId.name || "Unnamed Product",

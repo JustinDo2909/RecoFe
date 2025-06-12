@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import Image from "next/image";
 
 interface Props {
   order: Order | null;
@@ -18,9 +19,10 @@ interface Props {
   onClose: () => void;
 }
 
-const OrderDetailsDialog: FC<Props> = ({ order, user, isOpen, onClose }) => {
+const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
+  console.log("order", order);
   if (!order) return null;
-
+  console.log('order', order)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-scroll">
@@ -35,12 +37,12 @@ const OrderDetailsDialog: FC<Props> = ({ order, user, isOpen, onClose }) => {
             <strong>Email:</strong> {user?.email}
           </p> */}
           <p>
-            <strong>Ngày:</strong>{" "}
+            <strong>Ngày:</strong>
             {order?.createdAt &&
               new Date(order?.createdAt).toLocaleDateString()}
           </p>
           <p>
-            <strong>Trạng thái:</strong>{" "}
+            <strong>Trạng thái:</strong>
             <span className="capitalize text-green-600 font-medium">
               {order?.statusOrder}
             </span>
@@ -63,6 +65,7 @@ const OrderDetailsDialog: FC<Props> = ({ order, user, isOpen, onClose }) => {
             <TableRow>
               <TableHead>Sản phẩm</TableHead>
               <TableHead>Số lượng</TableHead>
+              <TableHead>Phí giao hàng</TableHead>
               <TableHead>Giá</TableHead>
             </TableRow>
           </TableHeader>
@@ -70,20 +73,21 @@ const OrderDetailsDialog: FC<Props> = ({ order, user, isOpen, onClose }) => {
             {order?.items?.map((product, index) => (
               <TableRow key={index}>
                 <TableCell className="flex items-center gap-2">
-                  {/* {product?.images && (
-                    <Image
-                      src={urlFor(product?.product?.images[0]).url()}
-                      alt="productImage"
-                      width={50}
-                      height={50}
-                      className="border rounded-sm w-14 h-14 object-contain"
-                    />
-                  )} */}
-                  {product?.productId && (
-                    <p className=" line-clamp-1">{product?.productId}</p>
-                  )}
+                  <Image
+                    src={product?.picture}
+                    alt="productImage"
+                    width={50}
+                    height={50}
+                    className="border rounded-sm w-14 h-14 object-contain"
+                  />
+
+                  <p className=" line-clamp-1">{product?.name || ""}</p>
+
+                
                 </TableCell>
                 <TableCell>{product?.quantity}</TableCell>
+                <TableCell>{order?.feeShipping} đ</TableCell>
+                <TableCell>{product?.finalPrice} đ</TableCell>
                 {/* {product?.product?.price && product?.quantity && (
                   <TableCell>
                     <PriceFormatter

@@ -7,13 +7,6 @@ export const headerData = [
   { title: "Về Chúng Tôi", href: "/about" },
 ];
 
-export const productType = [
-  { title: "Tshirt", value: "tshirt" },
-  { title: "Jacket", value: "jacket" },
-  { title: "Pants", value: "pants" },
-  { title: "Hoodie", value: "hoodie" },
-  { title: "Short", value: "tshirt" },
-];
 
 export const quickLinksData = [
   { title: "Trang Chủ", href: "/" },

@@ -5,12 +5,7 @@ import Container from "@/components/Container";
 import PriceView from "@/components/PriceView";
 import ProductCharacteristics from "@/components/ProductCharacteristics";
 import { useGetProductByIdQuery } from "@/state/api";
-import {
-  BoxIcon,
-  FileQuestion,
-  ListOrderedIcon,
-  Share,
-} from "lucide-react";
+import { BoxIcon, FileQuestion, ListOrderedIcon, Share } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 
@@ -38,78 +33,63 @@ const SingleProductPage = () => {
       <div className="w-full md:w-1/2 flex flex-col gap-5">
         {/* Tên và giá sản phẩm */}
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">
-            {product?.name}
-          </h2>
-          <PriceView
-            price={product?.price}
-            discount={20}
-            className="text-lg font-bold "
-          />
+          <h2 className="text-3xl md:text-4xl font-bold mb-2">{product?.name}</h2>
+          <PriceView price={product?.price} discount={20} className="text-lg font-bold " />
         </div>
 
         {/* Tình trạng kho */}
         {product?.stock && (
-          <p className="bg-green-100 w-fit px-4 py-2 text-green-600 text-sm font-semibold rounded-lg">
-            Còn hàng
-          </p>
-        )}  
-           <AddToCartButton product={product?? {}} />
+          <p className="bg-green-100 w-fit px-4 py-2 text-green-600 text-sm font-semibold rounded-lg">Còn hàng</p>
+        )}
+        <AddToCartButton product={product ?? {}} />
 
         {/* Mô tả sản phẩm */}
-        <p className="text-sm text-gray-700 leading-relaxed">
-          {product?.description}
-        </p>
+        <p className="text-sm text-gray-700 leading-relaxed">{product?.description}</p>
 
         {/* Nút yêu thích */}
-       
 
         {/* Đặc điểm sản phẩm */}
-        <ProductCharacteristics product={product || ""} />
+        <ProductCharacteristics product={product || {}} />
 
         {/* Các tùy chọn */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 py-5 mt-5">
-          <OptionItem onClick={() => router.push(`/product`)}  icon={<BoxIcon />} text="Các sản phẩm khác" />
-          <OptionItem  onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} icon={<FileQuestion />} text="Đặt câu hỏi" />
-          <OptionItem  onClick={() => router.push(`/chatbot`)} icon={<ListOrderedIcon />} text="AI-Style" />
-          <OptionItem onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} icon={<Share />} text="Chia sẻ" />
+          <OptionItem onClick={() => router.push(`/product`)} icon={<BoxIcon />} text="Các sản phẩm khác" />
+          <OptionItem
+            onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")}
+            icon={<FileQuestion />}
+            text="Đặt câu hỏi"
+          />
+          <OptionItem onClick={() => router.push(`/chatbot`)} icon={<ListOrderedIcon />} text="AI-Style" />
+          <OptionItem
+            onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")}
+            icon={<Share />}
+            text="Chia sẻ"
+          />
         </div>
 
         {/* Chính sách */}
         <div className="flex flex-wrap items-center gap-5 mt-4">
-          <PolicyCard
-            title="Vận chuyển nhanh chóng"
-            description="Mọi sản phẩm đều được đóng gói nhanh chóng"
-          />
-          <PolicyCard
-            title="Thân thiện với môi trường"
-            description="Sản phẩm được làm từ quần áo tái chế"
-          />
-          <PolicyCard
-            title="Thanh toán linh hoạt"
-            description="Hỗ trợ nhiều loại thẻ tín dụng"
-          />
+          <PolicyCard title="Vận chuyển nhanh chóng" description="Mọi sản phẩm đều được đóng gói nhanh chóng" />
+          <PolicyCard title="Thân thiện với môi trường" description="Sản phẩm được làm từ quần áo tái chế" />
+          <PolicyCard title="Thanh toán linh hoạt" description="Hỗ trợ nhiều loại thẻ tín dụng" />
         </div>
       </div>
     </Container>
   );
 };
 
-const OptionItem = ({ icon, text , onClick }: { icon: React.ReactNode; text: string , onClick?: () => void }) => (
-  <div onClick={onClick} className="flex items-center gap-2 text-sm text-gray-700 hover:text-red-600 cursor-pointer transition-all">
+const OptionItem = ({ icon, text, onClick }: { icon: React.ReactNode; text: string; onClick?: () => void }) => (
+  <div
+    onClick={onClick}
+    className="flex items-center gap-2 text-sm text-gray-700 hover:text-red-600 cursor-pointer transition-all"
+  >
     {icon}
     <p>{text}</p>
   </div>
 );
 
-const PolicyCard = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) => (
-  <div  className="border border-gray-300 text-center p-4 rounded-md hover:border-blue-500 transition-all">
+const PolicyCard = ({ title, description }: { title: string; description: string }) => (
+  <div className="border border-gray-300 text-center p-4 rounded-md hover:border-blue-500 transition-all">
     <p className="text-base font-semibold text-gray-800">{title}</p>
     <p className="text-sm text-gray-500">{description}</p>
   </div>
