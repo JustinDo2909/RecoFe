@@ -485,14 +485,14 @@ const CartPage = () => {
                           Pay With Stripe <BanknoteIcon />
                         </Button>
 
-                        <Button
+                        {/* <Button
                           disabled={loading || !cartProducts?.length || !feeShipping}
                           onClick={handleCheckoutWallet}
                           className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
                           size="lg"
                         >
                           Trả bằng tiền trong ví <BanknoteIcon />
-                        </Button>
+                        </Button> */}
                       </div>
                     </div>
                   </div>

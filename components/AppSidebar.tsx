@@ -120,7 +120,7 @@ const AppSidebar = () => {
             <SidebarMenuButton asChild>
               <button onClick={handleLogout} className="text-primary-700 pl-8">
                 <LogOut className="mr-2 h-6 w-6" />
-                <span>Sign out</span>
+                <span>Đăng xuất</span>
               </button>
             </SidebarMenuButton>
           </SidebarMenuItem>

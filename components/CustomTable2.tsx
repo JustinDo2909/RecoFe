@@ -110,13 +110,13 @@ const CustomTable = <T extends { _id: string }>({
   return (
     <div className="p-4 bg-customgreys-secondarybg">
       <div className="flex items-center gap-5 justify-center">
-        <input
+        {/* <input
           type="text"
           placeholder="Search..."
           className="mb-4 p-2 border rounded w-full"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        /> */}
         {/* {onCreate && (
           <button onClick={onCreate} className="mb-4 text-green-600 p-3">
             <PlusCircleIcon size={35} />

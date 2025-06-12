@@ -1,7 +1,8 @@
 "use client";
 
-import { Category, Discount } from "@/types";
-import React, { useEffect, useMemo, useState } from "react";
+import type { Category, Discount } from "@/types";
+import type React from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ProductFormData {
@@ -60,10 +61,45 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const [showDiscountDropdown, setShowDiscountDropdown] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null);
+  const [priceDisplay, setPriceDisplay] = useState<string>("");
 
   const selectedCategorys = watch("categories") || [];
   const profilePictureFile = watch("picture");
+  const currentPrice = watch("price");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Format number to VND currency
+  const formatVND = (value: number): string => {
+    if (isNaN(value) || value === 0) return "";
+    return new Intl.NumberFormat("vi-VN").format(value) + " VND";
+  };
+
+  // Parse VND string back to number
+  const parseVND = (value: string): number => {
+    if (!value) return 0;
+    // Remove "VND", spaces, and dots, then convert to number
+    const numericValue = value.replace(/[^\d]/g, "");
+    return Number.parseInt(numericValue) || 0;
+  };
+
+  // Update display when price changes
+  useEffect(() => {
+    if (currentPrice !== undefined) {
+      setPriceDisplay(formatVND(currentPrice));
+    }
+  }, [currentPrice]);
+
+  // Handle price input change
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const numericValue = parseVND(inputValue);
+
+    // Update the actual form value
+    setValue("price", numericValue, { shouldValidate: true });
+
+    // Update display value
+    setPriceDisplay(formatVND(numericValue));
+  };
 
   const onCategoryToggle = (category: string) => {
     const current = getValues("categories") || [];
@@ -80,7 +116,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   const confirmRemoveDiscount = () => {
     if (window.confirm("Bạn chắc chắn muốn xóa mã giảm giá?") && currentDiscountCode) {
-      onRemoveDiscount?.({ productId: initialValues._id as string, discountId: currentDiscountCode }); // ✅ Truyền đúng kiểu
+      onRemoveDiscount?.({ productId: initialValues._id as string, discountId: currentDiscountCode });
     }
   };
 
@@ -108,6 +144,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   const internalSubmit = (data: ProductFormData) => {
     console.log("Submit categories:", data.categories);
+    console.log("Submit price:", data.price); // This will be the numeric value
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description || "");
@@ -121,12 +158,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
       formData.append("profilePicture", data.picture);
     } else if (typeof data.picture === "string") {
       console.log("picture", data.picture);
-
       formData.append("profilePicture", data.picture);
     }
 
     console.log("formData", formData);
-
     onSubmit(formData);
   };
 
@@ -165,15 +200,21 @@ const ProductForm: React.FC<ProductFormProps> = ({
           <div>
             <label className="block font-medium mb-1">Giá (VND)</label>
             <input
-              type="number"
+              type="text"
+              value={priceDisplay}
+              onChange={handlePriceChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2"
+              placeholder="0 VND"
+            />
+            {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
+            {/* Hidden input for actual numeric value */}
+            <input
+              type="hidden"
               {...register("price", {
                 required: "Giá là bắt buộc",
                 min: { value: 0, message: "Giá phải lớn hơn hoặc bằng 0" },
               })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2"
-              placeholder="0"
             />
-            {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
           </div>
 
           <div>
@@ -259,7 +300,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
             }}
           />
           {previewUrl && (
-            <img src={previewUrl} alt="Ảnh xem trước" className="mt-3 rounded-md border max-h-60 object-contain" />
+            <img
+              src={previewUrl || "/placeholder.svg"}
+              alt="Ảnh xem trước"
+              className="mt-3 rounded-md border max-h-60 object-contain"
+            />
           )}
         </div>
 
@@ -293,7 +338,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
                       if (productId && selected) {
                         onAddDiscount?.({ productId, discountId });
-                        setSelectedDiscount(selected); // 👉 lưu mã đã chọn
+                        setSelectedDiscount(selected);
                         setShowDiscountDropdown(false);
                       }
                     }}

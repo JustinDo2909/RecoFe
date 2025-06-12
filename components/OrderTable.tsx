@@ -78,13 +78,13 @@ const OrderTable = <T extends { _id: string; statusOrder: string }>({
   return (
     <div className="p-4 bg-customgreys-secondarybg">
       <div className="flex items-center gap-5 justify-center">
-        <input
+        {/* <input
           type="text"
           placeholder="Search..."
           className="mb-4 p-2 border rounded w-full"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        /> */}
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-gray-200">

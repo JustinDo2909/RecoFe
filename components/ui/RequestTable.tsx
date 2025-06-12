@@ -205,14 +205,14 @@ const RequestTable = <T extends { _id: string }>({
           Trước
         </button>
         <span>
-          Sau {currentPage} of {totalPages}
+          {currentPage} / {totalPages}
         </span>
         <button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >
-          Next
+          Sau
         </button>
       </div>
 
