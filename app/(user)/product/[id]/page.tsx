@@ -47,16 +47,6 @@ const SingleProductPage = () => {
         )}
         <AddToCartButton product={product ?? {}} />
 
-        {id === idCustom && (
-          <button
-            onClick={() => router.push("/customeBag")}
-            className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            <Palette className="h-5 w-5" />
-            Tùy chỉnh thiết kế
-          </button>
-        )}
-
         {/* Mô tả sản phẩm */}
         <p className="text-sm text-gray-700 leading-relaxed">{product?.description}</p>
 
