@@ -18,9 +18,9 @@ const StickerEditor = dynamic(() => import("@/app/(user)/customeBag/customeBag")
 });
 
 export default function Home() {
-  // const params = useParams();
-  // const id = params.id;
-  const id = "684a85aa1d6c9de849557543";
+  const params = useParams();
+  const id = params.id;
+  // const id = "684a85aa1d6c9de849557543";
 
   const { data: product } = useGetProductByIdQuery({ id });
 

@@ -2,15 +2,10 @@ import { Order, User } from "@/types";
 import { FC } from "react";
 import PriceFormatter from "./PriceFormatter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import Image from "next/image";
+import { Palette } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   order: Order | null;
@@ -19,10 +14,14 @@ interface Props {
   onClose: () => void;
 }
 
+const idCustom = "684a85aa1d6c9de849557543";
+
 const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
+  const router = useRouter();
+
   console.log("order", order);
   if (!order) return null;
-  console.log('order', order)
+  console.log("order", order);
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-scroll">
@@ -38,14 +37,11 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
           </p> */}
           <p>
             <strong>Ngày:</strong>
-            {order?.createdAt &&
-              new Date(order?.createdAt).toLocaleDateString()}
+            {order?.createdAt && new Date(order?.createdAt).toLocaleDateString()}
           </p>
           <p>
             <strong>Trạng thái:</strong>
-            <span className="capitalize text-green-600 font-medium">
-              {order?.statusOrder}
-            </span>
+            <span className="capitalize text-green-600 font-medium">{order?.statusOrder}</span>
           </p>
           {/* <p>
             <strong>Invoice Number:</strong> {order?.invoice?.number}
@@ -72,34 +68,42 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
           <TableBody>
             {order?.items?.map((product, index) => (
               <TableRow key={index}>
-                <TableCell className="flex items-center gap-2">
-                  <Image
-                    src={product?.picture}
-                    alt="productImage"
-                    width={50}
-                    height={50}
-                    className="border rounded-sm w-14 h-14 object-contain"
-                  />
+                <TableCell className="flex flex-col items-start gap-2">
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={product?.picture}
+                      alt="productImage"
+                      width={50}
+                      height={50}
+                      className="border rounded-sm w-14 h-14 object-contain"
+                    />
+                    <p className="line-clamp-1">{product?.name || ""}</p>
+                  </div>
 
-                  <p className=" line-clamp-1">{product?.name || ""}</p>
-
-                
+                  {(typeof product.productId === "string"
+                    ? product.productId === idCustom
+                    : product.productId === idCustom) && (
+                    <button
+                      onClick={() => router.push(`/customeBag/${product.productId}`)}
+                      className="flex items-center gap-1 text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1 rounded-md hover:from-purple-700 hover:to-pink-700 transition-all duration-300 mt-1"
+                    >
+                      <Palette className="h-4 w-4" />
+                      Tùy chỉnh thiết kế
+                    </button>
+                  )}
                 </TableCell>
+
                 <TableCell>{product?.quantity}</TableCell>
                 <TableCell>{order?.feeShipping} đ</TableCell>
                 <TableCell>{product?.finalPrice} đ</TableCell>
-                {/* {product?.product?.price && product?.quantity && (
-                  <TableCell>
-                    <PriceFormatter
-                      className="text-black font-medium"
-                      amount={product?.product?.price * product?.quantity}
-                    />
-                  </TableCell>
-                )} */}
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        {order?.items?.some((item) =>
+          typeof item.productId === "string" ? item.productId === idCustom : item.productId?._id === idCustom
+        )}
+
         <div className="mt-4 text-right flex items-center justify-end">
           <div className="w-44 flex flex-col gap-1">
             {/* {order?.amountDiscount !== 0 && (
@@ -122,10 +126,7 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
 
             <div className="w-full flex items-center justify-between">
               <strong>Tổng đơn:</strong>
-              <PriceFormatter
-                amount={order?.totalPrice}
-                className="text-black font-bold"
-              />
+              <PriceFormatter amount={order?.totalPrice} className="text-black font-bold" />
             </div>
           </div>
         </div>

@@ -29,7 +29,7 @@ const AddToCartButton = ({ product, className }: Props) => {
       productId: product._id || "",
       quantity: 1,
     });
-    toast.success(`${product.name?.substring(0, 12)} ${result.data.message}`);
+    toast.success(`${product.name?.substring(0, 12)} ${result.data?.message}`);
     await refetch();
   };
 
@@ -48,7 +48,7 @@ const AddToCartButton = ({ product, className }: Props) => {
           </div>
           <div className="flex items-center justify-between border-t pt-1">
             <span className="text-xs font-semibold">Subtotal</span>
-            <PriceFormatter amount={product.price * itemCount} />
+            <PriceFormatter amount={product.finalPrice * itemCount} />
           </div>
         </div>
       ) : (

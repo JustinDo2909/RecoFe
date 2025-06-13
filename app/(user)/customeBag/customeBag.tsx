@@ -42,6 +42,8 @@ import img20 from "../../../asset/Img/20.png";
 // Import Product type
 import type { Product } from "@/types";
 import AddToCartButton from "@/components/AddToCartButton";
+import { useCustomeDesignMutation } from "@/state/api";
+import { toast } from "sonner";
 
 const imageList = [
   img1,
@@ -227,7 +229,7 @@ export default function StickerEditor({ product }: StickerEditorProps) {
   const [showSendModal, setShowSendModal] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
   const [sendStatus, setSendStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-
+  const [sendCustomDesign] = useCustomeDesignMutation();
   // Lấy URL hình ảnh sản phẩm nếu có
   const productImageUrl = product?.picture || null;
 
@@ -336,6 +338,39 @@ export default function StickerEditor({ product }: StickerEditorProps) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleSendCustomDesign = async () => {
+    if (!stageRef.current) return;
+
+    try {
+      // 1. Render ảnh từ canvas
+      const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
+      const blob = await (await fetch(uri)).blob();
+      const file = new File([blob], "custom-design.png", { type: "image/png" });
+
+      // 2. Lấy toàn bộ element (sticker/layer) dưới dạng JSON
+      const elementsJSON = stageRef.current.toJSON(); // đây là string JSON gọn gàng
+
+      // 3. Tạo form data
+      const formData = new FormData();
+      formData.append("customPicture", file);
+      formData.append("productId", product?._id || "");
+      formData.append("elements", elementsJSON); // Gửi các element sticker
+
+      const result = await sendCustomDesign(formData).unwrap();
+
+      console.log("result", result);
+
+      if (result.success) {
+        toast.success(result.message);
+      }
+
+      alert("Thiết kế đã được gửi thành công!");
+    } catch (err) {
+      console.error("Lỗi gửi thiết kế:", err);
+      alert("Đã xảy ra lỗi khi gửi thiết kế.");
+    }
   };
 
   const handleSendToAdmin = async () => {
@@ -716,7 +751,13 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                 Tải xuống PNG
               </button>
 
-              <AddToCartButton product={product ?? {}} />
+              <button
+                onClick={handleSendCustomDesign}
+                className="w-full p-4 bg-gradient-to-r from-black to-white text-white rounded-2xl font-semibold transition-all duration-300 hover:from-gray-500 hover:to-gray-700 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              >
+                <Send className="h-4 w-4" />
+                Gửi mẫu thiết kế
+              </button>
             </div>
           </div>
         </div>

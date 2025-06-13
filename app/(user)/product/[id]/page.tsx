@@ -9,6 +9,7 @@ import { BoxIcon, FileQuestion, ListOrderedIcon, Share } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { Palette } from "lucide-react";
+import { toast } from "sonner";
 
 // Đây là viết cứng (không nên)
 const idCustom = "684a85aa1d6c9de849557543";
@@ -46,6 +47,17 @@ const SingleProductPage = () => {
           <p className="bg-green-100 w-fit px-4 py-2 text-green-600 text-sm font-semibold rounded-lg">Còn hàng</p>
         )}
         <AddToCartButton product={product ?? {}} />
+
+        {id === idCustom && (
+          <button
+            onClick={() => {
+              alert("Bạn chỉ có thể thiết kế khi đã mua sản phẩm thành công!");
+            }}
+            className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+          >
+            <Palette className="h-5 w-5" /> Tùy chỉnh thiết kế
+          </button>
+        )}
 
         {/* Mô tả sản phẩm */}
         <p className="text-sm text-gray-700 leading-relaxed">{product?.description}</p>

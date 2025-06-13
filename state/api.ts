@@ -1,6 +1,9 @@
 import {
   Card,
   Category,
+  Custom,
+  Custome,
+  CustomResponse,
   DashboardParams,
   DashboardStats,
   Discount,
@@ -64,6 +67,7 @@ export const api = createApi({
     "Wallet",
     "Dashboard",
     "Discount",
+    "Custom",
   ],
   endpoints: (build) => ({
     //login
@@ -184,14 +188,15 @@ export const api = createApi({
       },
     }),
     //addProductToCard
-    addProductToCard: build.mutation<Card[], { productId: string; quantity: number }>({
+    addProductToCard: build.mutation<Response<null>, { productId: string; quantity: number }>({
       query: (body) => ({
         url: "/cart/add",
         method: "POST",
-        body: body,
+        body,
       }),
-      transformResponse: (response: any): Card[] => response.data,
+      transformResponse: (response) => response,
     }),
+
     //deleteProductToCard
     deleteAllProductToCard: build.mutation<any, {}>({
       query: () => ({
@@ -604,6 +609,7 @@ export const api = createApi({
       }),
       invalidatesTags: ["Categories"],
     }),
+
     walletPay: build.mutation<
       any,
       {
@@ -621,6 +627,23 @@ export const api = createApi({
         transformResponse: (response: any) => response.data,
       }),
       invalidatesTags: ["Wallet"],
+    }),
+
+    customeDesign: build.mutation<Response<null>, FormData>({
+      query: (formData) => ({
+        url: `/custome/create`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Custom"],
+    }),
+
+    getAllCustom: build.query<Response<CustomResponse[]>, void>({
+      query: () => ({
+        url: `/custome/all`,
+        method: "GET",
+      }),
+      providesTags: ["Custom"],
     }),
   }),
 });
@@ -689,4 +712,7 @@ export const {
 
   useUpdateOrderStatusMutation,
   useWalletPayMutation,
+
+  useCustomeDesignMutation,
+  useGetAllCustomQuery,
 } = api;
