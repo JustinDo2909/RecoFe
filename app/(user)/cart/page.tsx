@@ -38,7 +38,6 @@ import useCartStore from "@/store";
 import {
   BanknoteIcon,
   DollarSign,
-  Heart,
   ShoppingBag,
   Trash,
   WalletIcon,
@@ -51,7 +50,7 @@ import toast from "react-hot-toast";
 const CartPage = () => {
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { deleteCartProduct, getTotalPrice, getSubtotalPrice, resetCart } =
+  const { deleteCartProduct, getTotalPrice, getSubtotalPrice } =
     useCartStore();
   const { user } = useUser();
 
@@ -60,9 +59,9 @@ const CartPage = () => {
       setIsClient(true);
     }
   }, [user]);
-  const { data: cartProducts = [], refetch: cartRefetch } = useGetCardQuery({});
+  const { data: cartProducts = [], refetch: cartRefetch } = useGetCardQuery();
   const [deleteAllCart] = useDeleteAllProductToCardMutation();
-  const [itemCount, setItemCount] = useState(0);
+  const [ setItemCount] = useState(0);
   const [districSelected, setDistricSelected] = useState("");
   const [provinceSelected, setProvinceSelected] = useState("");
   const [wardSelected, setWardSelected] = useState("");
@@ -70,6 +69,7 @@ const CartPage = () => {
   const [getFeeShipping] = useGetShippingFeeMutation();
   const [createOrder] = useCreateOrderMutation();
   const [payByWallet] = useWalletPayMutation();
+  const [deleteAllProduct] = useDeleteAllProductToCardMutation();
   const { data: province } = useGetProvincesQuery({});
   const { data: district } = useGetDistrictsQuery(
     {
@@ -79,11 +79,12 @@ const CartPage = () => {
       skip: !provinceSelected,
     }
   );
-  const { data: ward, error: wardError } = useGetWardsQuery(
+  const { data: ward } = useGetWardsQuery(
     { districtId: districSelected ? parseInt(districSelected) : 0 },
     { skip: !districSelected }
   );
   const { data: wallet, refetch: refetchWallet } = useGetWalletQuery({});
+  const [address, setAddress] = useState("");
   const socket = useSocket();
 
   useEffect(() => {
@@ -126,8 +127,8 @@ const CartPage = () => {
 
             setFeeShipping(res.data.data.total);
             console.log(res.data.data.total);
-          } catch (error) {
-            console.error("Failed to fetch fee:", error);
+          } catch {
+          
           }
         }
       }
@@ -139,8 +140,9 @@ const CartPage = () => {
   const handleResetCart = () => {
     const confirmed = window.confirm("Are you sure to reset your Cart?");
     if (confirmed) {
-      resetCart();
+      deleteAllProduct({});
       toast.success("Your cart reset successfully!");
+      window.location.reload(); 
     }
   };
 
@@ -162,15 +164,10 @@ const CartPage = () => {
 
     if (!selectedProvince || !selectedDistrict || !selectedWard) {
       toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
-      console.error("Missing selection:", {
-        province: !!selectedProvince,
-        district: !!selectedDistrict,
-        ward: !!selectedWard,
-      });
       return;
     }
 
-    const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`;
+    const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}, ${address}`;
     setLoading(true);
     try {
       const metadata: Metadata = {
@@ -191,8 +188,7 @@ const CartPage = () => {
           window.location.href = checkoutUrl;
         }
       }
-    } catch (error) {
-      console.error("Error creating checkout session:", error);
+    } catch {
       toast.error("Có lỗi xảy ra khi thanh toán bằng Stripe!");
     } finally {
       setLoading(false);
@@ -212,15 +208,11 @@ const CartPage = () => {
 
     if (!selectedProvince || !selectedDistrict || !selectedWard) {
       toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
-      console.error("Missing selection:", {
-        province: !!selectedProvince,
-        district: !!selectedDistrict,
-        ward: !!selectedWard,
-      });
+    
       return;
     }
 
-    const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`;
+    const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}, ${address}`;
 
     try {
       setLoading(true);
@@ -232,7 +224,7 @@ const CartPage = () => {
         address: addressString,
       });
       await deleteAllCart({}).unwrap();
-      toast.success("Order created successfully!");
+      toast.success("Order created successfully , Please check your order!");
       window.location.reload();
     } catch (error: any) {
       toast.error("Có lỗi xảy ra khi tạo đơn hàng!");
@@ -262,7 +254,7 @@ const CartPage = () => {
             return total + price * quantity;
           }, 0));
 
-      if (wallet?.wallet < totalPrice) {
+      if ((wallet as any)?.wallet < totalPrice) {
         toast.error("Số dư ví không đủ để thanh toán!");
         return;
       }
@@ -279,15 +271,11 @@ const CartPage = () => {
 
       if (!selectedProvince || !selectedDistrict || !selectedWard) {
         toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
-        console.error("Missing selection:", {
-          province: !!selectedProvince,
-          district: !!selectedDistrict,
-          ward: !!selectedWard,
-        });
+      
         return;
       }
 
-      const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}`;
+      const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}, ${address}`;
       await payByWallet({
         items: cartProducts,
         totalPrice: totalPrice,
@@ -319,9 +307,8 @@ const CartPage = () => {
       toast.success("Thanh toán bằng ví thành công!");
       refetchWallet();
       window.location.reload();
-    } catch (error: any) {
+    } catch  {
       toast.error("Có lỗi xảy ra khi thanh toán bằng ví!");
-      console.error("Wallet payment error:", error);
     } finally {
       setLoading(false);
     }
@@ -336,13 +323,13 @@ const CartPage = () => {
               <div className="flex items-center gap-10 py-5 ">
                 <div className=" flex justify-center items-center gap-4">
                   <ShoppingBag />
-                  <h1 className="text-2xl font-semibold">Shopping Cart</h1>
+                  <h1 className="text-2xl font-semibold">Giỏ hàng</h1>
                 </div>
                 <div className="text-2xl font-semibold flex justify-center items-center gap-1">
                   <WalletIcon /> :{" "}
                   <PriceFormatter
                     className="text-red-500 text-2xl"
-                    amount={wallet?.wallet ?? 0}
+                    amount={(wallet as any)?.wallet ?? 0}
                   />
                 </div>
               </div>
@@ -381,13 +368,13 @@ const CartPage = () => {
                                   {product?.productId.description}
                                 </p>
                                 <p className="text-sm capitalize">
-                                  Variant:{" "}
+                                  Số lượng còn lại:{" "}
                                   <span className="font-semibold">
                                     {product?.productId.stock}
                                   </span>
                                 </p>
                                 <p className="text-sm capitalize">
-                                  Description:{" "}
+                                  Mô tả:{" "}
                                   <span className="font-semibold">
                                     {product?.productId.decription}
                                   </span>
@@ -395,14 +382,6 @@ const CartPage = () => {
                               </div>
                               <div className="text-gray-500 flex items-center gap-2">
                                 <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger>
-                                      <Heart className="w-4 h-4 md:w-5 md:h-5 hover:text-green-600 hoverEffect" />
-                                    </TooltipTrigger>
-                                    <TooltipContent className="font-bold">
-                                      Add to Favorite
-                                    </TooltipContent>
-                                  </Tooltip>
                                   <Tooltip>
                                     <TooltipTrigger>
                                       <Trash
@@ -415,7 +394,7 @@ const CartPage = () => {
                                       />
                                     </TooltipTrigger>
                                     <TooltipContent className="font-bold bg-red-600">
-                                      Delete product
+                                      Xóa sản phẩm khỏi giỏ hàng
                                     </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
@@ -446,7 +425,7 @@ const CartPage = () => {
                       className="m-5 font-semibold"
                       variant="destructive"
                     >
-                      Reset Cart
+                      Xóa trắng giỏ hàng
                     </Button>
                   </div>
                 </div>
@@ -455,18 +434,28 @@ const CartPage = () => {
                   <div className="flex">
                     <SelectFiled
                       lists={province || []}
-                      title="Province"
+                      title="Tỉnh"
                       onSelect={(value: string) => setProvinceSelected(value)}
                     />
                     <SelectFiled
                       lists={district || []}
-                      title="District"
+                      title="Huyện"
                       onSelect={(value: string) => setDistricSelected(value)}
                     />
                     <SelectFiled
                       lists={ward || []}
-                      title="Ward"
+                      title="Đường"
                       onSelect={(value: string) => setWardSelected(value)}
+                    />
+                  </div>
+                  <div>
+                    <input
+                    title="Chi tiết"
+                      type="text"
+                      className="w-full border p-2 mb-2"
+                      placeholder="Hãy nhập địa chỉ chi tiết"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
                     />
                   </div>
                   {/* Summary */}
@@ -477,7 +466,7 @@ const CartPage = () => {
                       </h2>
                       <div className="space-y-4">
                         <div className="flex justify-between">
-                          <span>Subtotal</span>
+                          <span>Giá sản phẩm</span>
                           <PriceFormatter
                             amount={cartProducts?.reduce((total, item) => {
                               const price = item.productId.price as number;
@@ -487,7 +476,7 @@ const CartPage = () => {
                           />
                         </div>
                         <div className="flex justify-between">
-                          <span>Discount</span>
+                          <span>Giảm giá</span>
                           <PriceFormatter
                             amount={
                               cartProducts?.reduce((total, item) => {
@@ -507,12 +496,12 @@ const CartPage = () => {
                           />
                         </div>
                         <div className="flex justify-between">
-                          <span>Fee Shipping</span>
+                          <span>Phí giao hàng</span>
                           <PriceFormatter amount={feeShipping} />
                         </div>
                         <Separator />
                         <div className="flex justify-between">
-                          <span>Total</span>
+                          <span>Tổng đơn hàng</span>
                           <PriceFormatter
                             amount={
                               cartProducts?.reduce((total, item) => {
@@ -546,7 +535,7 @@ const CartPage = () => {
                           className="w-full rounded-full font-semibold tracking-wide bg-green-500"
                           size="lg"
                         >
-                          Pay With Wallet <WalletIcon />
+                          Thanh toán bằng ví <WalletIcon />
                         </Button>
                         <Button
                           disabled={
@@ -556,7 +545,7 @@ const CartPage = () => {
                           className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
                           size="lg"
                         >
-                          Pay With Cash <DollarSign />
+                          Thanh toán khi nhận <DollarSign />
                         </Button>
                         <Button
                           disabled={
@@ -566,7 +555,7 @@ const CartPage = () => {
                           className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
                           size="lg"
                         >
-                          Pay With Stripe <BanknoteIcon />
+                          Thanh toán bằng Stripe <BanknoteIcon />
                         </Button>
 
                         {/* <Button
@@ -585,26 +574,26 @@ const CartPage = () => {
                 <div className="md:hidden fixed bottom-0 left-0 w-full bg-white pt-2">
                   <div className="p-4 rounded-lg border mx-4">
                     <h2 className="text-xl font-semibold mb-4">
-                      Order Summary
+                      Chi tiêt đơn hàng
                     </h2>
                     <div className="space-y-4">
                       <div className="flex justify-between">
-                        <span>Subtotal</span>
+                        <span>Giá sản phẩm</span>
                         <PriceFormatter amount={getSubtotalPrice()} />
                       </div>
                       <div className="flex justify-between">
-                        <span>Discount</span>
+                        <span>Giảm giá</span>
                         <PriceFormatter
                           amount={getSubtotalPrice() - getTotalPrice()}
                         />
                       </div>
                       <div className="flex justify-between">
-                        <span>Fee Shipping</span>
+                        <span>Phí giao hàng</span>
                         <PriceFormatter amount={feeShipping} />
                       </div>
                       <Separator />
                       <div className="flex justify-between">
-                        <span>Total</span>
+                        <span>Tổng đơn hàng</span>
                         <PriceFormatter
                           amount={getTotalPrice() + feeShipping}
                           className="text-lg font-bold text-black"
@@ -618,7 +607,7 @@ const CartPage = () => {
                         className="w-full rounded-full font-semibold tracking-wide bg-green-500"
                         size="lg"
                       >
-                        Pay With Wallet <WalletIcon />
+                        Thanh toán bằng ví <WalletIcon />
                       </Button>
                       <Button
                         disabled={
@@ -628,7 +617,7 @@ const CartPage = () => {
                         className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
                         size="lg"
                       >
-                        Pay With Cash <DollarSign />
+                        Thanh toán khi nhận <DollarSign />
                       </Button>
                       <Button
                         disabled={
@@ -638,7 +627,7 @@ const CartPage = () => {
                         className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
                         size="lg"
                       >
-                        Pay With Stripe <BanknoteIcon />
+                        Thanh toán bằng Stripe <BanknoteIcon />
                       </Button>
                       <Link
                         href={"/"}

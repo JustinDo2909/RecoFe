@@ -1,5 +1,6 @@
 import { defineQuery } from "next-sanity";
 import { sanityFetch } from "../lib/live";
+import toast from "react-hot-toast";
 
 export const getProductBySlug = async (slug: string) => {
   const PRODUCT_BY_SLUG_QUERY = defineQuery(
@@ -14,7 +15,7 @@ export const getProductBySlug = async (slug: string) => {
     });
     return product?.data || null;
   } catch (error) {
-    console.error("Error fetching product by Slug:", error);
+    toast.error("Error fetching product by Slug:", error || "Error fetching product by Slug");
   }
 };
 
@@ -28,7 +29,7 @@ export const getAllCategories = async () => {
     });
     return categories.data || [];
   } catch (error) {
-    console.error("Error fetching all categories");
+    toast.error("Error fetching all categories", error || "Error fetching all categories");
 
     return [];
   }
@@ -52,7 +53,7 @@ export const getMyOrders = async (userId: string) => {
     });
     return orders?.data || [];
   } catch (error) {
-    console.error("Error fetching orders:", error);
+    toast.error("Error fetching orders:", error || "Error fetching orders");
     return [];
   }
 };

@@ -1,12 +1,11 @@
 "use client";
 import { useGetCardQuery } from "@/state/api";
-import useCartStore from "@/store";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 const CartIcon = () => {
-  const { data: items } = useGetCardQuery({});
+  const { data: items } = useGetCardQuery();
   return (
     <Link href={"/cart"} className="group relative">
       <ShoppingBag className="w-5 h-5 group-hover:text-darkColor hoverEffect" />

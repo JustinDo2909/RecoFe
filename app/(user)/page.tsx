@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  const { data: product } = useGetProductQuery({});
+  const { data: product } = useGetProductQuery();
   const feedbackList = [
     {
       image: feedback,

@@ -4,19 +4,22 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import QuantityButtons from "./QuantityButtons";
 import PriceFormatter from "./PriceFormatter";
-import { Product } from "@/types";
 import { useAddProductToCardMutation, useGetCardQuery } from "@/state/api";
+import { useUser } from "@/hooks/useUser";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  product: Product;
+  product: any;
   className?: string;
+  quantity? : number
 }
 
-const AddToCartButton = ({ product, className }: Props) => {
+const AddToCartButton = ({ product, className, quantity }: Props) => {
   const [addProduct] = useAddProductToCardMutation();
-  const { data: cartList, refetch } = useGetCardQuery({});
+  const { data: cartList, refetch } = useGetCardQuery();
   const [itemCount, setItemCount] = useState(0);
-
+  const router = useRouter();
+  const {user} = useUser()
   useEffect(() => {
     const item = cartList?.find((item) => item?.productId?._id === product._id);
     setItemCount(item?.quantity ?? 0);
@@ -24,15 +27,20 @@ const AddToCartButton = ({ product, className }: Props) => {
 
   const isOutOfStock = product?.stock === 0;
 
-  const handleAdd = async () => {
+const handleAdd = async () => {
+  if (user) {
     const result = await addProduct({
       productId: product._id || "",
       quantity: 1,
     });
     toast.success(`${product.name?.substring(0, 12)} ${result.data?.message}`);
     await refetch();
-  };
-
+  } else {
+    router.push("/login");
+    toast.error("Vui lòng đăng nhập");
+  }
+};
+console.log('quantity', quantity)
   return (
     <div className="w-full h-12 flex items-center">
       {itemCount > 0 ? (
@@ -47,7 +55,7 @@ const AddToCartButton = ({ product, className }: Props) => {
             />
           </div>
           <div className="flex items-center justify-between border-t pt-1">
-            <span className="text-xs font-semibold">Subtotal</span>
+            <span className="text-xs font-semibold">Giá sản phẩm</span>
             <PriceFormatter amount={product.finalPrice * itemCount} />
           </div>
         </div>

@@ -43,7 +43,7 @@ const DiscountForm: React.FC<{
   const { data: fetchedOrders } = useGetAllOrderQuery();
 
   // Chuẩn hóa default values
-  const defaultValues: Discount = {
+  const defaultValues: any = {
     ...initialValues,
     discountType: mapDiscountType(initialValues.discountType as string),
     startDate: formatDateDMYtoISO(initialValues.startDate ?? ""),
@@ -84,11 +84,11 @@ const DiscountForm: React.FC<{
   // Khi targetType hoặc fetched data thay đổi, cập nhật list tương ứng
   useEffect(() => {
     if (targetType === "product") {
-      setProductsList(fetchedProducts ?? []);
+      setProductsList((fetchedProducts as any) ?? []);
       setOrdersList([]);
       setSelectedOrders([]);
     } else if (targetType === "order") {
-      setOrdersList(fetchedOrders ?? []);
+      setOrdersList((fetchedOrders as any) ?? []);
       setProductsList([]);
       setSelectedProducts([]);
     } else {

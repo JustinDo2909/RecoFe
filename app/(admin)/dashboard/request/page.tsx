@@ -124,8 +124,7 @@ const DashboardRequest = () => {
       await updateStatus({ id, status }).unwrap();
       toast.success("Cập nhật trạng thái thành công!");
       refetch();
-    } catch (error) {
-      console.error("Update request status failed:", error);
+    } catch  {
       toast.error("Cập nhật thất bại!");
     }
   };

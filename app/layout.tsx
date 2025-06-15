@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
+import "./globals.css";
 import Providers from "./providers";
 
 

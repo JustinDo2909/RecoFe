@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Select,
   SelectContent,
@@ -8,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import * as React from "react";
 
 interface AddRess {
   name: string;
@@ -29,7 +29,7 @@ export function SelectFiled({ lists, title, onSelect }: SelectProps) {
   return (
     <Select onValueChange={onSelect}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={`Select a ${title}`} />
+        <SelectValue placeholder={`Chọn ${title}`} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
@@ -38,7 +38,7 @@ export function SelectFiled({ lists, title, onSelect }: SelectProps) {
             <input
               type="text"
               className="w-full border p-2 mb-2"
-              placeholder={`Search ${title}`}
+              placeholder={`Tìm kiếm ${title}`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -52,7 +52,7 @@ export function SelectFiled({ lists, title, onSelect }: SelectProps) {
             ))
           ) : (
             <SelectItem value="no" disabled>
-              No results found
+              Không tìm thấy dữ liệu
             </SelectItem>
           )}
         </SelectGroup>

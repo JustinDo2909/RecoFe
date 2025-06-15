@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Container from "./Container";
-import SocialMedia from "./SocialMedia";
 import { Input } from "./ui/input";
 import { categoriesData, quickLinksData } from "@/constants";
 import Link from "next/link";
@@ -27,11 +26,7 @@ const Footer = () => {
             <p className="text-gray-600 text-sm  pb-4">
               Mỗi sản phẩm của RECO đều được thiết kế lại, từ những chiếc áo cũ, túi xách đã qua sử dụng đến các phụ kiện, tất cả đều được biến hóa để mang lại sự tươi mới và độc đáo.
             </p>
-            <SocialMedia
-              className="text-darkColor/60"
-              iconClassName="border-darkColor/60 hover:border-darkColor hover:text-darkColor"
-              tooltipClassName="bg-darkColor text-white"
-            />
+           
           </div>
           <div>
             <h3 className="font-semibold text-darkColor mb-4">RECO</h3>

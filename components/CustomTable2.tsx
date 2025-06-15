@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useDisableUserMutation, useEnableUserMutation } from "@/state/api";
 import { format } from "date-fns";
-import { PlusCircleIcon, EyeIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -22,14 +21,13 @@ const CustomTable = <T extends { _id: string }>({
   columns,
   ITEMS_PER_PAGE,
 
-  onCreate,
   getIsActive,
 }: TableProps<T>) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [updatedRowId, setUpdatedRowId] = useState<string | null>(null);
+  const [ setUpdatedRowId] = useState<any | null>(null);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [reason, setReason] = useState("");

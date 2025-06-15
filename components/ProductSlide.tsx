@@ -1,13 +1,12 @@
-import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { useRef, useState, useEffect } from "react";
+import { Product } from "@/types";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Product } from "@/types";
-import Image from "next/image";
-import { Button } from "./ui/button";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 
 interface ProductSlideProps {
   products: Product[];
@@ -69,30 +68,13 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
               }`}
             >
               <Image
-                src={product.picture}
-                alt={product.name}
+                src={product.picture || ""}
+                alt={product.name || ""}
                 width={1200}
                 height={400}
                 className="transition-transform duration-500 hover:scale-105 object-contain rounded-xl h-[300px]"
                 priority={index === 0}
               />
-
-              <div className="absolute bottom-10 left-6 right-0 p-4 text-black">
-                <div className="space-y-2">
-                  <h3 className="text-xl md:text-3xl font-semibold tracking-tight drop-shadow-md uppercase">
-                    {product.name}
-                  </h3>
-                  <p className="text-xs md:text-sm text-black line-clamp-2 drop-shadow">
-                    {product.description}
-                  </p>
-                  <Button
-                    className="mt-3 bg-black text-white font-medium
-                    px-5 py-1.5 rounded-md transition-all duration-300 transform hover:scale-105"
-                  >
-                    Mua Ngay
-                  </Button>
-                </div>
-              </div>
             </div>
           </SwiperSlide>
         ))}

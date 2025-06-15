@@ -8,6 +8,7 @@ import {
 } from "@/state/api";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const useUser = () => {
   const [user, setUser] = useState<any>(null);
@@ -26,7 +27,7 @@ export const useUser = () => {
           const result = await triggerGetMe().unwrap();
           setUser(result);
         } catch (error) {
-          console.error("Lỗi khi gọi getMe:", error);
+          toast.error("Lỗi khi gọi getMe:", error || "Lỗi khi gọi getMe");
           setUser(null);
         }
       } else {
@@ -58,9 +59,6 @@ export const useUser = () => {
         sameSite: "strict",
       });
 
-      // // Gọi getMe sau khi login để lấy thông tin user
-      // const me = await triggerGetMe().unwrap();
-      // const userInfo = me.data.user;
 
       setUser(data.user);
       Cookies.set("user", encodeURIComponent(JSON.stringify(data.user)), {
@@ -68,9 +66,9 @@ export const useUser = () => {
         secure: true,
         sameSite: "strict",
       });
+      toast.success("Login successful!");
       return data;
     } catch (error) {
-      console.error("Login failed:", error);
       return { error };
     } finally {
       setLoading(false);
@@ -102,10 +100,10 @@ export const useUser = () => {
         phone,
         passwordConfirm,
       }).unwrap();
-
+      toast.success("Sign up successful!");
       return data;
     } catch (error) {
-      console.error("SignUp failed:", error);
+      toast.error("Error signing up:", error || "Error signing up");
       return { error };
     } finally {
       setLoading(false);

@@ -90,8 +90,6 @@ export async function createCheckoutSession(
 
     const session = await stripe.checkout.sessions.create(sessionPayload);
     return session.url;
-  } catch (error) {
-    console.error("Error creating checkout session:", error);
-    throw error;
+  } catch  {
   }
 }

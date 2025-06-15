@@ -178,7 +178,7 @@ const DashboardUser = () => {
             { key: "isActive", label: "Trạng thái" },
             { key: "deactivatedReason", label: "Lý do" },
           ]}
-          getIsActive={(row) => row.isActiveValue}
+          getIsActive={(row : any) => row.isActiveValue}
           data={filteredUsers.map((user) => ({
             ...user,
             isActiveValue: user.isActive,

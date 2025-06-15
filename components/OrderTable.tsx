@@ -9,20 +9,20 @@ interface TableProps<T> {
   columns: {
     key: keyof T;
     label: string;
-    render?: (value: unknown, row?: T) => React.ReactNode;
+    render?: (value?: unknown, row?: T) => React.ReactNode;
   }[];
   ITEMS_PER_PAGE: number;
   getIsActive?: (row: T) => boolean;
   onUpdateStatus?: (_id: string, status: string, reason?: string) => void;
 }
 
-const OrderTable = <T extends { _id: string; statusOrder: string }>({
+const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
   data,
   columns,
   ITEMS_PER_PAGE,
   onUpdateStatus,
 }: TableProps<T>) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -138,17 +138,17 @@ const OrderTable = <T extends { _id: string; statusOrder: string }>({
                         <>
                           <Button
                             className="bg-blue-500 text-white"
-                            onClick={() => onUpdateStatus?.(row._id, "Shipping")}
+                            onClick={() => onUpdateStatus?.((row as any)._id, "Shipping")}
                           >
                             Giao hàng
                           </Button>
-                          <Button className="bg-red-500 text-white" onClick={() => handleRejectClick(row._id)}>
+                          <Button className="bg-red-500 text-white" onClick={() => handleRejectClick((row as any)._id)}>
                             Từ chối
                           </Button>
                         </>
                       )}
                       {row.statusOrder === "Shipping" && (
-                        <Button className="bg-green-500 text-white" onClick={() => onUpdateStatus?.(row._id, "Done")}>
+                        <Button className="bg-green-500 text-white" onClick={() => onUpdateStatus?.((row as any)._id, "Done")}>
                           Hoàn thành
                         </Button>
                       )}

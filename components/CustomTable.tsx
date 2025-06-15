@@ -38,7 +38,7 @@ const CustomTable = <T extends { username: string }>({ data, columns, onDelete, 
     <div className="p-4">
       <input
         type="text"
-        placeholder="Search..."
+        placeholder="Tìm kiếm..."
         className="mb-4 p-2 border rounded w-full"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}

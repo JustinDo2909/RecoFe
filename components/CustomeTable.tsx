@@ -1,15 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { useDisableUserMutation, useEnableUserMutation } from "@/state/api";
+import { useDisableUserMutation } from "@/state/api";
 import { format } from "date-fns";
-import { PlusCircleIcon, EyeIcon } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface TableProps<T> {
   data: T[];
-  columns: { key: keyof T; label: string }[];
-
+  columns: { key: keyof T; label: string,  render?: (row: T) => React.ReactNode; }[];
   onCreate?: () => void;
   onView?: (_id: string) => void;
   onUpdateStatus?: (_id: string, status: string) => void;
@@ -22,20 +20,16 @@ const CustomeTable = <T extends { _id: string }>({
   columns,
   ITEMS_PER_PAGE,
 
-  onCreate,
-  getIsActive,
 }: TableProps<T>) => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [updatedRowId, setUpdatedRowId] = useState<string | null>(null);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [reason, setReason] = useState("");
 
   const [disableUser] = useDisableUserMutation();
-  const [enableUser] = useEnableUserMutation();
 
   function getNestedValue(obj: any, path: string): any {
     return path.split(".").reduce((acc, key) => acc?.[key], obj);
@@ -70,25 +64,25 @@ const CustomeTable = <T extends { _id: string }>({
     }
   };
 
-  const hanleClickUpdateStatus = async (id: string) => {
-    const confirmed = window.confirm("Bạn có chắc muốn kích hoạt người dùng này?");
-    if (!confirmed) return;
+  // const hanleClickUpdateStatus = async (id: string) => {
+  //   const confirmed = window.confirm("Bạn có chắc muốn kích hoạt người dùng này?");
+  //   if (!confirmed) return;
 
-    try {
-      await enableUser({ id }).unwrap();
-      toast.success("Đã kích hoạt người dùng!");
-      setUpdatedRowId(id);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      toast.error("Kích hoạt thất bại!");
-    }
-  };
+  //   try {
+  //     await enableUser({ id }).unwrap();
+  //     toast.success("Đã kích hoạt người dùng!");
+  //     setUpdatedRowId(id);
+  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //   } catch (err) {
+  //     toast.error("Kích hoạt thất bại!");
+  //   }
+  // };
 
-  const openReasonModal = (id: string) => {
-    setSelectedRowId(id);
-    setReason("");
-    setShowReasonModal(true);
-  };
+  // const openReasonModal = (id: string) => {
+  //   setSelectedRowId(id);
+  //   setReason("");
+  //   setShowReasonModal(true);
+  // };
 
   const handleSaveReason = async () => {
     if (selectedRowId) {
@@ -151,15 +145,15 @@ const CustomeTable = <T extends { _id: string }>({
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.length > 0 ? (
               paginatedData.map((row, rowIndex) => {
-                const isActive = getIsActive ? getIsActive(row) : false;
+             
 
                 return (
                   <tr key={rowIndex} className="border">
                     {columns.map((col) => {
                       return (
                         <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
-                          {col.render ? (
-                            col.render(row)
+                          {(col as any).render ? (
+                            (col as any).render(row)
                           ) : col.key === "picture" ? (
                             <Image
                               src={String(getNestedValue(row, String(col.key)))}

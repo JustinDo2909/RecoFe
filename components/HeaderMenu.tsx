@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 import React from "react";
-import Logo from "./Logo";
 import { Button } from "./ui/button";
 
 interface Header {

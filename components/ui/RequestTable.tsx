@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useDisableUserMutation, useEnableUserMutation, useUpdateStatusRequestMutation } from "@/state/api";
+import { useUpdateStatusRequestMutation } from "@/state/api";
 import { format } from "date-fns";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -19,21 +19,17 @@ const RequestTable = <T extends { _id: string }>({
   data,
   columns,
   ITEMS_PER_PAGE,
-
-  onCreate,
-  getIsActive,
 }: TableProps<T>) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [updatedRowId, setUpdatedRowId] = useState<string | null>(null);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [reason, setReason] = useState("");
   const [updateStatusRequest] = useUpdateStatusRequestMutation();
-  const [disableUser] = useDisableUserMutation();
-  const [enableUser] = useEnableUserMutation();
+  // const [disableUser] = useDisableUserMutation();
+  // const [enableUser] = useEnableUserMutation();
 
   const filteredData = data.filter((row) =>
     columns.some((col) => String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()))
@@ -71,11 +67,11 @@ const RequestTable = <T extends { _id: string }>({
     }
   };
 
-  const openReasonModal = (id: string) => {
-    setSelectedRowId(id);
-    setReason("");
-    setShowReasonModal(true);
-  };
+  // const openReasonModal = (id: string) => {
+  //   setSelectedRowId(id);
+  //   setReason("");
+  //   setShowReasonModal(true);
+  // };
 
   const handleSaveReason = async () => {
     if (selectedRowId) {
@@ -169,7 +165,7 @@ const RequestTable = <T extends { _id: string }>({
                       );
                     })}
                     <td className="px-4 py-2 border text-center">
-                      {row.status === "Pending" ? (
+                      {(row as any).status   === "Pending" ? (
                         <div className="flex gap-2 justify-center">
                           <Button onClick={() => updateStatus(row._id, "Approved")} className="bg-green-500 text-white">
                             Chấp nhận

@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CustomInput2 from "./seg";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -39,7 +40,7 @@ const LoginPage = () => {
         email: data.Email,
         password: data.Password,
       });
-
+      console.log('res', res)
       if (res.token) {
         resetForm(); // Xóa dữ liệu form khi login thành công
         if (res.user.role === "admin") {
@@ -49,7 +50,7 @@ const LoginPage = () => {
           router.refresh();
         }
       } else {
-        alert(res.message);
+        toast.error(res.error.data.message || "Login failed. Please try again.");
       }
     } else {
       console.log("data", data);

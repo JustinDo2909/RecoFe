@@ -23,7 +23,7 @@ type FilterType = "all" | "product" | "order";
 type FilterDiscountType = "all" | "percentage" | "fixed";
 
 const DiscountManager = () => {
-  const { data: discounts, isLoading, refetch } = useGetDiscountsQuery({});
+  const { data: discounts, isLoading, refetch } = useGetDiscountsQuery();
   const [disableDiscount] = useDisableDiscountMutation();
   const [activeDiscount] = useActiveDiscountMutation();
   const [createDiscountOrder] = useCreateDiscountOrderMutation();
@@ -97,7 +97,7 @@ const DiscountManager = () => {
       const data = await disableDiscount({ id, reason }).unwrap();
       toast.success(data.message);
       await refetch();
-    } catch (error) {
+    } catch  {
       toast.error("Đình chỉ discount thất bại!");
     }
   };
@@ -108,7 +108,7 @@ const DiscountManager = () => {
       const data = await activeDiscount({ id }).unwrap();
       toast.success(data.message);
       await refetch();
-    } catch (error) {
+    } catch  {
       toast.error("Kích hoạt discount thất bại!");
     }
   };
@@ -117,14 +117,14 @@ const DiscountManager = () => {
     _id: "",
     name: "",
     description: "",
-    discountType: "",
+    discountType: "percentage",
     value: 0,
     applicableProducts: [""],
     applicableOrders: [""],
     startDate: "",
     endDate: "",
     code: "",
-    targetType: "",
+    targetType: "product",
     isActive: true,
   };
 
@@ -242,7 +242,7 @@ const DiscountManager = () => {
   };
 
   // Process data for table display
-  const processedDiscounts = filteredDiscounts.map((discount) => ({
+  const processedDiscounts = (filteredDiscounts as any).map((discount : any) => ({
     ...discount,
     discountType: discount.discountType === "percentage" ? "Phần trăm" : "Giá cố định",
     targetType:
@@ -409,8 +409,8 @@ const DiscountManager = () => {
             { key: "reason", label: "Lý do" },
           ]}
           getIsActive={(row) => {
-            console.log("getIsActive called with row:", row._id, "isActive:", row.isActiveInData);
-            return Boolean(row.isActiveInData);
+            console.log("getIsActive called with row:", row._id, "isActive:", (row as any).isActiveInData);
+            return Boolean((row as any).isActiveInData);
           }}
           data={processedDiscounts}
           onDisable={handleDisable}

@@ -1,12 +1,17 @@
 {
-  "name": "Reco_yt",
+  "name": "Reco",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "test": "yarn lint:types && yarn lint-next && yarn prettier",
+    "prettier": "prettier --write **/*.{ts,tsx,js} **/*.scss",
+    "lint": "eslint . --fix --ext .ts,.tsx ",
+    "lint:es": "eslint -c .eslintrc.json --fix **/*.{ts,tsx}",
+    "lint:types": "tsc -p . --noEmit",
+    "lint-next": "next lint",
     "typegen": "npx sanity@latest schema extract && npx sanity@latest typegen generate"
   },
   "dependencies": {
@@ -27,6 +32,7 @@
     "@sanity/icons": "^3.5.2",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.67.1",
+    "canvas": "^2.11.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",

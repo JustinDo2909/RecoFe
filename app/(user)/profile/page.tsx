@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useChangePasswordMutation, useUpdateProfileMutation } from '@/state/api'
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast'
 const Profile = () => {
   const { user } = useUser();
   const [updateProfile, { isLoading: isProfileLoading, isError: isProfileError, error: profileError }] = useUpdateProfileMutation();
@@ -62,7 +63,7 @@ const Profile = () => {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e : any) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -70,7 +71,7 @@ const Profile = () => {
     }));
   };
 
-  const handlePasswordInputChange = (e) => {
+  const handlePasswordInputChange = (e : any) => {
     const { name, value } = e.target;
     setPasswordData(prev => ({
       ...prev,
@@ -78,7 +79,7 @@ const Profile = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e : any) => {
     e.preventDefault();
     try {
       await updateProfile(formData).unwrap();
@@ -87,11 +88,11 @@ const Profile = () => {
       setTimeout(() => setSuccessMessage(''), 3000);
       window.location.reload();
     } catch (err) {
-      console.error('Failed to update profile:', err);
+      toast.error('Failed to update profile:', err || 'An error occurred.');
     }
   };
 
-  const handlePasswordSubmit = async (e) => {
+  const handlePasswordSubmit = async (e : any) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmNewPassword) {
       setPasswordSuccessMessage('');
@@ -109,7 +110,7 @@ const Profile = () => {
       setPasswordData({ currentPassword: '', newPassword: '', confirmNewPassword: '' });
       setTimeout(() => setPasswordSuccessMessage(''), 3000);
     } catch (err) {
-      console.error('Failed to change password:', err);
+      toast.error('Failed to change password:', err || 'An error occurred.');
     }
   };
 

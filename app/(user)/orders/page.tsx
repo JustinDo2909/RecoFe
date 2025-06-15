@@ -74,10 +74,6 @@ const OrdersPage = () => {
                   <TableRow>
                     <TableHead className="w-auto">Số Đơn Hàng</TableHead>
                     <TableHead className="hidden md:table-cell">Ngày</TableHead>
-                    {/* <TableHead>Customer</TableHead>
-                    <TableHead className="hidden sm:table-cell">
-                      Email
-                    </TableHead> */}
                     <TableHead>Tổng</TableHead>
                     <TableHead>Trạng thái thanh toán</TableHead>
                     <TableHead>Trạng thái đơn hàng</TableHead>

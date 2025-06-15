@@ -1,42 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import toast from "react-hot-toast";
+import { useUpdateProductToCardMutation } from "@/state/api";
 import { Card, Product } from "@/types";
-import {
-  useAddProductToCardMutation,
-  useUpdateProductToCardMutation,
-} from "@/state/api";
-import { set } from "sanity";
+import { Minus, Plus } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Button } from "./ui/button";
 
 interface Props {
   product: Product;
   className?: string;
   cartList: Card[];
   refetch: () => void;
-  setItemCount: React.Dispatch<React.SetStateAction<number>>; 
+  setItemCount: any;
 }
 
-const QuantityButtons = ({ product, className, cartList, refetch, setItemCount }: Props) => {
+const QuantityButtons = ({
+  product,
+  className,
+  cartList,
+  refetch,
+  setItemCount,
+}: Props) => {
   const [updateQuantityProduct] = useUpdateProductToCardMutation();
   const [itemCount, setItemCountLocal] = useState(0);
   useEffect(() => {
-    const productInCart = cartList.find((item) => item.productId?._id === product._id);
+    const productInCart = cartList.find(
+      (item) => item.productId?._id === product._id
+    );
     if (productInCart) {
-      setItemCount(productInCart.quantity); 
+      setItemCount(productInCart.quantity);
       setItemCountLocal(productInCart.quantity);
     } else {
-      setItemCount(0); 
+      setItemCount(0);
     }
-  }, [cartList, product._id, setItemCount]); 
+  }, [cartList, product._id, setItemCount]);
 
   const isOutOfStock = product?.stock === 0;
 
   const handleRemoveProduct = async () => {
-    setItemCount((prevCount) => Math.max(prevCount - 1, 0)); 
+    setItemCount((prevCount: any) => Math.max(prevCount - 1, 0));
     await updateQuantityProduct({
-      productId: product?._id,
+      productId: product?._id || "",
       quantity: 1,
       action: "decrease",
     });
@@ -45,9 +49,9 @@ const QuantityButtons = ({ product, className, cartList, refetch, setItemCount }
   };
 
   const handleAddProduct = async () => {
-    setItemCount((prevCount) => prevCount + 1); 
+    setItemCount((prevCount: any) => prevCount + 1);
     await updateQuantityProduct({
-      productId: product?._id,
+      productId: product?._id || "",
       quantity: 1,
       action: "increase",
     });
@@ -80,6 +84,5 @@ const QuantityButtons = ({ product, className, cartList, refetch, setItemCount }
     </div>
   );
 };
-
 
 export default QuantityButtons;

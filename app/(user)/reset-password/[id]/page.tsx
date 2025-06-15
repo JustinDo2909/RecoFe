@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 
 const ResetPassword = () => {
- const params = useParams();
+  const params = useParams();
   const resetToken = params.id;
   const navigate = useRouter();
   const [newPassword, setNewPassword] = useState("");
@@ -21,14 +21,14 @@ const ResetPassword = () => {
 
     if (newPassword !== confirmPassword)
       return toast.error("Mật khẩu xác nhận không khớp");
-    
+
     try {
       const res = await resetPassword({
-        resetToken ,
+        resetToken: resetToken?.toString() || "",
         newPassword,
       }).unwrap();
       toast.success(res.message || "Đổi mật khẩu thành công");
-     navigate.push("/login"); // điều hướng về login sau khi thành công
+      navigate.push("/login"); // điều hướng về login sau khi thành công
     } catch (err: any) {
       toast.error(err?.data?.message || "Đặt lại mật khẩu thất bại");
     }
@@ -40,10 +40,12 @@ const ResetPassword = () => {
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Đặt lại mật khẩu
         </h2>
-      
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-600 font-medium">Mật khẩu mới</label>
+            <label className="block text-gray-600 font-medium">
+              Mật khẩu mới
+            </label>
             <input
               type="password"
               placeholder="Nhập mật khẩu mới"
@@ -53,7 +55,9 @@ const ResetPassword = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-600 font-medium">Xác nhận mật khẩu</label>
+            <label className="block text-gray-600 font-medium">
+              Xác nhận mật khẩu
+            </label>
             <input
               type="password"
               placeholder="Nhập lại mật khẩu"

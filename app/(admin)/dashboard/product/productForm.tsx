@@ -20,7 +20,7 @@ interface ProductFormData {
 interface ProductFormProps {
   initialValues?: Partial<ProductFormData>;
   categoriesOptions: Category[];
-  onSubmit: (data: ProductFormData) => void;
+  onSubmit: (data: any) => void;
   onCancel: () => void;
   currentDiscountCode?: string;
   onAddDiscount: (payload: { productId: string; discountId: string }) => void;
@@ -142,7 +142,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const visibleCategories = showAllCategories ? sortedCategories : sortedCategories.slice(0, 3);
   const discount = discountList?.find((d) => d._id === currentDiscountCode);
 
-  const internalSubmit = (data: ProductFormData) => {
+  const internalSubmit = (data: any) => {
     console.log("Submit categories:", data.categories);
     console.log("Submit price:", data.price); // This will be the numeric value
     const formData = new FormData();
@@ -152,7 +152,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     formData.append("rating", data.rating.toString());
     formData.append("location", data.location || "");
     formData.append("stock", data.stock.toString());
-    data.categories.forEach((cat) => formData.append("categories[]", cat));
+    data.categories.forEach((cat: any) => formData.append("categories[]", cat));
 
     if (data.picture && data.picture instanceof File) {
       formData.append("profilePicture", data.picture);

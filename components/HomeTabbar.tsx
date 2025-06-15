@@ -13,7 +13,9 @@ const HomeTabbar = ({ selectedTab, onTabSelect, onReset }: Props) => {
   return (
     <div className="flex items-center gap-1.5 text-sm font-semibold">
       <div className="flex items-center gap-1.5">
-        {productType?.map((item) => (
+        {productType?.filter((item) => item?.isActive === true)
+        
+        .map((item) => (
           <button
             key={item?.title}
             onClick={() => onTabSelect(item?._id)}

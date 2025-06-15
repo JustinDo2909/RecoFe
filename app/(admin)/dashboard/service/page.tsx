@@ -2,18 +2,17 @@
 import CustomeTable from "@/components/CustomeTable";
 import Loading from "@/components/Loading";
 import { useGetAllCustomQuery } from "@/state/api";
-import { Custome, CustomResponse } from "@/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const DashboardService = () => {
-  const { data: customs, isLoading } = useGetAllCustomQuery({});
-  const [customList, setCustomList] = useState<CustomResponse[]>([]);
+  const { data: customs, isLoading } = useGetAllCustomQuery();
+  const [customList, setCustomList] = useState<any[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (customs) {
-      setCustomList(customs.data as CustomResponse[]);
+      setCustomList(customs.data as any[]);
       console.log("customs", customs);
     }
   }, [customs]);
@@ -30,32 +29,32 @@ const DashboardService = () => {
           {
             key: "user.username",
             label: "Username",
-            render: (row: Custome) => row.user?.username || "N/A",
+            render: (row: any) => row.user?.username || "N/A",
           },
           {
             key: "user.email",
             label: "Email",
-            render: (row: Custome) => row.user?.email || "N/A",
+            render: (row: any) => row.user?.email || "N/A",
           },
           {
             key: "user.phone",
             label: "Phone",
-            render: (row: Custome) => row.user?.phone || "N/A",
+            render: (row: any) => row.user?.phone || "N/A",
           },
           {
             key: "product.name",
             label: "Product",
-            render: (row: Custome) => row.product?.name || "N/A",
+            render: (row: any) => row.product?.name || "N/A",
           },
           {
             key: "createdAt",
             label: "Created At",
-            render: (row: Custome) => new Date(row.createdAt).toLocaleDateString("vi-VN"),
+            render: (row: any) => new Date(row.createdAt).toLocaleDateString("vi-VN"),
           },
           {
             key: "image",
             label: "Image",
-            render: (row: Custome) => (
+            render: (row: any) => (
               <Image
                 src={row.image}
                 alt="custom"

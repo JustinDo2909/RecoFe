@@ -5,7 +5,13 @@ import PriceView from "./PriceView";
 import AddToCartButton from "./AddToCartButton";
 import { Product } from "@/types";
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({
+  product,
+  hideButton,
+}: {
+  product: Product;
+  hideButton?: boolean;
+}) => {
   return (
     <div className="group text-sm rounded-lg overflow-hidden">
       <div className=" bg-gradient-to-r from-zinc-200 via-zinc-300 to-zinc-200 overflow-hidden relative">
@@ -32,12 +38,8 @@ const ProductCard = ({ product }: { product: Product }) => {
       <div className="py-3 px-2 flex flex-col gap-1.5 bg-zinc-50 border border-t-0 rounded-lg rounded-tl-none rounded-tr-none">
         <h2 className="font-semibold line-clamp-1">{product?.name}</h2>
         <p>{product?.description}</p>
-        <PriceView
-          className="text-lg"
-          price={product?.price}
-          discount={20}
-        />
-        <AddToCartButton product={product} />
+        <PriceView className="text-lg" price={product?.price} discount={20} />
+        {!hideButton && <AddToCartButton product={product} />}
       </div>
     </div>
   );

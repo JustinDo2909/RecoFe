@@ -33,18 +33,17 @@ const EmptyCart = () => {
         </motion.div>
         <div className="text-center space-y-4">
           <h2 className="text-3xl font-bold text-gray-800">
-            Your cart is feeling lonely
+            Bạn không có sản phẩm nào trong giỏ hàng
           </h2>
           <p className="text-gray-600">
-            It looks like you haven&apos;t added anything to your cart yet.
-            Let&apos;s change and find some amazing products for you!
+            Hãy thêm sản phẩm của RECO vào giỏ hàng của bạn bằng cách bấm vào nút ở dưới đây
           </p>
         </div>
         <Link
-          href={"/"}
+          href={"/product"}
           className="block bg-darkColor/5 border border-darkColor/20 text-center py-2.5 rounded-full text-sm font-semibold tracking-wide hover:border-darkColor hover:bg-darkColor hover:text-white hoverEffect"
         >
-          Discover Products
+          Chuyển đến trang sản phẩm
         </Link>
       </motion.div>
     </div>

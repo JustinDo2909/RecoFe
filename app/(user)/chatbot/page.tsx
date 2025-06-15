@@ -77,8 +77,7 @@ const ChatBotPage: React.FC = () => {
       };
   
       setMessages((prev) => [...prev, botMsg]);
-    } catch (error) {
-      console.error("Error sending message: ", error);
+    } catch  {
       setMessages((prev) => [
         ...prev,
         {

@@ -1,32 +1,27 @@
 "use client";
 
-import type React from "react";
-import { useRef, useState, useEffect } from "react";
-import { Stage, Layer, Image as KonvaImage, Transformer, Text as KonvaText } from "react-konva";
 import {
-  Upload,
-  Sparkles,
-  Type,
-  Palette,
+  CheckCircle2,
   Download,
   ImageIcon,
-  Wand2,
-  Layers,
   Move3D,
+  Palette,
   Send,
-  CheckCircle2,
-  AlertCircle,
+  Sparkles,
+  Type,
+  Wand2,
 } from "lucide-react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Image as KonvaImage,
+  Text as KonvaText,
+  Layer,
+  Stage,
+  Transformer,
+} from "react-konva";
 
 import img1 from "../../../asset/Img/1.png";
-import img2 from "../../../asset/Img/2.png";
-import img3 from "../../../asset/Img/3.png";
-import img4 from "../../../asset/Img/4.png";
-import img5 from "../../../asset/Img/5.png";
-import img6 from "../../../asset/Img/6.png";
-import img7 from "../../../asset/Img/7.png";
-import img8 from "../../../asset/Img/8.png";
-import img9 from "../../../asset/Img/9.png";
 import img10 from "../../../asset/Img/10.png";
 import img11 from "../../../asset/Img/11.png";
 import img12 from "../../../asset/Img/12.png";
@@ -37,13 +32,20 @@ import img16 from "../../../asset/Img/16.png";
 import img17 from "../../../asset/Img/17.png";
 import img18 from "../../../asset/Img/18.png";
 import img19 from "../../../asset/Img/19.png";
+import img2 from "../../../asset/Img/2.png";
 import img20 from "../../../asset/Img/20.png";
+import img3 from "../../../asset/Img/3.png";
+import img4 from "../../../asset/Img/4.png";
+import img5 from "../../../asset/Img/5.png";
+import img6 from "../../../asset/Img/6.png";
+import img7 from "../../../asset/Img/7.png";
+import img8 from "../../../asset/Img/8.png";
+import img9 from "../../../asset/Img/9.png";
 
 // Import Product type
-import type { Product } from "@/types";
-import AddToCartButton from "@/components/AddToCartButton";
 import { useCustomeDesignMutation } from "@/state/api";
-import { toast } from "sonner";
+import type { Product } from "@/types";
+import toast from "react-hot-toast";
 
 const imageList = [
   img1,
@@ -93,7 +95,12 @@ interface StickerProps {
 }
 
 // Component Sticker
-const Sticker = ({ shapeProps, isSelected, onSelect, onChange }: StickerProps) => {
+const Sticker = ({
+  shapeProps,
+  isSelected,
+  onSelect,
+  onChange,
+}: StickerProps) => {
   const shapeRef = useRef<any>(null);
   const trRef = useRef<any>(null);
   const image = useImageSrc(shapeProps.src);
@@ -124,7 +131,7 @@ const Sticker = ({ shapeProps, isSelected, onSelect, onChange }: StickerProps) =
       <>
         <KonvaImage
           {...commonProps}
-          image={image}
+          image={image ? image : undefined}
           width={shapeProps.width}
           height={shapeProps.height}
           onTransformEnd={() => {
@@ -157,7 +164,9 @@ const Sticker = ({ shapeProps, isSelected, onSelect, onChange }: StickerProps) =
               "top-center",
               "bottom-center",
             ]}
-            boundBoxFunc={(oldBox, newBox) => (newBox.width < 20 || newBox.height < 20 ? oldBox : newBox)}
+            boundBoxFunc={(oldBox, newBox) =>
+              newBox.width < 20 || newBox.height < 20 ? oldBox : newBox
+            }
           />
         )}
       </>
@@ -183,7 +192,7 @@ const Sticker = ({ shapeProps, isSelected, onSelect, onChange }: StickerProps) =
           onTransformEnd={() => {
             const node = shapeRef.current;
             const scaleX = node.scaleX();
-            const scaleY = node.scaleY();
+            // const scaleY = node.scaleY();
             node.scaleX(1);
             node.scaleY(1);
             onChange({
@@ -199,7 +208,9 @@ const Sticker = ({ shapeProps, isSelected, onSelect, onChange }: StickerProps) =
             ref={trRef}
             enabledAnchors={["middle-left", "middle-right"]}
             rotateEnabled={false}
-            boundBoxFunc={(oldBox, newBox) => (newBox.width < 10 ? oldBox : newBox)}
+            boundBoxFunc={(oldBox, newBox) =>
+              newBox.width < 10 ? oldBox : newBox
+            }
           />
         )}
       </>
@@ -228,7 +239,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
   const [sendMessage, setSendMessage] = useState("");
-  const [sendStatus, setSendStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [sendStatus, setSendStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
   const [sendCustomDesign] = useCustomeDesignMutation();
   // Lấy URL hình ảnh sản phẩm nếu có
   const productImageUrl = product?.picture || null;
@@ -237,39 +250,41 @@ export default function StickerEditor({ product }: StickerEditorProps) {
     setIsMounted(true);
   }, []);
 
-  const handleUploadBackground = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    setBackgroundSrc(url);
-  };
+  // const handleUploadBackground = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
+  //   const url = URL.createObjectURL(file);
+  //   setBackgroundSrc(url);
+  // };
 
-  // Sử dụng hình ảnh sản phẩm làm background
-  const useProductAsBackground = () => {
-    if (productImageUrl) {
-      setBackgroundSrc(productImageUrl);
-    }
-  };
+  // // Sử dụng hình ảnh sản phẩm làm background
+  // const useProductAsBackground = () => {
+  //   if (productImageUrl) {
+  //     setBackgroundSrc(productImageUrl);
+  //   }
+  // };
 
   useEffect(() => {
     setBackgroundSrc(productImageUrl);
   }, [productImageUrl]);
 
   // Sử dụng hình ảnh sản phẩm làm sticker
-  const useProductAsSticker = () => {
-    if (productImageUrl) {
-      addSticker(productImageUrl);
-    }
-  };
+  // const useProductAsSticker = () => {
+  //   if (productImageUrl) {
+  //     addSticker(productImageUrl);
+  //   }
+  // };
 
   const handleStickerChange = (id: number, newAttrs: any) => {
-    setStickers((prev) => prev.map((s) => (s.id === id ? { ...s, ...newAttrs } : s)));
+    setStickers((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, ...newAttrs } : s))
+    );
   };
 
   const addSticker = (src: any) => {
     try {
       if (!src) {
-        console.error("Invalid image source");
+        toast.error("Invalid image source");
         return;
       }
 
@@ -288,7 +303,7 @@ export default function StickerEditor({ product }: StickerEditorProps) {
       ]);
       setSelectedId(newId);
     } catch (error) {
-      console.error("Error adding sticker:", error);
+      toast.error("Error adding sticker:", error || "Error adding sticker");
     }
   };
 
@@ -319,14 +334,22 @@ export default function StickerEditor({ product }: StickerEditorProps) {
 
     if (selectedId) {
       setStickers((prev) =>
-        prev.map((st) => (st.id === selectedId && st.type === "text" ? { ...st, text: newText } : st))
+        prev.map((st) =>
+          st.id === selectedId && st.type === "text"
+            ? { ...st, text: newText }
+            : st
+        )
       );
     }
   };
 
   const handleTextColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value;
-    setStickers((prev) => prev.map((st) => (st.id === selectedId && st.type === "text" ? { ...st, fill: color } : st)));
+    setStickers((prev) =>
+      prev.map((st) =>
+        st.id === selectedId && st.type === "text" ? { ...st, fill: color } : st
+      )
+    );
   };
 
   const handleDownload = () => {
@@ -366,10 +389,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
         toast.success(result.message);
       }
 
-      alert("Thiết kế đã được gửi thành công!");
-    } catch (err) {
-      console.error("Lỗi gửi thiết kế:", err);
-      alert("Đã xảy ra lỗi khi gửi thiết kế.");
+      toast.error("Thiết kế đã được gửi thành công!");
+    } catch {
+      toast.error("Đã xảy ra lỗi khi gửi thiết kế.");
     }
   };
 
@@ -379,24 +401,22 @@ export default function StickerEditor({ product }: StickerEditorProps) {
     setSendStatus("sending");
 
     try {
-      // Capture canvas as base64
-      const imageData = stageRef.current.toDataURL({ pixelRatio: 2 });
+      // // Capture canvas as base64
+      // const imageData = stageRef.current.toDataURL({ pixelRatio: 2 });
 
-      // Prepare design data
-      const designData = {
-        image: imageData,
-        stickers: stickers,
-        backgroundSrc: backgroundSrc,
-        message: sendMessage,
-        timestamp: new Date().toISOString(),
-        canvasSize: { width: 800, height: 600 },
-        productId: product?._id || null,
-      };
+      // // Prepare design data
+      // const designData = {
+      //   image: imageData,
+      //   stickers: stickers,
+      //   backgroundSrc: backgroundSrc,
+      //   message: sendMessage,
+      //   timestamp: new Date().toISOString(),
+      //   canvasSize: { width: 800, height: 600 },
+      //   productId: product?._id || null,
+      // };
 
       // Simulate API call (replace with actual API endpoint)
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      console.log("Sending design to admin:", designData);
 
       setSendStatus("success");
       setTimeout(() => {
@@ -405,22 +425,29 @@ export default function StickerEditor({ product }: StickerEditorProps) {
         setSendMessage("");
       }, 2000);
     } catch (error) {
-      console.error("Error sending design:", error);
+      toast.error("Error sending design:", error || "Error sending design");
       setSendStatus("error");
       setTimeout(() => setSendStatus("idle"), 3000);
     }
   };
 
   useEffect(() => {
-    const selectedTextSticker = stickers.find((s) => s.id === selectedId && s.type === "text");
+    const selectedTextSticker = stickers.find(
+      (s) => s.id === selectedId && s.type === "text"
+    );
     if (selectedTextSticker) {
       setTextInput(selectedTextSticker.text);
-    } else if (selectedId && !stickers.find((s) => s.id === selectedId && s.type === "text")) {
+    } else if (
+      selectedId &&
+      !stickers.find((s) => s.id === selectedId && s.type === "text")
+    ) {
       setTextInput("");
     }
   }, [selectedId, stickers]);
 
-  const selectedTextSticker = stickers.find((s) => s.id === selectedId && s.type === "text");
+  const selectedTextSticker = stickers.find(
+    (s) => s.id === selectedId && s.type === "text"
+  );
 
   // Send to Admin Modal
   const SendModal = () => (
@@ -437,7 +464,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
         {sendStatus === "idle" && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Ghi chú cho admin (tùy chọn)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Ghi chú cho admin (tùy chọn)
+              </label>
               <textarea
                 value={sendMessage}
                 onChange={(e) => setSendMessage(e.target.value)}
@@ -469,7 +498,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
             <p className="text-gray-700 font-medium">Đang gửi thiết kế...</p>
-            <p className="text-gray-500 text-sm mt-1">Vui lòng đợi trong giây lát</p>
+            <p className="text-gray-500 text-sm mt-1">
+              Vui lòng đợi trong giây lát
+            </p>
           </div>
         )}
 
@@ -479,14 +510,16 @@ export default function StickerEditor({ product }: StickerEditorProps) {
               <CheckCircle2 className="h-8 w-8 text-green-600" />
             </div>
             <p className="text-gray-700 font-medium mb-1">Gửi thành công!</p>
-            <p className="text-gray-500 text-sm">Admin sẽ xem xét thiết kế của bạn</p>
+            <p className="text-gray-500 text-sm">
+              Admin sẽ xem xét thiết kế của bạn
+            </p>
           </div>
         )}
 
         {sendStatus === "error" && (
           <div className="text-center py-8">
             <div className="p-3 bg-red-100 rounded-full w-fit mx-auto mb-4">
-              <AlertCircle className="h-8 w-8 text-red-600" />
+              {/* <toast.errorCircle className="h-8 w-8 text-red-600" /> */}
             </div>
             <p className="text-gray-700 font-medium mb-1">Có lỗi xảy ra!</p>
             <p className="text-gray-500 text-sm mb-4">Vui lòng thử lại sau</p>
@@ -510,8 +543,12 @@ export default function StickerEditor({ product }: StickerEditorProps) {
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-200 border-t-indigo-600 mx-auto mb-6"></div>
             <Wand2 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-6 w-6 text-indigo-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Đang khởi tạo Studio</h3>
-          <p className="text-gray-600">Chuẩn bị không gian sáng tạo của bạn...</p>
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            Đang khởi tạo Studio
+          </h3>
+          <p className="text-gray-600">
+            Chuẩn bị không gian sáng tạo của bạn...
+          </p>
         </div>
       </div>
     );
@@ -554,7 +591,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">Hình ảnh sản phẩm</h3>
-                  <p className="text-xs text-gray-600">Sử dụng hình ảnh sản phẩm</p>
+                  <p className="text-xs text-gray-600">
+                    Sử dụng hình ảnh sản phẩm
+                  </p>
                 </div>
               </div>
 
@@ -626,14 +665,19 @@ export default function StickerEditor({ product }: StickerEditorProps) {
               </div>
               <div>
                 <h3 className="font-bold text-gray-800">Stickers</h3>
-                <p className="text-xs text-gray-600">Thêm sticker vào thiết kế</p>
+                <p className="text-xs text-gray-600">
+                  Thêm sticker vào thiết kế
+                </p>
               </div>
             </div>
 
             <div className="max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 rounded-2xl">
               <div className="grid grid-cols-3 gap-3 p-1">
                 {imageList.map((src, idx) => {
-                  const imageSrc = typeof src === "string" ? src : src.src || " src.default" || src;
+                  const imageSrc =
+                    typeof src === "string"
+                      ? src
+                      : src.src || " src.default" || src;
 
                   return (
                     <div
@@ -647,7 +691,7 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                       title={`Sticker ${idx + 1}`}
                     >
                       <img
-                        src={imageSrc || "/placeholder.svg"}
+                       src={typeof imageSrc === "string" ? imageSrc : imageSrc.src}
                         alt={`Sticker ${idx + 1}`}
                         className="w-full h-full object-cover rounded-xl group-hover:scale-110 transition-transform duration-300"
                         draggable={false}
@@ -699,12 +743,16 @@ export default function StickerEditor({ product }: StickerEditorProps) {
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="flex items-center gap-2 mb-4">
                   <Palette className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-semibold text-gray-700">Chỉnh sửa text đã chọn</span>
+                  <span className="text-sm font-semibold text-gray-700">
+                    Chỉnh sửa text đã chọn
+                  </span>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-2">Nội dung:</label>
+                    <label className="block text-xs font-medium text-gray-600 mb-2">
+                      Nội dung:
+                    </label>
                     <input
                       type="text"
                       value={textInput}
@@ -714,7 +762,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-2">Màu sắc:</label>
+                    <label className="block text-xs font-medium text-gray-600 mb-2">
+                      Màu sắc:
+                    </label>
                     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
                       <input
                         type="color"
@@ -722,7 +772,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                         value={selectedTextSticker.fill || "#000000"}
                         className="w-8 h-8 border-none rounded-lg cursor-pointer shadow-sm"
                       />
-                      <span className="text-sm text-gray-700 font-medium">Chọn màu</span>
+                      <span className="text-sm text-gray-700 font-medium">
+                        Chọn màu
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -738,7 +790,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
               </div>
               <div>
                 <h3 className="font-bold text-gray-800">Export & Share</h3>
-                <p className="text-xs text-gray-600">Tải xuống hoặc gửi thiết kế</p>
+                <p className="text-xs text-gray-600">
+                  Tải xuống hoặc gửi thiết kế
+                </p>
               </div>
             </div>
 
@@ -780,14 +834,24 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                   }}
                 >
                   <Layer>
-                    {backgroundSrc && <BackgroundImage src={backgroundSrc} x={0} y={0} width={800} height={600} />}
+                    {backgroundSrc && (
+                      <BackgroundImage
+                        src={backgroundSrc}
+                        x={0}
+                        y={0}
+                        width={800}
+                        height={600}
+                      />
+                    )}
                     {stickers.map((sticker) => (
                       <Sticker
                         key={sticker.id}
                         shapeProps={sticker}
                         isSelected={sticker.id === selectedId}
                         onSelect={() => setSelectedId(sticker.id)}
-                        onChange={(newAttrs) => handleStickerChange(sticker.id, newAttrs)}
+                        onChange={(newAttrs) =>
+                          handleStickerChange(sticker.id, newAttrs)
+                        }
                       />
                     ))}
                   </Layer>
@@ -815,7 +879,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                 <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="font-medium text-gray-800">Thêm elements</p>
-                  <p className="text-gray-600">Click vào sticker hoặc nhập text để thêm vào canvas</p>
+                  <p className="text-gray-600">
+                    Click vào sticker hoặc nhập text để thêm vào canvas
+                  </p>
                 </div>
               </div>
 
@@ -823,15 +889,21 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                 <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="font-medium text-gray-800">Chỉnh sửa</p>
-                  <p className="text-gray-600">Click vào element trên canvas để chọn và chỉnh sửa</p>
+                  <p className="text-gray-600">
+                    Click vào element trên canvas để chọn và chỉnh sửa
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 bg-pink-500 rounded-full mt-2 flex-shrink-0"></div>
                 <div>
-                  <p className="font-medium text-gray-800">Di chuyển & resize</p>
-                  <p className="text-gray-600">Kéo thả để di chuyển, dùng handles để thay đổi kích thước</p>
+                  <p className="font-medium text-gray-800">
+                    Di chuyển & resize
+                  </p>
+                  <p className="text-gray-600">
+                    Kéo thả để di chuyển, dùng handles để thay đổi kích thước
+                  </p>
                 </div>
               </div>
 
@@ -839,7 +911,9 @@ export default function StickerEditor({ product }: StickerEditorProps) {
                 <div className="w-2 h-2 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="font-medium text-gray-800">Xuất file</p>
-                  <p className="text-gray-600">Click "Tải xuống PNG" để lưu thiết kế của bạn</p>
+                  <p className="text-gray-600">
+                    Click Tải xuống PNG để lưu thiết kế của bạn
+                  </p>
                 </div>
               </div>
             </div>

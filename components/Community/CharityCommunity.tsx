@@ -43,7 +43,7 @@ const CharityCommunity = ({ charityList }: { charityList: Charity[] }) => {
 
             {/* Button */}
             <div className="mt-4">
-              <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className=" text-white px-4 py-2 rounded-md">
+              <Button onClick={() => window.open("https://docs.google.com/forms/d/e/1FAIpQLSfHvXBONhp5ihlLPca3xdRLyaKGHu-4r6M-oVcmPtJSNCO3hw/viewform?fbclid=IwY2xjawK7WBxleHRuA2FlbQIxMABicmlkETFxNm1TeHhOUzNKbFFaZlo4AR4qlskgsh1bvgkEtNB2WGhja1Vngh7sUbvlumEqdD3JC9MnWZ2HP0dSSfiDxQ_aem_deP4YLcuB0j0HeNnkj7pcw", "_blank")} className=" text-white px-4 py-2 rounded-md">
                 {item.button}
               </Button>
             </div>

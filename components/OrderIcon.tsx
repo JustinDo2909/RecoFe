@@ -1,9 +1,9 @@
 "use client";
-import { useGetCardQuery, useLazyGetOrderQuery } from "@/state/api";
+import { useLazyGetOrderQuery } from "@/state/api";
 import { ListOrderedIcon } from "lucide-react";
 
 import Link from "next/link";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 const OrderIcon = () => {
   const [order, { data: items }] = useLazyGetOrderQuery({});

@@ -1,9 +1,10 @@
+"use client"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const DetailPage = () => {
   const router = useRouter();
-  const { type, id, data: rawData } = router.query;
+  const { type, data: rawData } = router.query;
 
   const [data, setData] = useState<any>(null);
 
@@ -12,8 +13,7 @@ const DetailPage = () => {
       try {
         const parsed = JSON.parse(decodeURIComponent(rawData as string));
         setData(parsed);
-      } catch (err) {
-        console.error("Failed to parse data:", err);
+      } catch{
       }
     }
   }, [rawData]);

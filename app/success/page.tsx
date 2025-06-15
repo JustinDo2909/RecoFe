@@ -1,15 +1,14 @@
 "use client";
 
-import useCartStore from "@/store";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { motion } from "motion/react";
-import { Check, Home, Package, ShoppingBag } from "lucide-react";
-import Link from "next/link";
 import {
   useCreateOrderMutation,
   useDeleteAllProductToCardMutation,
 } from "@/state/api";
+import { Check, Home, Package, ShoppingBag } from "lucide-react";
+import { motion } from "motion/react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const SuccessPage = () => {
   const searchParams = useSearchParams();

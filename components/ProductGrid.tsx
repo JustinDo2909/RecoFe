@@ -15,12 +15,15 @@ const ProductGrid: React.FC<ProductSlideProps> = ({ products }) => {
   
 const filteredProducts = selectedTab
   ? products.filter(product => 
+      product.isActive === true && 
+      product.stock !== 0 &&
       product.categories?.some(cat => {
         console.log("cat._id:", cat, "| selectedTab:", selectedTab);
         return cat === selectedTab;
       })
     )
-  : products;
+  : products.filter(product => product.isActive === true && 
+      product.stock !== 0) ; 
 
 
   const handleReset = () => {

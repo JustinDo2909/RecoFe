@@ -19,7 +19,7 @@ interface CategoryFormData {
 }
 
 const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) => {
-  const { data: Products, isLoading } = useGetProductQuery({});
+  const { data: Products, isLoading } = useGetProductQuery();
 
   const {
     register,
@@ -106,14 +106,14 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) 
         <label className="block text-sm font-medium mb-1">Sản phẩm</label>
         <div className="max-h-48 overflow-auto border rounded p-2">
           {(Products || []).map((product: Product) => {
-            const checked = watchedProducts.includes(product._id);
+            const checked = watchedProducts.includes(product._id || "");
             return (
               <label key={product._id} className="flex items-center space-x-2 mb-1 cursor-pointer">
                 <input
                   type="checkbox"
                   value={product._id}
                   checked={checked}
-                  onChange={() => toggleProduct(product._id)}
+                  onChange={() => toggleProduct(product._id || "")}
                 />
                 <span>{product.name}</span>
               </label>

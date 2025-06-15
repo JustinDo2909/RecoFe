@@ -18,13 +18,13 @@ interface TableProps<T> {
   onUpdateStatus?: (_id: string, status: string) => void;
   ITEMS_PER_PAGE: number;
   getIsActive?: (row: T) => boolean;
-  onDisable: (_id: string, reason: string) => void;
-  onEnable: (_id: string) => void;
+  onDisable?: (_id: string, reason: string) => void;
+  onEnable?: (_id: string) => void;
   onCreate?: () => void;
   onUpdate?: (row: T) => void;
 }
 
-const UitlTable = <T extends { _id: string }>({
+const UitlTable = <T extends { _id?: string }>({
   data,
   columns,
   ITEMS_PER_PAGE,
@@ -43,18 +43,25 @@ const UitlTable = <T extends { _id: string }>({
   const [reason, setReason] = useState("");
 
   const filteredData = data.filter((row) =>
-    columns.some((col) => String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()))
+    columns.some((col) =>
+      String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase())
+    )
   );
 
   const sortedData = [...filteredData].sort((a, b) => {
     if (!sortColumn) return 0;
     const aValue = String(a[sortColumn]).toLowerCase();
     const bValue = String(b[sortColumn]).toLowerCase();
-    return sortOrder === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    return sortOrder === "asc"
+      ? aValue.localeCompare(bValue)
+      : bValue.localeCompare(aValue);
   });
 
   const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
-  const paginatedData = sortedData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const paginatedData = sortedData.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const handleSort = (colKey: keyof T) => {
     if (sortColumn === colKey) {
@@ -71,15 +78,18 @@ const UitlTable = <T extends { _id: string }>({
 
     try {
       console.log("onEnable", id);
-
-      onEnable(id); // <--- Sai: onEnable nhận 1 param kiểu string (id), bạn đang truyền object {id}
-    } catch (err) {
+      if (onEnable) {
+        onEnable(id);
+      }
+    } catch {
       toast.error("Kích hoạt thất bại!");
     }
   };
 
   const handleClickCreate = () => {
-    onCreate();
+    if (onCreate) {
+      onCreate();
+    }
   };
 
   const openReasonModal = (id: string) => {
@@ -94,7 +104,9 @@ const UitlTable = <T extends { _id: string }>({
       if (!confirmed) return;
 
       try {
-        onDisable(selectedRowId, reason);
+        if (onDisable) {
+          onDisable(selectedRowId, reason);
+        }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
@@ -124,7 +136,10 @@ const UitlTable = <T extends { _id: string }>({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         {onCreate && (
-          <button onClick={handleClickCreate} className="mb-4 text-green-600 p-3">
+          <button
+            onClick={handleClickCreate}
+            className="mb-4 text-green-600 p-3"
+          >
             <PlusCircleIcon size={35} />
           </button>
         )}
@@ -140,7 +155,12 @@ const UitlTable = <T extends { _id: string }>({
                   className="px-4 py-2 text-left border cursor-pointer"
                   onClick={() => handleSort(col.key)}
                 >
-                  {col.label} {sortColumn === col.key ? (sortOrder === "asc" ? "▲" : "▼") : ""}
+                  {col.label}{" "}
+                  {sortColumn === col.key
+                    ? sortOrder === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
               <th className="px-4 py-2 text-left border">Thao tác</th>
@@ -154,8 +174,12 @@ const UitlTable = <T extends { _id: string }>({
                 return (
                   <tr key={row._id} className="border">
                     {columns.map((col) => (
-                      <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
-                        {typeof row[col.key] === "object" && React.isValidElement(row[col.key]) ? (
+                      <td
+                        key={String(col.key)}
+                        className="px-4 py-2 border text-customgreys-blueGrey"
+                      >
+                        {typeof row[col.key] === "object" &&
+                        React.isValidElement(row[col.key]) ? (
                           row[col.key]
                         ) : col.key === "picture" ? (
                           <Image
@@ -165,9 +189,11 @@ const UitlTable = <T extends { _id: string }>({
                             height={50}
                             className="w-10 h-10 rounded-full"
                           />
-                        ) : col.key === "createdAt" || col.key === "updatedAt" ? (
+                        ) : col.key === "createdAt" ||
+                          col.key === "updatedAt" ? (
                           format(new Date(String(row[col.key])), "dd/MM/yyyy")
-                        ) : typeof row[col.key] === "object" && row[col.key] !== null ? (
+                        ) : typeof row[col.key] === "object" &&
+                          row[col.key] !== null ? (
                           "name" in (row[col.key] as object) ? (
                             (row[col.key] as any).name
                           ) : (
@@ -181,7 +207,7 @@ const UitlTable = <T extends { _id: string }>({
                     <td className="px-4 py-2 border text-center flex justify-center gap-3">
                       {isActive ? (
                         <button
-                          onClick={() => openReasonModal(row._id)}
+                          onClick={() => openReasonModal((row as any)._id)}
                           className="bg-red-600 hover:bg-red-700 transition text-white font-semibold py-1.5 px-4 rounded-md shadow"
                           title="Đình chỉ"
                         >
@@ -189,7 +215,7 @@ const UitlTable = <T extends { _id: string }>({
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleClickEnable(row._id)}
+                          onClick={() => handleClickEnable((row as any)._id)}
                           className="bg-green-600 hover:bg-green-700 transition text-white font-semibold py-1.5 px-4 rounded-md shadow"
                           title="Kích hoạt"
                         >
@@ -210,7 +236,10 @@ const UitlTable = <T extends { _id: string }>({
               })
             ) : (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-2 text-center">
+                <td
+                  colSpan={columns.length + 1}
+                  className="px-4 py-2 text-center"
+                >
                   Không có dữ liệu
                 </td>
               </tr>
@@ -231,7 +260,9 @@ const UitlTable = <T extends { _id: string }>({
           Trang {currentPage} / {totalPages}
         </span>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >

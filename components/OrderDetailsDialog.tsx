@@ -1,11 +1,18 @@
 import { Order, User } from "@/types";
+import { Palette } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import PriceFormatter from "./PriceFormatter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
-import Image from "next/image";
-import { Palette } from "lucide-react";
-import { useRouter } from "next/navigation";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
 
 interface Props {
   order: Order | null;
@@ -29,32 +36,36 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
           <DialogTitle>Chi tiết đơn hàng - {order?._id}</DialogTitle>
         </DialogHeader>
         <div className="mt-4 space-y-1">
-          {/* <p>
-            <strong>Customer:</strong> {user?.username}
-          </p>
-          <p>
-            <strong>Email:</strong> {user?.email}
-          </p> */}
           <p>
             <strong>Ngày:</strong>
-            {order?.createdAt && new Date(order?.createdAt).toLocaleDateString()}
+            {order?.createdAt &&
+              new Date(order?.createdAt).toLocaleDateString()}
           </p>
           <p>
             <strong>Trạng thái:</strong>
-            <span className="capitalize text-green-600 font-medium">{order?.statusOrder}</span>
+            <span className="capitalize text-green-600 font-medium">
+              {(() => {
+                switch (order?.statusOrder) {
+                  case "Processing":
+                    return "Đang xử lý";
+                  case "Shipping":
+                    return "Đang giao hàng";
+                  case "Done":
+                    return "Hoàn thành";
+                  case "Refund Approved":
+                    return "Đã chấp nhận hoàn tiền";
+                  case "Cancel":
+                    return "Đã hủy";
+                  case "Refund Requested":
+                    return "Yêu cầu hoàn tiền";
+                  case "Refund Rejected":
+                    return "Từ chối hoàn tiền";
+                  default:
+                    return "Không xác định";
+                }
+              })()}
+            </span>
           </p>
-          {/* <p>
-            <strong>Invoice Number:</strong> {order?.invoice?.number}
-          </p> */}
-          {/* {order?.invoice && (
-            <Button variant="outline" className="mt-2">
-              {order?.invoice?.hosted_invoice_url && (
-                <Link href={order?.invoice?.hosted_invoice_url} target="blank">
-                  Download Invoice
-                </Link>
-              )}
-            </Button>
-          )} */}
         </div>
         <Table>
           <TableHeader>
@@ -71,7 +82,7 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
                 <TableCell className="flex flex-col items-start gap-2">
                   <div className="flex items-center gap-2">
                     <Image
-                      src={product?.picture}
+                      src={product?.picture || ""}
                       alt="productImage"
                       width={50}
                       height={50}
@@ -84,7 +95,9 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
                     ? product.productId === idCustom
                     : product.productId === idCustom) && (
                     <button
-                      onClick={() => router.push(`/customeBag/${product.productId}`)}
+                      onClick={() =>
+                        router.push(`/customeBag/${product.productId}`)
+                      }
                       className="flex items-center gap-1 text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1 rounded-md hover:from-purple-700 hover:to-pink-700 transition-all duration-300 mt-1"
                     >
                       <Palette className="h-4 w-4" />
@@ -101,32 +114,19 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
           </TableBody>
         </Table>
         {order?.items?.some((item) =>
-          typeof item.productId === "string" ? item.productId === idCustom : item.productId?._id === idCustom
+          typeof item.productId === "string"
+            ? item.productId === idCustom
+            : (item as any).productId?._id === idCustom
         )}
 
         <div className="mt-4 text-right flex items-center justify-end">
           <div className="w-44 flex flex-col gap-1">
-            {/* {order?.amountDiscount !== 0 && (
-              <div className="w-full flex items-center justify-between">
-                <strong>Subtotal</strong>
-                <PriceFormatter
-                  amount={
-                    (order?.totalPrice as number) +
-                    (order?.amountDiscount as number)
-                  }
-                />
-              </div>
-            )}
-            {order?.amountDiscount !== 0 && (
-              <div className="w-full flex items-center justify-between">
-                <strong>Discount</strong>
-                <PriceFormatter amount={order?.amountDiscount} />
-              </div>
-            )} */}
-
             <div className="w-full flex items-center justify-between">
               <strong>Tổng đơn:</strong>
-              <PriceFormatter amount={order?.totalPrice} className="text-black font-bold" />
+              <PriceFormatter
+                amount={order?.totalPrice}
+                className="text-black font-bold"
+              />
             </div>
           </div>
         </div>
