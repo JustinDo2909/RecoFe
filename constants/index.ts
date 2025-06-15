@@ -1,12 +1,11 @@
-
 export const headerData = [
   { title: "Trang Chủ", href: "/" },
   { title: "Sản Phẩm", href: "/product" },
   { title: "Dịch Vụ Custom", href: "/custom" },
   { title: "Cộng Đồng", href: "/community" },
   { title: "Về Chúng Tôi", href: "/about" },
+  // { title: "Custome", href: "/customeBag" },
 ];
-
 
 export const quickLinksData = [
   { title: "Trang Chủ", href: "/" },
@@ -39,8 +38,7 @@ export const faqsData = [
   },
   {
     question: "Reco phục vụ những ngành công nghiệp nào?",
-    answer:
-      "Reco phục vụ nhiều ngành công nghiệp bao gồm tài chính, y tế, bán lẻ và sản xuất.",
+    answer: "Reco phục vụ nhiều ngành công nghiệp bao gồm tài chính, y tế, bán lẻ và sản xuất.",
   },
   {
     question: "Reco đảm bảo an toàn dữ liệu như thế nào?",

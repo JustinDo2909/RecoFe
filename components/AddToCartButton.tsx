@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
@@ -26,11 +25,11 @@ const AddToCartButton = ({ product, className }: Props) => {
   const isOutOfStock = product?.stock === 0;
 
   const handleAdd = async () => {
-    await addProduct({
+    const result = await addProduct({
       productId: product._id || "",
       quantity: 1,
     });
-    toast.success(`${product.name?.substring(0, 12)}... added successfully!`);
+    toast.success(`${product.name?.substring(0, 12)} ${result.data?.message}`);
     await refetch();
   };
 
@@ -44,12 +43,12 @@ const AddToCartButton = ({ product, className }: Props) => {
               product={product}
               cartList={cartList || []}
               refetch={refetch}
-              setItemCount={setItemCount}  // Pass the setItemCount function down to update itemCount
+              setItemCount={setItemCount} // Pass the setItemCount function down to update itemCount
             />
           </div>
           <div className="flex items-center justify-between border-t pt-1">
             <span className="text-xs font-semibold">Subtotal</span>
-            <PriceFormatter amount={product.price * itemCount} />
+            <PriceFormatter amount={product.finalPrice * itemCount} />
           </div>
         </div>
       ) : (

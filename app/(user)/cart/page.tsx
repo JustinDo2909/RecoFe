@@ -311,7 +311,7 @@ const CartPage = () => {
         paymentMethod: "Wallet",
         statusOrder: "",
         statusPayment: "Paid",
-        feeShipping: Number(feeShipping) ,
+        feeShipping: Number(feeShipping),
         address: addressString,
       });
 
@@ -568,6 +568,15 @@ const CartPage = () => {
                         >
                           Pay With Stripe <BanknoteIcon />
                         </Button>
+
+                        {/* <Button
+                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          onClick={handleCheckoutWallet}
+                          className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
+                          size="lg"
+                        >
+                          Trả bằng tiền trong ví <BanknoteIcon />
+                        </Button> */}
                       </div>
                     </div>
                   </div>

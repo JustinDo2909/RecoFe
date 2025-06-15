@@ -182,3 +182,37 @@ export interface Response<T> {
   data?: T;
   success: boolean;
 }
+
+export interface Custome {
+  _id: string;
+  user: string;
+  image: string;
+  product?: string;
+  title?: string;
+  createdAt: string;
+  isActive: boolean;
+}
+
+export interface CustomResponse {
+  _id: string;
+  title: string;
+  image: string;
+  createdAt: string;
+  isActive: boolean;
+  metadata: {
+    elements: any[];
+  };
+  user: {
+    _id: string;
+    username: string;
+    email: string;
+    phone: string;
+    address: string;
+    date_of_birth: string | null;
+    avatar: string;
+  };
+  product: {
+    _id: string;
+    name: string;
+  };
+}
