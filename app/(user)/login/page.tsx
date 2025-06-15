@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@/hooks/useUser";
-import loginImage from "@/images/login.jpg";
+import loginImage from "@/images/Bglogin_new.jpg";
 import { useForgotPasswordMutation } from "@/state/api";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react"; // Import icons cho show/hide password
@@ -77,7 +77,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await forgotPassword({ email: forgotPasswordEmail }).unwrap();
-      setForgotPasswordMessage("Password reset link sent to your email!");
+      setForgotPasswordMessage("Kiểm tra email của bạn đi!");
       setForgotPasswordEmail("");
       setTimeout(() => {
         setForgotPasswordMessage("");
@@ -126,7 +126,7 @@ const LoginPage = () => {
           value={formData[field] || ""}
           onChange={(e) => onInputChange(field, e.target.value)}
           className="mt-1 w-full p-3 border rounded-lg focus:ring-teal-500 focus:border-teal-500"
-          placeholder={`Enter your ${field.toLowerCase()}`}
+          placeholder={`Nhập ${field.toLowerCase()}`}
           required
         />
         {isPasswordField && (
@@ -184,7 +184,7 @@ const LoginPage = () => {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                Forgot Password
+                Quên Mật Khẩu
               </h2>
               {forgotPasswordMessage && (
                 <motion.div
@@ -209,7 +209,7 @@ const LoginPage = () => {
                     value={forgotPasswordEmail}
                     onChange={(e) => setForgotPasswordEmail(e.target.value)}
                     className="mt-1 w-full p-3 border rounded-lg focus:ring-teal-500 focus:border-teal-500"
-                    placeholder="Enter your email"
+                    placeholder="Nhập email"
                     required
                   />
                 </div>
@@ -222,7 +222,7 @@ const LoginPage = () => {
                       : ""
                   }`}
                 >
-                  {isForgotPasswordLoading ? "Sending..." : "Send Reset Link"}
+                  {isForgotPasswordLoading ? "Đang gửi..." : "Gửi liên kết"}
                 </button>
               </form>
               <div className="flex justify-center mt-4">
@@ -230,7 +230,7 @@ const LoginPage = () => {
                   onClick={toggleForgotPassword}
                   className="text-sm text-gray-600 hover:underline"
                 >
-                  Back to Login
+                  Trở lại đăng nhập
                 </button>
               </div>
             </motion.div>
@@ -249,10 +249,8 @@ const LoginPage = () => {
                     : ["Email", "Password"]
                 }
                 onSubmit={handleSubmit}
-                title={
-                  isUpdate ? "Register Your Account" : "Login to Your Account"
-                }
-                typeSubmit={isUpdate ? "Register Now" : "Login Now"}
+                title={isUpdate ? "Đăng ký " : "Đăng nhập "}
+                typeSubmit={isUpdate ? "Đăng ký " : "Đăng nhập"}
                 formData={formData}
                 onInputChange={handleInputChange}
                 renderInput={renderInput}
@@ -268,9 +266,7 @@ const LoginPage = () => {
                   className="flex items-center gap-2 px-4 py-2 rounded-lg transition-transform duration-500 hover:bg-gray-200"
                 >
                   <p className="hover:underline">
-                    {isUpdate
-                      ? "I Already Have Account"
-                      : "I don’t have an account"}
+                    {isUpdate ? "Đã có tài khoản?" : "Chưa có tài khoản"}
                   </p>
                 </div>
 
@@ -279,7 +275,7 @@ const LoginPage = () => {
                   className="flex items-center gap-2 px-4 py-2 rounded-lg transition-transform duration-500 hover:bg-gray-200"
                 >
                   <p className="hover:underline">
-                    {isUpdate ? "I forgot Password" : "I forgot Password"}
+                    {isUpdate ? "Quên mật khẩu" : "Quên mật khẩu"}
                   </p>
                 </div>
               </div>

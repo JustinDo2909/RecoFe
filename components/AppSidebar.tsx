@@ -35,13 +35,13 @@ const AppSidebar = () => {
   const navLinks = {
     admin: [
       { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard/overview" },
-      { icon: User, label: "Users", href: "/dashboard/user" },
-      { icon: BookOpen, label: "Categorys", href: "/dashboard/category" },
-      { icon: Package, label: "Orders", href: "/dashboard/order" },
-      { icon: Package2Icon, label: "Products", href: "/dashboard/product" },
-      { icon: ServerIcon, label: "Services", href: "/dashboard/service" },
-      { icon: Bell, label: "Requests", href: "/dashboard/request" },
-      { icon: TicketPercent, label: "Discount", href: "/dashboard/discount" },
+      { icon: User, label: "Người dùng", href: "/dashboard/user" },
+      { icon: BookOpen, label: "Loại", href: "/dashboard/category" },
+      { icon: Package, label: "Đơn hàng", href: "/dashboard/order" },
+      { icon: Package2Icon, label: "Sản phẩm", href: "/dashboard/product" },
+      { icon: ServerIcon, label: "Dịch vụ", href: "/dashboard/service" },
+      { icon: Bell, label: "Yêu cầu", href: "/dashboard/request" },
+      { icon: TicketPercent, label: "Giảm giá", href: "/dashboard/discount" },
     ],
   };
 
@@ -68,7 +68,7 @@ const AppSidebar = () => {
                 <div className="flex items-center gap-5">
                   <LogoReco className="transition duration-200 group-data-[collapsible=icon]:group-hover:brightness-75 w-auto" />
 
-                  <p className="text-lg font-extrabold group-data-[collapsible=icon]:hidden">RECORD</p>
+                  <p className="text-lg font-extrabold group-data-[collapsible=icon]:hidden">RECO</p>
                 </div>
                 <PanelLeft className="text-gray-400 w-5 h-5 group-data-[collapsible=icon]:hidden" />
               </div>

@@ -41,20 +41,20 @@ const Header = () => {
           <MobileMenu />
         </div>
         <div className="w-auto md:w-1/3 flex items-center justify-end gap-5">
-          {/* <SearchBar /> */}
+          <SearchBar />
 
           {!token ? (
-            <Link href={"/login"}>Login</Link>
+            <Link href={"/login"}>Đăng nhập</Link>
           ) : (
             <>
               <CartIcon />
               <OrderIcon />
-              <div className="flex gap-1">
+              <div className="flex gap-9 mb-1">
                 <UserIcon
                   className="cursor-pointer"
                   onClick={() => router.push("/profile")}
                 />
-                <button onClick={handleLogout}>Logout</button>
+                <button onClick={handleLogout}>Đăng xuất</button>
               </div>
             </>
           )}

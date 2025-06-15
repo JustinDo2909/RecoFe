@@ -24,7 +24,7 @@ const Footer = () => {
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
             <LogoReco className="justify-center flex md:justify-start" />
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm  pb-4">
               Mỗi sản phẩm của RECO đều được thiết kế lại, từ những chiếc áo cũ, túi xách đã qua sử dụng đến các phụ kiện, tất cả đều được biến hóa để mang lại sự tươi mới và độc đáo.
             </p>
             <SocialMedia

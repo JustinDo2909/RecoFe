@@ -49,7 +49,7 @@ const OrdersPage = () => {
     const response = await createRefunRequest({
       order: order._id,
       type: "refund",
-      message: "I want to Refund this",
+      message: "Tôi muốn hoàn tiền",
     });
     if (response) {
       getOrder({});

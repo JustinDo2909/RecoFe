@@ -473,7 +473,7 @@ const CartPage = () => {
                   <div className="lg:col-span-1">
                     <div className="hidden md:inline-block w-full bg-white p-6 rounded-lg border">
                       <h2 className="text-xl font-semibold mb-4">
-                        Order Summary
+                        Chi tiết đơn hàng
                       </h2>
                       <div className="space-y-4">
                         <div className="flex justify-between">
