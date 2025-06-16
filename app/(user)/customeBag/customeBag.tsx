@@ -13,13 +13,7 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import {
-  Image as KonvaImage,
-  Text as KonvaText,
-  Layer,
-  Stage,
-  Transformer,
-} from "react-konva";
+
 
 import img1 from "../../../asset/Img/1.png";
 import img10 from "../../../asset/Img/10.png";
@@ -45,8 +39,15 @@ import img9 from "../../../asset/Img/9.png";
 // Import Product type
 import { useCustomeDesignMutation } from "@/state/api";
 import type { Product } from "@/types";
+import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 
+// Import tắt SSR cho toàn bộ react-konva
+const Stage = dynamic(() => import("react-konva").then(mod => mod.Stage), { ssr: false });
+const Layer = dynamic(() => import("react-konva").then(mod => mod.Layer), { ssr: false });
+const  KonvaImage = dynamic(() => import("react-konva").then(mod => mod.Image), { ssr: false });
+const KonvaText  = dynamic(() => import("react-konva").then(mod => mod.Text), { ssr: false });
+const Transformer = dynamic(() => import("react-konva").then(mod => mod.Transformer), { ssr: false });
 const imageList = [
   img1,
   img2,
