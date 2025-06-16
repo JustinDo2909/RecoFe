@@ -51,6 +51,7 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.56.3",
     "react-hot-toast": "^2.4.1",
+    "react-is": "^19.1.0",
     "react-konva": "^19.0.5",
     "react-redux": "^9.2.0",
     "recharts": "^2.15.3",
