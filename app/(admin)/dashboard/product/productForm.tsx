@@ -245,23 +245,25 @@ const ProductForm: React.FC<ProductFormProps> = ({
         <div>
           <label className="block font-medium mb-2">Danh mục sản phẩm</label>
           <div className="flex flex-wrap gap-2">
-            {visibleCategories.map((cat) => {
-              const isSelected = selectedCategorys.includes(cat._id);
-              return (
-                <button
-                  key={cat._id}
-                  type="button"
-                  onClick={() => onCategoryToggle(cat._id)}
-                  className={`px-4 py-1 rounded-full text-sm border transition ${
-                    isSelected
-                      ? "bg-blue-600 text-white border-blue-600"
-                      : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
-                  }`}
-                >
-                  {cat.title}
-                </button>
-              );
-            })}
+            {visibleCategories
+              .filter((cat) => cat.isActive)
+              .map((cat) => {
+                const isSelected = selectedCategorys.includes(cat._id);
+                return (
+                  <button
+                    key={cat._id}
+                    type="button"
+                    onClick={() => onCategoryToggle(cat._id)}
+                    className={`px-4 py-1 rounded-full text-sm border transition ${
+                      isSelected
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                    }`}
+                  >
+                    {cat.title}
+                  </button>
+                );
+              })}
             {sortedCategories.length > 3 && (
               <div className="ml-1 space-x-2">
                 {!showAllCategories && (

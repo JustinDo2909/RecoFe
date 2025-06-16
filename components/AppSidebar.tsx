@@ -66,7 +66,9 @@ const AppSidebar = () => {
             >
               <div className="flex justify-between items-center gap-5 pl-3 pr-1 h-10 w-full group-data-[collapsible=icon]:ml-1 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:px-0">
                 <div className="flex items-center gap-5">
-                  <LogoReco className="transition duration-200 group-data-[collapsible=icon]:group-hover:brightness-75 w-auto" />
+                  <div className="max-w-14">
+                    <LogoReco className=" transition duration-200 group-data-[collapsible=icon]:group-hover:brightness-75 w-auto" />
+                  </div>
 
                   <p className="text-lg font-extrabold group-data-[collapsible=icon]:hidden">RECO</p>
                 </div>

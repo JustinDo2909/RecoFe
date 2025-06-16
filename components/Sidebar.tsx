@@ -43,9 +43,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
               onClick={onClose}
               key={item?.title}
               href={item?.href}
-              className={`hover:text-white hoverEffect w-24 ${
-                pathname === item?.href && "text-white"
-              }`}
+              className={`hover:text-white hoverEffect w-24 ${pathname === item?.href && "text-white"}`}
             >
               {item?.title}
             </Link>
