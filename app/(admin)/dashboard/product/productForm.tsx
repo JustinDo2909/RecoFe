@@ -1,6 +1,7 @@
 "use client";
 
 import type { Category, Discount } from "@/types";
+import Image from "next/image";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -24,7 +25,10 @@ interface ProductFormProps {
   onCancel: () => void;
   currentDiscountCode?: string;
   onAddDiscount: (payload: { productId: string; discountId: string }) => void;
-  onRemoveDiscount: (payload: { productId: string; discountId: string }) => void;
+  onRemoveDiscount: (payload: {
+    productId: string;
+    discountId: string;
+  }) => void;
   discountList?: Discount[];
 }
 
@@ -60,10 +64,12 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   const [showDiscountDropdown, setShowDiscountDropdown] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
-  const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(null);
+  const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(
+    null
+  );
   const [priceDisplay, setPriceDisplay] = useState<string>("");
 
-  const selectedCategorys = watch("categories") || [];
+  const selectedCategorys = watch("categories");
   const profilePictureFile = watch("picture");
   const currentPrice = watch("price");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -110,13 +116,22 @@ const ProductForm: React.FC<ProductFormProps> = ({
         { shouldValidate: true, shouldDirty: true }
       );
     } else {
-      setValue("categories", [...current, category], { shouldValidate: true, shouldDirty: true });
+      setValue("categories", [...current, category], {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   };
 
   const confirmRemoveDiscount = () => {
-    if (window.confirm("Bạn chắc chắn muốn xóa mã giảm giá?") && currentDiscountCode) {
-      onRemoveDiscount?.({ productId: initialValues._id as string, discountId: currentDiscountCode });
+    if (
+      window.confirm("Bạn chắc chắn muốn xóa mã giảm giá?") &&
+      currentDiscountCode
+    ) {
+      onRemoveDiscount?.({
+        productId: initialValues._id as string,
+        discountId: currentDiscountCode,
+      });
     }
   };
 
@@ -134,12 +149,18 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   // Danh sách danh mục đã chọn ở đầu
   const sortedCategories = useMemo(() => {
-    const selected = categoriesOptions.filter((cat) => selectedCategorys.includes(cat._id));
-    const others = categoriesOptions.filter((cat) => !selectedCategorys.includes(cat._id));
+    const selected = categoriesOptions.filter((cat) =>
+      selectedCategorys.includes(cat._id)
+    );
+    const others = categoriesOptions.filter(
+      (cat) => !selectedCategorys.includes(cat._id)
+    );
     return [...selected, ...others];
   }, [categoriesOptions, selectedCategorys]);
 
-  const visibleCategories = showAllCategories ? sortedCategories : sortedCategories.slice(0, 3);
+  const visibleCategories = showAllCategories
+    ? sortedCategories
+    : sortedCategories.slice(0, 3);
   const discount = discountList?.find((d) => d._id === currentDiscountCode);
 
   const internalSubmit = (data: any) => {
@@ -171,7 +192,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
         onSubmit={handleSubmit(internalSubmit)}
         className="bg-white shadow-md rounded-xl p-8 w-full max-w-3xl mx-auto space-y-6"
       >
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Thông tin sản phẩm</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Thông tin sản phẩm
+        </h2>
 
         {/* Name */}
         <div>
@@ -181,7 +204,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
             className="w-full border border-gray-300 rounded-lg px-4 py-2"
             placeholder="Nhập tên sản phẩm"
           />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+          )}
         </div>
 
         {/* Description */}
@@ -206,7 +231,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
               className="w-full border border-gray-300 rounded-lg px-4 py-2"
               placeholder="0 VND"
             />
-            {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>}
+            {errors.price && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.price.message}
+              </p>
+            )}
             {/* Hidden input for actual numeric value */}
             <input
               type="hidden"
@@ -227,7 +256,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
               className="w-full border border-gray-300 rounded-lg px-4 py-2"
               placeholder="0"
             />
-            {errors.stock && <p className="text-red-500 text-sm mt-1">{errors.stock.message}</p>}
+            {errors.stock && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.stock.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -300,10 +333,13 @@ const ProductForm: React.FC<ProductFormProps> = ({
             }}
           />
           {previewUrl && (
-            <img
+            <Image
               src={previewUrl || "/placeholder.svg"}
               alt="Ảnh xem trước"
+              width={200} // hoặc giá trị phù hợp
+              height={200}
               className="mt-3 rounded-md border max-h-60 object-contain"
+              style={{ height: "auto" }}
             />
           )}
         </div>
@@ -314,7 +350,11 @@ const ProductForm: React.FC<ProductFormProps> = ({
           {currentDiscountCode ? (
             <div className="flex items-center justify-between bg-green-100 text-green-800 px-4 py-2 rounded-lg">
               <span className="font-semibold">{discount?.code}</span>
-              <button type="button" onClick={confirmRemoveDiscount} className="text-red-500 hover:underline text-sm">
+              <button
+                type="button"
+                onClick={confirmRemoveDiscount}
+                className="text-red-500 hover:underline text-sm"
+              >
                 Xóa mã
               </button>
             </div>
@@ -334,7 +374,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
                     onChange={(e) => {
                       const discountId = e.target.value;
                       const productId = initialValues._id;
-                      const selected = discountList.find((d) => d._id === discountId);
+                      const selected = discountList.find(
+                        (d) => d._id === discountId
+                      );
 
                       if (productId && selected) {
                         onAddDiscount?.({ productId, discountId });
@@ -358,7 +400,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 )}
                 {selectedDiscount && (
                   <div className="mt-2 text-sm text-green-600">
-                    Mã đã chọn: <span className="font-semibold">{selectedDiscount.code}</span>
+                    Mã đã chọn:{" "}
+                    <span className="font-semibold">
+                      {selectedDiscount.code}
+                    </span>
                   </div>
                 )}
               </div>
@@ -368,10 +413,17 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
         {/* Action buttons */}
         <div className="flex justify-end space-x-3 pt-4 border-t mt-6">
-          <button type="button" onClick={onCancel} className="px-4 py-2 rounded-lg border hover:bg-gray-100 transition">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 rounded-lg border hover:bg-gray-100 transition"
+          >
             Hủy
           </button>
-          <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
             Lưu sản phẩm
           </button>
         </div>

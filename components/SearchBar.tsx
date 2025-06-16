@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import Image from "next/image";
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
@@ -109,11 +110,14 @@ const SearchBar = () => {
                         onClick={() => setShowSearch(false)}
                       >
                         {product.picture && (
-                          <img
-                            src={product.picture}
-                            alt="productImage"
-                            className="object-cover w-full h-full group-hover:scale-110 hoverEffect"
-                          />
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={product.picture}
+                              alt="productImage"
+                              fill
+                              className="object-cover group-hover:scale-110 hoverEffect"
+                            />
+                          </div>
                         )}
                       </Link>
                       <div className="px-4 py-2 flex-grow">

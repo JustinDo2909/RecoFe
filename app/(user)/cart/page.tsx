@@ -226,7 +226,7 @@ const CartPage = () => {
       await deleteAllCart({}).unwrap();
       toast.success("Order created successfully , Please check your order!");
       window.location.reload();
-    } catch (error: any) {
+    } catch  {
       toast.error("Có lỗi xảy ra khi tạo đơn hàng!");
     } finally {
       setLoading(false);

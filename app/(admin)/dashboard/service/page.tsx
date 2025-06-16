@@ -49,7 +49,8 @@ const DashboardService = () => {
           {
             key: "createdAt",
             label: "Created At",
-            render: (row: any) => new Date(row.createdAt).toLocaleDateString("vi-VN"),
+            render: (row: any) =>
+              new Date(row.createdAt).toLocaleDateString("vi-VN"),
           },
           {
             key: "image",
@@ -74,7 +75,15 @@ const DashboardService = () => {
           className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center"
           onClick={() => setSelectedImage(null)}
         >
-          <img src={selectedImage} alt="Zoomed" className="max-w-[90vw] max-h-[90vh] rounded-lg shadow-lg" />
+          <div className="relative max-w-[90vw] max-h-[90vh] w-auto h-auto">
+            <Image
+              src={selectedImage}
+              alt="Zoomed"
+              fill
+              className="object-contain rounded-lg shadow-lg"
+              unoptimized 
+            />
+          </div>
         </div>
       )}
     </div>
