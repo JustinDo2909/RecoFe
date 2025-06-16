@@ -90,7 +90,7 @@ const useImageSrc = (src: string | null) => {
 // Interface cho sticker props
 interface StickerProps {
   shapeProps: any;
-  isSelected: boolean;
+  isSelected: any;
   onSelect: () => void;
   onChange: (attrs: any) => void;
 }
@@ -112,6 +112,7 @@ const Sticker = ({
       trRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
+  
 
   const commonProps = {
     x: shapeProps.x,
