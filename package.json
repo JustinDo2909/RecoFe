@@ -17,7 +17,6 @@
   "dependencies": {
     "@clerk/nextjs": "^6.9.2",
     "@hookform/resolvers": "^5.0.1",
-    "@napi-rs/canvas": "^0.1.71",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-collapsible": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.3",
