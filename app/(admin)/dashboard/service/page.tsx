@@ -2,9 +2,9 @@
 import CustomeTable from "@/components/CustomeTable";
 import Loading from "@/components/Loading";
 import { useGetAllCustomQuery } from "@/state/api";
+import { Search, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { X, Search } from "lucide-react";
 
 const DashboardService = () => {
   const { data: customs, isLoading } = useGetAllCustomQuery();
@@ -44,53 +44,12 @@ const DashboardService = () => {
     <div className="flex flex-col min-h-screen bg-gray-100 p-6 w-full">
       {isLoading && <Loading />}
 
-      <CustomeTable
-        ITEMS_PER_PAGE={10}
-        data={customList}
-        columns={[
-          { key: "_id", label: "ID" },
-          {
-            key: "user.username",
-            label: "Username",
-            render: (row: any) => row.user?.username || "N/A",
-          },
-          {
-            key: "user.email",
-            label: "Email",
-            render: (row: any) => row.user?.email || "N/A",
-          },
-          {
-            key: "user.phone",
-            label: "Phone",
-            render: (row: any) => row.user?.phone || "N/A",
-          },
-          {
-            key: "product.name",
-            label: "Product",
-            render: (row: any) => row.product?.name || "N/A",
-          },
-          {
-            key: "createdAt",
-            label: "Created At",
-            render: (row: any) =>
-              new Date(row.createdAt).toLocaleDateString("vi-VN"),
-          },
-          {
-            key: "image",
-            label: "Image",
-            render: (row: any) => (
-              <Image
-                src={row.image}
-                alt="custom"
-                width={50}
-                height={50}
-                className="rounded border object-contain cursor-pointer"
-                onClick={() => setSelectedImage(row.image)}
-              />
-            ),
-          },
-        ]}
-      />
+      <div className="bg-white p-6 rounded-2xl shadow-xl flex-1 flex flex-col w-full max-w-none">
+        {/* Header + Tìm kiếm */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 w-full">
+          <h2 className="text-2xl font-bold text-pink-600">
+            Danh sách đơn thiết kế
+          </h2>
 
           <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2 w-full sm:w-[400px]">
             <Search className="text-gray-400" size={18} />
@@ -138,7 +97,8 @@ const DashboardService = () => {
               {
                 key: "createdAt",
                 label: "Ngày tạo",
-                render: (row: any) => new Date(row.createdAt).toLocaleDateString("vi-VN"),
+                render: (row: any) =>
+                  new Date(row.createdAt).toLocaleDateString("vi-VN"),
               },
               {
                 key: "image",
@@ -161,18 +121,23 @@ const DashboardService = () => {
 
       {/* Ảnh phóng to */}
       {selectedImage && (
-        <div
-          className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="relative max-w-[90vw] max-h-[90vh] w-auto h-auto">
-            <Image
-              src={selectedImage}
-              alt="Zoomed"
-              fill
-              className="object-contain rounded-lg shadow-lg"
-              unoptimized 
-            />
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="relative">
+            <button
+              className="absolute -top-4 -right-4 bg-white p-2 rounded-full shadow-md hover:bg-red-500 hover:text-white transition"
+              onClick={() => setSelectedImage(null)}
+            >
+              <X size={20} />
+            </button>
+            <div className="relative max-w-[90vw] max-h-[90vh] w-auto h-auto">
+              <Image
+                src={selectedImage}
+                alt="Zoomed"
+                fill
+                className="object-contain rounded-lg shadow-lg"
+                unoptimized
+              />
+            </div>
           </div>
         </div>
       )}
