@@ -46,7 +46,7 @@ const CartPage = () => {
   }, [user]);
   const { data: cartProducts = [], refetch: cartRefetch } = useGetCardQuery();
   const [deleteAllCart] = useDeleteAllProductToCardMutation();
-  const [itemCount, setItemCount] = useState(0);
+  const [ setItemCount] = useState(0);
   const [districSelected, setDistricSelected] = useState("");
   const [provinceSelected, setProvinceSelected] = useState("");
   const [wardSelected, setWardSelected] = useState("");
