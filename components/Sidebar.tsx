@@ -9,7 +9,7 @@ import SocialMedia from "./SocialMedia";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 
 interface SidebarProps {
-  isOpen: boolean;
+  isOpen: any;
   onClose: () => void;
 }
 

@@ -9,7 +9,6 @@ import { BoxIcon, FileQuestion, ListOrderedIcon, Share } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { Palette } from "lucide-react";
-import { toast } from "sonner";
 
 // Đây là viết cứng (không nên)
 const idCustom = "684a85aa1d6c9de849557543";

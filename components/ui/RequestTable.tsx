@@ -152,10 +152,8 @@ const RequestTable = <T extends { _id: string }>({
                             format(new Date(String(row[col.key])), "dd/MM/yyyy")
                           ) : typeof row[col.key] === "object" && row[col.key] !== null ? (
                             "name" in (row[col.key] as object) ? (
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
                               (row[col.key] as any).name
                             ) : (
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
                               ((row[col.key] as any)._id ?? "-")
                             )
                           ) : (
