@@ -39,7 +39,7 @@ const filteredProducts = selectedTab
       />
       <>
         {filteredProducts?.length ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 w-full">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-10 w-full ">
             {filteredProducts?.map((product: Product) => (
               <AnimatePresence key={product?._id}>
                 <motion.div
@@ -47,6 +47,7 @@ const filteredProducts = selectedTab
                   initial={{ opacity: 0.2 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  
                 >
                   <ProductCard product={product} />
                 </motion.div>

@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 
 interface CustomProps {
   cusTitle: string;
-  description: string;
+  description?: string;
   button?: string;
   button2?: string;
   onClick?: () => void;

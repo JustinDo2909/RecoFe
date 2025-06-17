@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
 import CustomIntro from "../CustomIntro";
-import banner from '@/images/CustomBanner.jpg'
+import banner from '@/images/share4.jpg'
 import Image from "next/image";
 const CommunityIntro = () => {
   return (

@@ -6,7 +6,8 @@ import CommunityIntro from "@/components/Community/CommunityIntro";
 import Slogan from "@/components/Community/Slogan";
 import Container from "@/components/Container";
 import React, { useEffect, useState } from "react";
-import banner from "@/images/Communiti.jpg";
+import banner from "@/images/share3.jpg";
+
 
 const CommunityPage = () => {
     const [isMounted, setIsMounted] = useState(false);
