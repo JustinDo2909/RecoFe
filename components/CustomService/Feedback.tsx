@@ -14,7 +14,7 @@ const Feedback = () => {
   if (!isClient) return null; // Tránh lỗi khi render trên server
 
   return (
-    <div className="py-12 bg-[#A0BBA7]">
+    <div className="py-12 my-10 bg-[#A0BBA7]">
       <div className="text-center mb-8 px-4">
         <h2 className="text-lg md:text-xl text-gray-800 uppercase tracking-wide">Dịch Vụ Custom</h2>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Phản Hồi Của Khách Hàng</h1>
