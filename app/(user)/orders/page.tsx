@@ -18,7 +18,7 @@ import { io } from "socket.io-client";
 
 
 // Kết nối Socket.IO
-const socket = io("http://localhost:9999", { withCredentials: true });
+const socket = io("https://deployexe-be-1.onrender.com", { withCredentials: true });
 
 const OrdersPage = () => {
   const [isMounted, setIsMounted] = useState(false);
