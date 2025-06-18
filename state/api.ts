@@ -197,9 +197,18 @@ export const api = createApi({
     }),
 
     //deleteProductToCard
-    deleteAllProductToCard: build.mutation<any, {}>({
+    deleteAllProductToCard: build.mutation<Response<unknown>, {}>({
       query: () => ({
         url: "/cart/delete",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Card"],
+    }),
+
+    // deleteProductToCard
+    deleteProductToCartById: build.mutation<Response<unknown>, string>({
+      query: (id) => ({
+        url: `/cart/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Card"],
@@ -714,4 +723,5 @@ export const {
 
   useCustomeDesignMutation,
   useGetAllCustomQuery,
+  useDeleteProductToCartByIdMutation,
 } = api;

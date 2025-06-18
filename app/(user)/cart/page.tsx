@@ -16,6 +16,7 @@ import paypalLogo from "@/images/paypalLogo.png";
 import {
   useCreateOrderMutation,
   useDeleteAllProductToCardMutation,
+  useDeleteProductToCartByIdMutation,
   useGetCardQuery,
   useGetWalletQuery,
   useWalletPayMutation,
@@ -37,6 +38,7 @@ const CartPage = () => {
   const [isClient, setIsClient] = useState(false);
   const [loading, setLoading] = useState(false);
   const { deleteCartProduct, getTotalPrice, getSubtotalPrice } = useCartStore();
+  const [deleteProductToCartById] = useDeleteProductToCartByIdMutation();
   const { user } = useUser();
 
   useEffect(() => {
@@ -71,7 +73,7 @@ const CartPage = () => {
   const { data: wallet, refetch: refetchWallet } = useGetWalletQuery({});
   const [address, setAddress] = useState("");
   const socket = useSocket();
-console.log('',itemCount )
+  console.log("", itemCount);
   useEffect(() => {
     if (!socket) return;
     const handler = (wallet: { refundAmount: number }) => {
@@ -120,18 +122,34 @@ console.log('',itemCount )
     fetchFee();
   }, [wardSelected, districSelected, getFeeShipping]);
 
-  const handleResetCart = () => {
-    const confirmed = window.confirm("Are you sure to reset your Cart?");
+  const handleResetCart = async () => {
+    const confirmed = window.confirm("Bạn có chắc không?");
     if (confirmed) {
-      deleteAllProduct({});
-      toast.success("Your cart reset successfully!");
+      const response = await deleteAllProduct({});
+      if (response.data?.success) {
+        await cartRefetch();
+        toast.success(response.data.message);
+      }
       window.location.reload();
     }
   };
 
-  const handleDeleteProduct = (id: string) => {
-    deleteCartProduct(id);
-    toast.success("Product deleted successfully!");
+  const handleDeleteProduct = async (productId: string) => {
+    console.log("productId", productId);
+
+    try {
+      const response = await deleteProductToCartById(productId).unwrap();
+      if (response.success) {
+        toast.success(response.message);
+        deleteCartProduct(productId);
+        await cartRefetch();
+      } else {
+        toast.error(response.message);
+      }
+    } catch (err) {
+      toast.error("Lỗi khi xóa sản phẩm.");
+      console.error(err);
+    }
   };
 
   const handleCheckout = async () => {
@@ -192,7 +210,7 @@ console.log('',itemCount )
       await deleteAllCart({}).unwrap();
       toast.success("Order created successfully , Please check your order!");
       window.location.reload();
-    } catch  {
+    } catch {
       toast.error("Có lỗi xảy ra khi tạo đơn hàng!");
     } finally {
       setLoading(false);
@@ -293,7 +311,7 @@ console.log('',itemCount )
               <div className="grid lg:grid-cols-3 md:gap-8">
                 {/* Products */}
                 <div className="lg:col-span-2 rounded-lg">
-                  <div className="border bg-white rounded-md">
+                  <div className="border bg-white rounded-md max-h-[calc(100vh-300px)] overflow-y-auto">
                     {cartProducts?.map((product, index) => {
                       return (
                         <div
@@ -319,13 +337,18 @@ console.log('',itemCount )
                             <div className="h-full flex flex-1 items-start flex-col justify-between py-1">
                               <div className="space-y-1.5">
                                 <h2 className="font-semibold line-clamp-1">{product?.productId.name}</h2>
-                                <p className="text-sm text-lightColor font-medium">{product?.productId.description}</p>
+                                <p className="text-sm text-lightColor font-medium">
+                                  {product?.productId.description.length > 100
+                                    ? product.productId.description.slice(0, 100) + "..."
+                                    : product?.productId.description}
+                                </p>
+
                                 <p className="text-sm capitalize">
                                   Số lượng còn lại: <span className="font-semibold">{product?.productId.stock}</span>
                                 </p>
-                                <p className="text-sm capitalize">
+                                {/* <p className="text-sm capitalize">
                                   Mô tả: <span className="font-semibold">{product?.productId.decription}</span>
-                                </p>
+                                </p> */}
                               </div>
                               <div className="text-gray-500 flex items-center gap-2">
                                 <TooltipProvider>
