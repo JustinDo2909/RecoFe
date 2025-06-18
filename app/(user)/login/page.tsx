@@ -194,7 +194,7 @@ const LoginPage = () => {
                   className={`mb-4 p-3 rounded-lg text-center ${
                     forgotPasswordMessage.includes("sent")
                       ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
+                      : "bg-green-100 text-green-800"
                   }`}
                 >
                   {forgotPasswordMessage}
