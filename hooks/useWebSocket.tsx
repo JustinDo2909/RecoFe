@@ -6,7 +6,7 @@ export const useSocket = () => {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:9999");
+    socketRef.current = io("https://deployexe-be-1.onrender.com");
 
     return () => {
       socketRef.current?.disconnect();

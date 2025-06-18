@@ -48,7 +48,7 @@ const Footer = () => {
               {categoriesData?.map((item) => (
                 <Link
                   key={item?.title}
-                  href={`http://localhost:3000/${item?.href}`}
+                  href={`https://reco-fe.vercel.app/${item?.href}`}
                   className="text-gray-600 hover:text-darkColor text-sm font-medium hoverEffect"
                 >
                   {item?.title}

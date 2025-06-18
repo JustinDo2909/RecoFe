@@ -20,7 +20,6 @@ import { DiscountRequestOrder, DiscountRequestProduct, Response } from "./../typ
 
 const customBaseQuery = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: any) => {
   const baseQuery = fetchBaseQuery({
-    // baseUrl: "http://localhost:9999",
     baseUrl: "https://deployexe-be-1.onrender.com",
     credentials: "include",
     prepareHeaders: async (headers) => {
