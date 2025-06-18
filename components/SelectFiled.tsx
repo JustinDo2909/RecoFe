@@ -23,7 +23,7 @@ interface SelectProps {
 export function SelectFiled({ lists, title, onSelect }: SelectProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
   const filteredLists = lists.filter((list) =>
-    list.name.toLowerCase().includes(searchTerm.toLowerCase())
+    list.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

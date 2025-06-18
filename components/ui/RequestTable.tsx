@@ -32,18 +32,25 @@ const RequestTable = <T extends { _id: string }>({
   // const [enableUser] = useEnableUserMutation();
 
   const filteredData = data.filter((row) =>
-    columns.some((col) => String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()))
+    columns.some((col) =>
+      String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
   );
 
   const sortedData = [...filteredData].sort((a, b) => {
     if (!sortColumn) return 0;
     const aValue = String(a[sortColumn]).toLowerCase();
     const bValue = String(b[sortColumn]).toLowerCase();
-    return sortOrder === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    return sortOrder === "asc"
+      ? aValue.localeCompare(bValue)
+      : bValue.localeCompare(aValue);
   });
 
   const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
-  const paginatedData = sortedData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const paginatedData = sortedData.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
 
   const handleSort = (colKey: keyof T) => {
     if (sortColumn === colKey) {
@@ -55,7 +62,9 @@ const RequestTable = <T extends { _id: string }>({
   };
 
   const updateStatus = async (id: string, status: string) => {
-    const confirmed = window.confirm(`Bạn có chắc muốn cập nhật trạng thái thành ${status}?`);
+    const confirmed = window.confirm(
+      `Bạn có chắc muốn cập nhật trạng thái thành ${status}?`,
+    );
     if (!confirmed) return;
 
     try {
@@ -124,7 +133,12 @@ const RequestTable = <T extends { _id: string }>({
                   className="px-4 py-2 text-left border cursor-pointer"
                   onClick={() => handleSort(col.key)}
                 >
-                  {col.label} {sortColumn === col.key ? (sortOrder === "asc" ? "▲" : "▼") : ""}
+                  {col.label}{" "}
+                  {sortColumn === col.key
+                    ? sortOrder === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
               <th className="px-4 py-2 text-left border">Thao tác</th>
@@ -137,8 +151,12 @@ const RequestTable = <T extends { _id: string }>({
                   <tr key={rowIndex} className="border">
                     {columns.map((col) => {
                       return (
-                        <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
-                          {typeof row[col.key] === "object" && React.isValidElement(row[col.key]) ? (
+                        <td
+                          key={String(col.key)}
+                          className="px-4 py-2 border text-customgreys-blueGrey"
+                        >
+                          {typeof row[col.key] === "object" &&
+                          React.isValidElement(row[col.key]) ? (
                             row[col.key]
                           ) : col.key === "picture" ? (
                             <Image
@@ -148,9 +166,11 @@ const RequestTable = <T extends { _id: string }>({
                               height={50}
                               className="w-10 h-10 rounded-full"
                             />
-                          ) : col.key === "createdAt" || col.key === "updatedAt" ? (
+                          ) : col.key === "createdAt" ||
+                            col.key === "updatedAt" ? (
                             format(new Date(String(row[col.key])), "dd/MM/yyyy")
-                          ) : typeof row[col.key] === "object" && row[col.key] !== null ? (
+                          ) : typeof row[col.key] === "object" &&
+                            row[col.key] !== null ? (
                             "name" in (row[col.key] as object) ? (
                               (row[col.key] as any).name
                             ) : (
@@ -163,17 +183,25 @@ const RequestTable = <T extends { _id: string }>({
                       );
                     })}
                     <td className="px-4 py-2 border text-center">
-                      {(row as any).status   === "Pending" ? (
+                      {(row as any).status === "Pending" ? (
                         <div className="flex gap-2 justify-center">
-                          <Button onClick={() => updateStatus(row._id, "Approved")} className="bg-green-500 text-white">
+                          <Button
+                            onClick={() => updateStatus(row._id, "Approved")}
+                            className="bg-green-500 text-white"
+                          >
                             Chấp nhận
                           </Button>
-                          <Button onClick={() => updateStatus(row._id, "Rejected")} className="bg-red-500 text-white">
+                          <Button
+                            onClick={() => updateStatus(row._id, "Rejected")}
+                            className="bg-red-500 text-white"
+                          >
                             Từ chối
                           </Button>
                         </div>
                       ) : (
-                        <span className="italic text-gray-600">Không cần thao tác</span>
+                        <span className="italic text-gray-600">
+                          Không cần thao tác
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -181,7 +209,10 @@ const RequestTable = <T extends { _id: string }>({
               })
             ) : (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-2 text-center">
+                <td
+                  colSpan={columns.length + 1}
+                  className="px-4 py-2 text-center"
+                >
                   Không có dữ liệu
                 </td>
               </tr>
@@ -202,7 +233,9 @@ const RequestTable = <T extends { _id: string }>({
           {currentPage} / {totalPages}
         </span>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >

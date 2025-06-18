@@ -25,7 +25,7 @@ const QuantityButtons = ({
   const [itemCount, setItemCountLocal] = useState(0);
   useEffect(() => {
     const productInCart = cartList.find(
-      (item) => item.productId?._id === product._id
+      (item) => item.productId?._id === product._id,
     );
     if (productInCart) {
       setItemCount(productInCart.quantity);

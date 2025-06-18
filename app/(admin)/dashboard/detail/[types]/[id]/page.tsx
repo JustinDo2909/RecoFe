@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -13,8 +13,7 @@ const DetailPage = () => {
       try {
         const parsed = JSON.parse(decodeURIComponent(rawData as string));
         setData(parsed);
-      } catch{
-      }
+      } catch {}
     }
   }, [rawData]);
 

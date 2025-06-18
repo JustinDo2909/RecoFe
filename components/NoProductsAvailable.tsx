@@ -14,7 +14,7 @@ const NoProductsAvailable = ({
     <div
       className={cn(
         "flex flex-col items-center justify-center py-10 min-h-80 space-y-4 text-center bg-gray-100 rounded-lg w-full mt-10",
-        className
+        className,
       )}
     >
       <motion.div
@@ -52,7 +52,8 @@ const NoProductsAvailable = ({
         transition={{ delay: 0.4, duration: 0.5 }}
         className="text-sm text-gray-600"
       >
-        Vui lòng quay lại sau hoặc khám phá các danh mục sản phẩm khác của chúng tôi.
+        Vui lòng quay lại sau hoặc khám phá các danh mục sản phẩm khác của chúng
+        tôi.
       </motion.p>
     </div>
   );

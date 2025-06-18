@@ -35,9 +35,9 @@ export interface Discount {
 }
 
 export interface Product {
-  discountCode ?: string;
-  categoryNames ?: string | string[];
-  product?: any
+  discountCode?: string;
+  categoryNames?: string | string[];
+  product?: any;
   _id?: string;
   name?: string;
   description?: string;
@@ -55,7 +55,7 @@ export interface Product {
   finalPrice?: number;
   createdAt?: string;
   updatedAt?: string;
-  discount? : number
+  discount?: number;
 }
 
 export interface Category {
@@ -113,7 +113,7 @@ export interface Order {
       _id: string;
       finalPrice: number;
       picture?: string;
-      name? : string
+      name?: string;
     },
   ];
   totalPrice: number;

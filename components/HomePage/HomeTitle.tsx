@@ -1,5 +1,5 @@
-import React from 'react'
-import Title from '../Title'
+import React from "react";
+import Title from "../Title";
 
 const HomeTitle = () => {
   return (
@@ -8,7 +8,7 @@ const HomeTitle = () => {
         Sản Phẩm Tái Tạo Tạo Nên Phong Cách Riêng
       </Title>
     </div>
-  )
-}
+  );
+};
 
-export default HomeTitle
+export default HomeTitle;

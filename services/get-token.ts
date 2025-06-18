@@ -11,7 +11,7 @@ export async function getAuth() {
 
   const decodedUser = decodeURIComponent(rawUserCookie);
   const user = decodedUser ? JSON.parse(decodedUser) : null;
-  
+
   const isLogged = !!user;
 
   return { authToken, user, isLogged };

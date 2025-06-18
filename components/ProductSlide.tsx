@@ -26,7 +26,7 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
           swiperRef.current?.autoplay.start();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     if (swiperContainerRef.current) {

@@ -54,7 +54,7 @@ const SocialMedia = ({ className, iconClassName, tooltipClassName }: Props) => {
                 rel="noopener noreferrer"
                 className={cn(
                   "p-2 border rounded-full hover:text-white hover:border-white hoverEffect",
-                  iconClassName
+                  iconClassName,
                 )}
               >
                 {item?.icon}
@@ -63,7 +63,7 @@ const SocialMedia = ({ className, iconClassName, tooltipClassName }: Props) => {
             <TooltipContent
               className={cn(
                 "bg-white text-darkColor font-semibold",
-                tooltipClassName
+                tooltipClassName,
               )}
             >
               {item?.title}

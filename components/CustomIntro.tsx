@@ -16,9 +16,19 @@ const CustomIntro = (CustomProps: CustomProps) => {
       <h2 className="text-4xl font-semibold mb-2">{CustomProps.cusTitle}</h2>
       <p className="text-gray-700">{CustomProps.description}</p>
       <div className="flex gap-5">
-        <Button onClick={CustomProps.onClick} className={`mt-4 ${CustomProps.button ? 'block' : "hidden"} `}>{CustomProps.button}</Button>
-      
-        <Button  onClick={CustomProps.onClick} className={`mt-4 ${CustomProps.button2 ? 'block' : "hidden"}`}>{CustomProps.button2}</Button>
+        <Button
+          onClick={CustomProps.onClick}
+          className={`mt-4 ${CustomProps.button ? "block" : "hidden"} `}
+        >
+          {CustomProps.button}
+        </Button>
+
+        <Button
+          onClick={CustomProps.onClick}
+          className={`mt-4 ${CustomProps.button2 ? "block" : "hidden"}`}
+        >
+          {CustomProps.button2}
+        </Button>
       </div>
     </div>
   );

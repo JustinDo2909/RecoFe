@@ -7,13 +7,20 @@ interface TableProps<T> {
   onUpdate: (username: string) => void;
 }
 
-const CustomTable = <T extends { username: string }>({ data, columns, onDelete, onUpdate }: TableProps<T>) => {
+const CustomTable = <T extends { username: string }>({
+  data,
+  columns,
+  onDelete,
+  onUpdate,
+}: TableProps<T>) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const filteredData = data.filter((row) =>
-    columns.some((col) => String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()))
+    columns.some((col) =>
+      String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
   );
 
   const sortedData = [...filteredData].sort((a, b) => {
@@ -53,7 +60,12 @@ const CustomTable = <T extends { username: string }>({ data, columns, onDelete, 
                   className="px-4 py-2 text-left border cursor-pointer"
                   onClick={() => handleSort(col.key)}
                 >
-                  {col.label} {sortColumn === col.key ? (sortOrder === "asc" ? "▲" : "▼") : ""}
+                  {col.label}{" "}
+                  {sortColumn === col.key
+                    ? sortOrder === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
               <th className="px-4 py-2 text-left border">Actions</th>
@@ -64,7 +76,10 @@ const CustomTable = <T extends { username: string }>({ data, columns, onDelete, 
               sortedData.map((row, rowIndex) => (
                 <tr key={rowIndex} className="border">
                   {columns.map((col) => (
-                    <td key={String(col.key)} className="px-4 py-2 border text-black">
+                    <td
+                      key={String(col.key)}
+                      className="px-4 py-2 border text-black"
+                    >
                       {String(row[col.key])}
                     </td>
                   ))}
@@ -86,7 +101,10 @@ const CustomTable = <T extends { username: string }>({ data, columns, onDelete, 
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-2 text-center">
+                <td
+                  colSpan={columns.length + 1}
+                  className="px-4 py-2 text-center"
+                >
                   No results found
                 </td>
               </tr>

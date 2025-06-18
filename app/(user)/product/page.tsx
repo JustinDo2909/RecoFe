@@ -5,7 +5,6 @@ import ProductGrid from "@/components/ProductGrid";
 
 import { useGetProductQuery } from "@/state/api";
 
-
 const Products = () => {
   const { data: product } = useGetProductQuery();
   return (

@@ -13,8 +13,13 @@ const WhyChooseUs = () => {
 Cá nhân hóa: RECO mang đến dịch vụ tùy chỉnh giúp bạn thể hiện phong cách và cá tính riêng.
 
 Gắn kết cộng đồng: RECO không chỉ là một thương hiệu thời trang, mà là một phần của cộng đồng yêu thương, nơi chúng tôi cùng nhau tạo ra sự thay đổi tích cực cho môi trường và xã hội."
-      button2="Tư vấn ngay"
-      onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")}
+        button2="Tư vấn ngay"
+        onClick={() =>
+          window.open(
+            "https://www.facebook.com/profile.php?id=61576419491353",
+            "_blank",
+          )
+        }
       />
       <Image src={pic} alt="alt" width={500} height={200} />
     </div>

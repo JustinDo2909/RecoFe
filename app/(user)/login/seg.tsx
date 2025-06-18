@@ -5,7 +5,11 @@ type CustomInputProps = {
   typeSubmit: string;
   formData: Record<string, string>;
   onInputChange: (field: string, value: string) => void;
-  renderInput: (field: string, formData: Record<string, string>, onInputChange: (field: string, value: string) => void) => JSX.Element;
+  renderInput: (
+    field: string,
+    formData: Record<string, string>,
+    onInputChange: (field: string, value: string) => void,
+  ) => JSX.Element;
 };
 
 const CustomInput2: React.FC<CustomInputProps> = ({
@@ -24,7 +28,9 @@ const CustomInput2: React.FC<CustomInputProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">{title}</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        {title}
+      </h2>
       {fields.map((field) => (
         <div key={field}>{renderInput(field, formData, onInputChange)}</div>
       ))}
@@ -38,4 +44,4 @@ const CustomInput2: React.FC<CustomInputProps> = ({
   );
 };
 
-export default CustomInput2
+export default CustomInput2;

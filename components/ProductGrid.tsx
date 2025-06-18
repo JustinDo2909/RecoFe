@@ -12,19 +12,20 @@ interface ProductSlideProps {
 
 const ProductGrid: React.FC<ProductSlideProps> = ({ products }) => {
   const [selectedTab, setSelectedTab] = useState("");
-  
-const filteredProducts = selectedTab
-  ? products.filter(product => 
-      product.isActive === true && 
-      product.stock !== 0 &&
-      product.categories?.some(cat => {
-        console.log("cat._id:", cat, "| selectedTab:", selectedTab);
-        return cat === selectedTab;
-      })
-    )
-  : products.filter(product => product.isActive === true && 
-      product.stock !== 0) ; 
 
+  const filteredProducts = selectedTab
+    ? products.filter(
+        (product) =>
+          product.isActive === true &&
+          product.stock !== 0 &&
+          product.categories?.some((cat) => {
+            console.log("cat._id:", cat, "| selectedTab:", selectedTab);
+            return cat === selectedTab;
+          }),
+      )
+    : products.filter(
+        (product) => product.isActive === true && product.stock !== 0,
+      );
 
   const handleReset = () => {
     setSelectedTab("");
@@ -32,9 +33,9 @@ const filteredProducts = selectedTab
 
   return (
     <div className="mt-10 flex flex-col items-center">
-      <HomeTabbar 
-        selectedTab={selectedTab} 
-        onTabSelect={setSelectedTab} 
+      <HomeTabbar
+        selectedTab={selectedTab}
+        onTabSelect={setSelectedTab}
         onReset={handleReset}
       />
       <>
@@ -47,7 +48,6 @@ const filteredProducts = selectedTab
                   initial={{ opacity: 0.2 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  
                 >
                   <ProductCard product={product} />
                 </motion.div>

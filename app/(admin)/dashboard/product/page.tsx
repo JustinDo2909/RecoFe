@@ -41,7 +41,8 @@ const DashboardProduct = () => {
   const [createProduct] = useCreateProductMutation();
   const [updateProduct] = useUpdateProductMutation();
 
-  const discounts = discountsData?.filter((d) => d.targetType === "product") || [];
+  const discounts =
+    discountsData?.filter((d) => d.targetType === "product") || [];
 
   // Format number to VND currency
   const formatVND = (value: number): string => {
@@ -62,14 +63,18 @@ const DashboardProduct = () => {
 
   const filteredProducts = useMemo(() => {
     if (filterStatus === "all") return ProductList;
-    if (filterStatus === "active") return ProductList.filter((product) => product.isActive === true);
-    if (filterStatus === "inactive") return ProductList.filter((product) => product.isActive === false);
+    if (filterStatus === "active")
+      return ProductList.filter((product) => product.isActive === true);
+    if (filterStatus === "inactive")
+      return ProductList.filter((product) => product.isActive === false);
     return ProductList;
   }, [ProductList, filterStatus]);
 
   const totalProducts = ProductList.length;
   const activeProducts = ProductList.filter((p) => p.isActive === true).length;
-  const inactiveProducts = ProductList.filter((p) => p.isActive === false).length;
+  const inactiveProducts = ProductList.filter(
+    (p) => p.isActive === false,
+  ).length;
   const filteredCount = filteredProducts.length;
 
   if (!isMounted) return null;
@@ -112,7 +117,13 @@ const DashboardProduct = () => {
     }
   };
 
-  const handleAddDiscountProduct = async ({ productId, discountId }: { productId: string; discountId: string }) => {
+  const handleAddDiscountProduct = async ({
+    productId,
+    discountId,
+  }: {
+    productId: string;
+    discountId: string;
+  }) => {
     try {
       const data = await addDiscountProduct({ productId, discountId });
       toast.success(data.data?.message);
@@ -122,7 +133,13 @@ const DashboardProduct = () => {
     }
   };
 
-  const handleRemoveDiscountProduct = async ({ productId, discountId }: { productId: string; discountId: string }) => {
+  const handleRemoveDiscountProduct = async ({
+    productId,
+    discountId,
+  }: {
+    productId: string;
+    discountId: string;
+  }) => {
     try {
       const data = await removeDiscountProduct({
         productId,
@@ -148,19 +165,27 @@ const DashboardProduct = () => {
         {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600">{totalProducts}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {totalProducts}
+            </div>
             <div className="text-sm text-blue-600">Tổng sản phẩm</div>
           </div>
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-            <div className="text-2xl font-bold text-green-600">{activeProducts}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {activeProducts}
+            </div>
             <div className="text-sm text-green-600">Đang hoạt động</div>
           </div>
           <div className="bg-red-50 rounded-lg p-4 border border-red-200">
-            <div className="text-2xl font-bold text-red-600">{inactiveProducts}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {inactiveProducts}
+            </div>
             <div className="text-sm text-red-600">Không hoạt động</div>
           </div>
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-            <div className="text-2xl font-bold text-purple-600">{filteredCount}</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {filteredCount}
+            </div>
             <div className="text-sm text-purple-600">Đang hiển thị</div>
           </div>
         </div>
@@ -168,12 +193,16 @@ const DashboardProduct = () => {
         {/* Filter Section */}
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-700">Lọc theo trạng thái:</span>
+            <span className="text-sm font-medium text-gray-700">
+              Lọc theo trạng thái:
+            </span>
             <div className="flex gap-2">
               <button
                 onClick={() => setFilterStatus("all")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  filterStatus === "all" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  filterStatus === "all"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 Tất cả ({totalProducts})
@@ -181,7 +210,9 @@ const DashboardProduct = () => {
               <button
                 onClick={() => setFilterStatus("active")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  filterStatus === "active" ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  filterStatus === "active"
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 Hoạt động ({activeProducts})
@@ -189,7 +220,9 @@ const DashboardProduct = () => {
               <button
                 onClick={() => setFilterStatus("inactive")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  filterStatus === "inactive" ? "bg-red-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  filterStatus === "inactive"
+                    ? "bg-red-600 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 Không hoạt động ({inactiveProducts})
@@ -199,9 +232,12 @@ const DashboardProduct = () => {
 
           {/* Current filter info */}
           <div className="text-sm text-gray-600">
-            {filterStatus === "all" && `Hiển thị tất cả ${totalProducts} sản phẩm`}
-            {filterStatus === "active" && `Hiển thị ${activeProducts} sản phẩm đang hoạt động`}
-            {filterStatus === "inactive" && `Hiển thị ${inactiveProducts} sản phẩm không hoạt động`}
+            {filterStatus === "all" &&
+              `Hiển thị tất cả ${totalProducts} sản phẩm`}
+            {filterStatus === "active" &&
+              `Hiển thị ${activeProducts} sản phẩm đang hoạt động`}
+            {filterStatus === "inactive" &&
+              `Hiển thị ${inactiveProducts} sản phẩm không hoạt động`}
           </div>
         </div>
       </div>
@@ -226,7 +262,9 @@ const DashboardProduct = () => {
         ]}
         getIsActive={(row) => (row as any).isActiveValue}
         data={(filteredProducts as any).map((product: any) => {
-          const discount = discounts?.find((d) => d._id === product.currentDiscount);
+          const discount = discounts?.find(
+            (d) => d._id === product.currentDiscount,
+          );
           const categoryNames =
             product?.categories ||
             []
@@ -240,17 +278,25 @@ const DashboardProduct = () => {
             ...product,
             isActiveValue: product.isActive,
             isActive: (
-              <span className={`font-semibold ${product.isActive ? "text-green-600" : "text-red-600"}`}>
+              <span
+                className={`font-semibold ${product.isActive ? "text-green-600" : "text-red-600"}`}
+              >
                 {product.isActive ? "Hoạt động" : "Không hoạt động"}
               </span>
             ),
             deactivatedReason: product.deactivationReason || "Không có lý do",
             categoryNames: categoryNames,
             discountCode: discount?.code || "Không có",
-            formattedPrice: <span className="font-medium text-blue-600">{formatVND(product.price || 0)}</span>,
+            formattedPrice: (
+              <span className="font-medium text-blue-600">
+                {formatVND(product.price || 0)}
+              </span>
+            ),
 
             finalPrice: (
-              <span className="font-medium text-green-600">{formatVND(product.finalPrice || product.price || 0)}</span>
+              <span className="font-medium text-green-600">
+                {formatVND(product.finalPrice || product.price || 0)}
+              </span>
             ),
           };
         })}
@@ -271,7 +317,8 @@ const DashboardProduct = () => {
             currentDiscountCode={
               typeof editingProduct?.currentDiscount === "string"
                 ? editingProduct.currentDiscount
-                : typeof editingProduct?.currentDiscount === "object" && editingProduct.currentDiscount?.code
+                : typeof editingProduct?.currentDiscount === "object" &&
+                    editingProduct.currentDiscount?.code
                   ? editingProduct.currentDiscount.code
                   : ""
             }

@@ -22,7 +22,7 @@ export async function createCheckoutSession(
   feeShipping: number,
   items: Card[],
   metadata: Metadata,
-  deleteAllCart: () => void
+  deleteAllCart: () => void,
 ) {
   try {
     const customers = await stripe.customers.list({
@@ -90,6 +90,5 @@ export async function createCheckoutSession(
 
     const session = await stripe.checkout.sessions.create(sessionPayload);
     return session.url;
-  } catch  {
-  }
+  } catch {}
 }

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const NewsAndBlog = () => {
-  return (
-    <div>NewsAndBlog</div>
-  )
-}
+  return <div>NewsAndBlog</div>;
+};
 
-export default NewsAndBlog
+export default NewsAndBlog;

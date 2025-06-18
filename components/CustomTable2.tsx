@@ -27,7 +27,7 @@ const CustomTable = <T extends { _id: string }>({
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [ setUpdatedRowId] = useState<any | null>(null);
+  const [setUpdatedRowId] = useState<any | null>(null);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [reason, setReason] = useState("");
@@ -37,7 +37,9 @@ const CustomTable = <T extends { _id: string }>({
 
   // Filter data based on search term
   const filteredData = data.filter((row) =>
-    columns.some((col) => String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()))
+    columns.some((col) =>
+      String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
   );
 
   // Sort data
@@ -45,11 +47,16 @@ const CustomTable = <T extends { _id: string }>({
     if (!sortColumn) return 0;
     const aValue = String(a[sortColumn]).toLowerCase();
     const bValue = String(b[sortColumn]).toLowerCase();
-    return sortOrder === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    return sortOrder === "asc"
+      ? aValue.localeCompare(bValue)
+      : bValue.localeCompare(aValue);
   });
 
   const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
-  const paginatedData = sortedData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const paginatedData = sortedData.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
 
   const handleSort = (colKey: keyof T) => {
     if (sortColumn === colKey) {
@@ -61,7 +68,9 @@ const CustomTable = <T extends { _id: string }>({
   };
 
   const hanleClickUpdateStatus = async (id: string) => {
-    const confirmed = window.confirm("Bạn có chắc muốn kích hoạt người dùng này?");
+    const confirmed = window.confirm(
+      "Bạn có chắc muốn kích hoạt người dùng này?",
+    );
     if (!confirmed) return;
 
     try {
@@ -82,7 +91,9 @@ const CustomTable = <T extends { _id: string }>({
 
   const handleSaveReason = async () => {
     if (selectedRowId) {
-      const confirmed = window.confirm("Bạn có chắc muốn đình chỉ người dùng này?");
+      const confirmed = window.confirm(
+        "Bạn có chắc muốn đình chỉ người dùng này?",
+      );
       if (!confirmed) return;
 
       try {
@@ -132,7 +143,12 @@ const CustomTable = <T extends { _id: string }>({
                   className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors"
                   onClick={() => handleSort(col.key)}
                 >
-                  {col.label} {sortColumn === col.key ? (sortOrder === "asc" ? "▲" : "▼") : ""}
+                  {col.label}{" "}
+                  {sortColumn === col.key
+                    ? sortOrder === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
               <th className="px-4 py-2 text-left border">Thao tác</th>
@@ -147,8 +163,12 @@ const CustomTable = <T extends { _id: string }>({
                   <tr key={rowIndex} className="border">
                     {columns.map((col) => {
                       return (
-                        <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
-                          {typeof row[col.key] === "object" && React.isValidElement(row[col.key]) ? (
+                        <td
+                          key={String(col.key)}
+                          className="px-4 py-2 border text-customgreys-blueGrey"
+                        >
+                          {typeof row[col.key] === "object" &&
+                          React.isValidElement(row[col.key]) ? (
                             row[col.key]
                           ) : col.key === "picture" ? (
                             <Image
@@ -158,9 +178,11 @@ const CustomTable = <T extends { _id: string }>({
                               height={50}
                               className="w-10 h-10 rounded-full"
                             />
-                          ) : col.key === "createdAt" || col.key === "updatedAt" ? (
+                          ) : col.key === "createdAt" ||
+                            col.key === "updatedAt" ? (
                             format(new Date(String(row[col.key])), "dd/MM/yyyy")
-                          ) : typeof row[col.key] === "object" && row[col.key] !== null ? (
+                          ) : typeof row[col.key] === "object" &&
+                            row[col.key] !== null ? (
                             "name" in (row[col.key] as object) ? (
                               (row[col.key] as any).name
                             ) : (
@@ -174,11 +196,17 @@ const CustomTable = <T extends { _id: string }>({
                     })}
                     <td className="px-4 py-2 border text-center">
                       {isActive ? (
-                        <Button onClick={() => openReasonModal(row._id)} className="bg-red-500 text-white">
+                        <Button
+                          onClick={() => openReasonModal(row._id)}
+                          className="bg-red-500 text-white"
+                        >
                           Đình chỉ
                         </Button>
                       ) : (
-                        <Button onClick={() => hanleClickUpdateStatus(row._id)} className="bg-green-500 text-white">
+                        <Button
+                          onClick={() => hanleClickUpdateStatus(row._id)}
+                          className="bg-green-500 text-white"
+                        >
                           Kích hoạt
                         </Button>
                       )}
@@ -188,7 +216,10 @@ const CustomTable = <T extends { _id: string }>({
               })
             ) : (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-2 text-center">
+                <td
+                  colSpan={columns.length + 1}
+                  className="px-4 py-2 text-center"
+                >
                   Không có dữ liệu
                 </td>
               </tr>
@@ -209,7 +240,9 @@ const CustomTable = <T extends { _id: string }>({
           Page {currentPage} of {totalPages}
         </span>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >

@@ -12,7 +12,7 @@ const Logo = ({ children, className }: Props) => {
       <h2
         className={cn(
           "text-2xl text-darkColor font-black tracking-wider uppercase",
-          className
+          className,
         )}
       >
         {children}

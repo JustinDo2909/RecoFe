@@ -20,7 +20,7 @@ const ProductCharacteristics = ({ product }: { product: any }) => {
               {categories?.find(
                 (item) =>
                   item._id ===
-                  (product?.categories ? product?.categories[0] : "")
+                  (product?.categories ? product?.categories[0] : ""),
               )?.title || "Không xác định"}
             </span>
           </p>

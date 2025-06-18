@@ -17,7 +17,7 @@ const ChatBotPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [postMessage, { isLoading }] = usePostMessageMutation();
-  
+
   useEffect(() => {
     // Lắng nghe phản hồi bot từ WebSocket
     socket.on("prediction_result", (data) => {
@@ -59,25 +59,25 @@ const ChatBotPage: React.FC = () => {
       image: selectedImage ? URL.createObjectURL(selectedImage) : undefined,
     };
     setMessages((prev) => [...prev, userMsg]);
-  
+
     const formData = new FormData();
     formData.append("question", message);
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
-  
+
     try {
       const data = await postMessage(formData as any).unwrap();
-  
+
       // Giả sử API trả về answer + image
       const botMsg: Message = {
         text: data.answer || "Bot không trả lời được.",
         sender: "bot",
         image: data.similar_image_paths?.[0] || undefined,
       };
-  
+
       setMessages((prev) => [...prev, botMsg]);
-    } catch  {
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
@@ -86,10 +86,9 @@ const ChatBotPage: React.FC = () => {
         },
       ]);
     }
-  
+
     setSelectedImage(null);
   };
-  
 
   return (
     <div className="flex flex-col min-h-[50vh] bg-gray-100 p-4">

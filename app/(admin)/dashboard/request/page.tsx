@@ -4,9 +4,21 @@ import type React from "react";
 
 import Loading from "@/components/Loading";
 import RequestTable from "@/components/ui/RequestTable";
-import { useGetAllRequestQuery, useUpdateStatusRequestMutation } from "@/state/api";
+import {
+  useGetAllRequestQuery,
+  useUpdateStatusRequestMutation,
+} from "@/state/api";
 import type { Request } from "@/types";
-import { FileText, Clock, CheckCircle, XCircle, Search, Filter, DollarSign, AlertCircle } from "lucide-react";
+import {
+  FileText,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Search,
+  Filter,
+  DollarSign,
+  AlertCircle,
+} from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
 
@@ -72,12 +84,20 @@ const DashboardRequest = () => {
             orderId: item.order?._id || "N/A",
             orderAmount: item.order?.totalPrice || 0,
             paymentMethod: item.order?.paymentMethod || "N/A",
-            orderStatus: orderStatusVN[String(item.order?.statusOrder)] || "N/A",
+            orderStatus:
+              orderStatusVN[String(item.order?.statusOrder)] || "N/A",
             statusVN: requestStatusVN[status] || status,
-            statusElement: <span style={{ color, fontWeight: "bold" }}>{requestStatusVN[status] || status}</span>,
+            statusElement: (
+              <span style={{ color, fontWeight: "bold" }}>
+                {requestStatusVN[status] || status}
+              </span>
+            ),
           };
         })
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
       setRequestList(flattened);
     }
   }, [requests]);
@@ -86,7 +106,8 @@ const DashboardRequest = () => {
   const filteredRequests = useMemo(() => {
     return requestList.filter((request) => {
       // Filter by status
-      const statusMatch = filterStatus === "all" || request.status === filterStatus;
+      const statusMatch =
+        filterStatus === "all" || request.status === filterStatus;
 
       // Filter by search term
       const searchMatch =
@@ -102,9 +123,15 @@ const DashboardRequest = () => {
 
   // Calculate statistics
   const totalRequests = requestList.length;
-  const pendingRequests = requestList.filter((r) => r.status === "Pending").length;
-  const approvedRequests = requestList.filter((r) => r.status === "Approved").length;
-  const rejectedRequests = requestList.filter((r) => r.status === "Rejected").length;
+  const pendingRequests = requestList.filter(
+    (r) => r.status === "Pending",
+  ).length;
+  const approvedRequests = requestList.filter(
+    (r) => r.status === "Approved",
+  ).length;
+  const rejectedRequests = requestList.filter(
+    (r) => r.status === "Rejected",
+  ).length;
   const filteredCount = filteredRequests.length;
 
   // Calculate total refund amount
@@ -124,7 +151,7 @@ const DashboardRequest = () => {
       await updateStatus({ id, status }).unwrap();
       toast.success("Cập nhật trạng thái thành công!");
       refetch();
-    } catch  {
+    } catch {
       toast.error("Cập nhật thất bại!");
     }
   };
@@ -144,7 +171,9 @@ const DashboardRequest = () => {
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{totalRequests}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {totalRequests}
+                </div>
                 <div className="text-sm text-blue-600">Tổng yêu cầu</div>
               </div>
               <FileText className="h-8 w-8 text-blue-500" />
@@ -154,7 +183,9 @@ const DashboardRequest = () => {
           <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-orange-600">{pendingRequests}</div>
+                <div className="text-2xl font-bold text-orange-600">
+                  {pendingRequests}
+                </div>
                 <div className="text-sm text-orange-600">Chờ duyệt</div>
               </div>
               <Clock className="h-8 w-8 text-orange-500" />
@@ -164,7 +195,9 @@ const DashboardRequest = () => {
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-green-600">{approvedRequests}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {approvedRequests}
+                </div>
                 <div className="text-sm text-green-600">Đã duyệt</div>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
@@ -174,7 +207,9 @@ const DashboardRequest = () => {
           <div className="bg-red-50 rounded-lg p-4 border border-red-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-red-600">{rejectedRequests}</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {rejectedRequests}
+                </div>
                 <div className="text-sm text-red-600">Đã từ chối</div>
               </div>
               <XCircle className="h-8 w-8 text-red-500" />
@@ -184,7 +219,9 @@ const DashboardRequest = () => {
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-lg font-bold text-purple-600">{formatVND(totalRefundAmount)}</div>
+                <div className="text-lg font-bold text-purple-600">
+                  {formatVND(totalRefundAmount)}
+                </div>
                 <div className="text-sm text-purple-600">Tổng hoàn tiền</div>
               </div>
               <DollarSign className="h-8 w-8 text-purple-500" />
@@ -212,7 +249,9 @@ const DashboardRequest = () => {
               <Filter className="h-4 w-4 text-gray-500" />
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                onChange={(e) =>
+                  setFilterStatus(e.target.value as FilterStatus)
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tất cả trạng thái</option>
@@ -238,9 +277,21 @@ const DashboardRequest = () => {
           ITEMS_PER_PAGE={10}
           data={filteredRequests.map((request) => ({
             ...request,
-            orderAmount: <span className="font-semibold text-green-600">{formatVND(request.orderAmount)}</span>,
-            userName: <span className="font-medium text-gray-900">{request.userName}</span>,
-            orderId: <span className="font-mono text-sm text-blue-600">{request.orderId}</span>,
+            orderAmount: (
+              <span className="font-semibold text-green-600">
+                {formatVND(request.orderAmount)}
+              </span>
+            ),
+            userName: (
+              <span className="font-medium text-gray-900">
+                {request.userName}
+              </span>
+            ),
+            orderId: (
+              <span className="font-mono text-sm text-blue-600">
+                {request.orderId}
+              </span>
+            ),
             paymentMethod: (
               <span className="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-700">
                 {request.paymentMethod}
@@ -266,7 +317,10 @@ const DashboardRequest = () => {
             ),
             message: (
               <div className="max-w-xs">
-                <p className="text-sm text-gray-700 truncate" title={request.message}>
+                <p
+                  className="text-sm text-gray-700 truncate"
+                  title={request.message}
+                >
                   {request.message}
                 </p>
               </div>
@@ -299,8 +353,12 @@ const DashboardRequest = () => {
       {filteredRequests.length === 0 && !isLoading && (
         <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200 mt-4">
           <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-1">Không tìm thấy yêu cầu</h3>
-          <p className="text-gray-500">Không có yêu cầu hoàn tiền nào phù hợp với bộ lọc hiện tại.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-1">
+            Không tìm thấy yêu cầu
+          </h3>
+          <p className="text-gray-500">
+            Không có yêu cầu hoàn tiền nào phù hợp với bộ lọc hiện tại.
+          </p>
           <button
             onClick={() => {
               setFilterStatus("all");
@@ -319,8 +377,12 @@ const DashboardRequest = () => {
           <div className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-orange-600" />
             <div>
-              <p className="text-sm font-medium text-orange-800">Có {pendingRequests} yêu cầu chờ duyệt</p>
-              <p className="text-xs text-orange-600">Vui lòng xem xét và xử lý</p>
+              <p className="text-sm font-medium text-orange-800">
+                Có {pendingRequests} yêu cầu chờ duyệt
+              </p>
+              <p className="text-xs text-orange-600">
+                Vui lòng xem xét và xử lý
+              </p>
             </div>
           </div>
         </div>

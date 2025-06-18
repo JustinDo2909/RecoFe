@@ -26,15 +26,15 @@ const NoAccessToCart = () => {
             Log in to view your cart items and checkout. Don&apos;t miss out on
             your favorite products!
           </p>
-            <Button className="w-full font-semibold" size="lg">
-              Sign in
-            </Button>
+          <Button className="w-full font-semibold" size="lg">
+            Sign in
+          </Button>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           <div>Don&apos;t have an account?</div>
-            <Button variant="outline" className="w-full" size="lg">
-              Create an account
-            </Button>
+          <Button variant="outline" className="w-full" size="lg">
+            Create an account
+          </Button>
         </CardFooter>
       </Card>
     </div>

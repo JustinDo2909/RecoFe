@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CharityCommunity from "@/components/Community/CharityCommunity";
 import CharityOverview from "@/components/Community/CharityOverview";
 import CommunityBody from "@/components/Community/CommunityBody";
@@ -8,16 +8,15 @@ import Container from "@/components/Container";
 import React, { useEffect, useState } from "react";
 import banner from "@/images/share3.jpg";
 
-
 const CommunityPage = () => {
-    const [isMounted, setIsMounted] = useState(false);
-  
-    useEffect(() => {
-      setIsMounted(true);
-    }, []);
-    if (!isMounted) {
-      return null;
-    }
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return null;
+  }
   return (
     <Container>
       <CommunityIntro />

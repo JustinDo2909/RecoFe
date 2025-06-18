@@ -59,7 +59,6 @@ export const useUser = () => {
         sameSite: "strict",
       });
 
-
       setUser(data.user);
       Cookies.set("user", encodeURIComponent(JSON.stringify(data.user)), {
         expires: 7,

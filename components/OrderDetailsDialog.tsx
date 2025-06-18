@@ -116,7 +116,7 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
         {order?.items?.some((item) =>
           typeof item.productId === "string"
             ? item.productId === idCustom
-            : (item as any).productId?._id === idCustom
+            : (item as any).productId?._id === idCustom,
         )}
 
         <div className="mt-4 text-right flex items-center justify-end">

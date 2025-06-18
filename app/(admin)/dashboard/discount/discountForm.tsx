@@ -71,12 +71,20 @@ const DiscountForm: React.FC<{
   const targetType = watch("targetType");
 
   // State danh sách sản phẩm và đơn hàng hiện có để chọn
-  const [productsList, setProductsList] = useState<{ _id: string; name: string }[]>([]);
-  const [ordersList, setOrdersList] = useState<{ _id: string; id: string }[]>([]);
+  const [productsList, setProductsList] = useState<
+    { _id: string; name: string }[]
+  >([]);
+  const [ordersList, setOrdersList] = useState<{ _id: string; id: string }[]>(
+    [],
+  );
 
   // State lựa chọn sản phẩm và đơn hàng (checkbox)
-  const [selectedProducts, setSelectedProducts] = useState<string[]>(defaultValues.applicableProducts);
-  const [selectedOrders, setSelectedOrders] = useState<string[]>(defaultValues.applicableOrders ?? []);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>(
+    defaultValues.applicableProducts,
+  );
+  const [selectedOrders, setSelectedOrders] = useState<string[]>(
+    defaultValues.applicableOrders ?? [],
+  );
 
   // isEditMode: nếu initialValues có targetType thì không cho đổi
   const isEditMode = !!initialValues?.targetType;
@@ -111,7 +119,9 @@ const DiscountForm: React.FC<{
 
   // Xử lý toggle checkbox sản phẩm
   const onProductToggle = (id: string) => {
-    setSelectedProducts((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+    setSelectedProducts((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
   };
 
   useEffect(() => {
@@ -121,7 +131,9 @@ const DiscountForm: React.FC<{
 
   // Xử lý toggle checkbox đơn hàng
   const onOrderToggle = (id: string) => {
-    setSelectedOrders((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+    setSelectedOrders((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
   };
 
   return (
@@ -137,13 +149,19 @@ const DiscountForm: React.FC<{
           className="w-full border rounded px-3 py-2"
           placeholder="Nhập tên giảm giá"
         />
-        {errors.name && <p className="text-red-600 mt-1 text-sm">{errors.name.message}</p>}
+        {errors.name && (
+          <p className="text-red-600 mt-1 text-sm">{errors.name.message}</p>
+        )}
       </div>
 
       {/* Mã */}
       <div className="mb-4">
         <label className="block mb-1 font-semibold">Mã</label>
-        <input {...register("code")} className="w-full border rounded px-3 py-2" placeholder="Nhập mã giảm giá" />
+        <input
+          {...register("code")}
+          className="w-full border rounded px-3 py-2"
+          placeholder="Nhập mã giảm giá"
+        />
       </div>
 
       {/* Mô tả */}
@@ -160,7 +178,10 @@ const DiscountForm: React.FC<{
       {/* Loại giảm giá */}
       <div className="mb-4">
         <label className="block mb-1 font-semibold">Loại giảm giá</label>
-        <select {...register("discountType", { required: true })} className="w-full border rounded px-3 py-2">
+        <select
+          {...register("discountType", { required: true })}
+          className="w-full border rounded px-3 py-2"
+        >
           <option value="percentage">Phần trăm</option>
           <option value="fixed">Giá cố định</option>
         </select>
@@ -178,7 +199,9 @@ const DiscountForm: React.FC<{
           className="w-full border rounded px-3 py-2"
           placeholder="Nhập giá trị giảm"
         />
-        {errors.value && <p className="text-red-600 mt-1 text-sm">{errors.value.message}</p>}
+        {errors.value && (
+          <p className="text-red-600 mt-1 text-sm">{errors.value.message}</p>
+        )}
       </div>
 
       {/* Ngày bắt đầu */}
@@ -189,7 +212,11 @@ const DiscountForm: React.FC<{
           {...register("startDate", { required: "Ngày bắt đầu là bắt buộc" })}
           className="w-full border rounded px-3 py-2"
         />
-        {errors.startDate && <p className="text-red-600 mt-1 text-sm">{errors.startDate.message}</p>}
+        {errors.startDate && (
+          <p className="text-red-600 mt-1 text-sm">
+            {errors.startDate.message}
+          </p>
+        )}
       </div>
 
       {/* Ngày kết thúc */}
@@ -200,30 +227,44 @@ const DiscountForm: React.FC<{
           {...register("endDate", { required: "Ngày kết thúc là bắt buộc" })}
           className="w-full border rounded px-3 py-2"
         />
-        {errors.endDate && <p className="text-red-600 mt-1 text-sm">{errors.endDate.message}</p>}
+        {errors.endDate && (
+          <p className="text-red-600 mt-1 text-sm">{errors.endDate.message}</p>
+        )}
       </div>
 
       {/* Loại đối tượng áp dụng */}
       <div className="mb-4">
-        <label className="block mb-1 font-semibold">Loại đối tượng áp dụng</label>
+        <label className="block mb-1 font-semibold">
+          Loại đối tượng áp dụng
+        </label>
 
         {isEditMode ? (
           <>
             <p className="px-3 py-2 border rounded bg-gray-100">
               {defaultValues.targetType === "product" ? "Sản phẩm" : "Đơn hàng"}
             </p>
-            <input type="hidden" value={defaultValues.targetType} {...register("targetType")} />
+            <input
+              type="hidden"
+              value={defaultValues.targetType}
+              {...register("targetType")}
+            />
           </>
         ) : (
           <>
             <select
-              {...register("targetType", { required: "Loại đối tượng là bắt buộc" })}
+              {...register("targetType", {
+                required: "Loại đối tượng là bắt buộc",
+              })}
               className="w-full border rounded px-3 py-2"
             >
               <option value="product">Sản phẩm</option>
               <option value="order">Đơn hàng</option>
             </select>
-            {errors.targetType && <p className="text-red-600 mt-1 text-sm">{errors.targetType.message}</p>}
+            {errors.targetType && (
+              <p className="text-red-600 mt-1 text-sm">
+                {errors.targetType.message}
+              </p>
+            )}
           </>
         )}
       </div>
@@ -231,9 +272,14 @@ const DiscountForm: React.FC<{
       {/* Danh sách sản phẩm hoặc đơn hàng chọn lựa */}
       {targetType === "product" && productsList.length > 0 && (
         <div className="mb-4 border p-3 rounded max-h-48 overflow-auto">
-          <label className="block mb-2 font-semibold">Chọn sản phẩm áp dụng</label>
+          <label className="block mb-2 font-semibold">
+            Chọn sản phẩm áp dụng
+          </label>
           {productsList.map((p) => (
-            <label key={p._id} className="flex items-center mb-1 cursor-pointer select-none">
+            <label
+              key={p._id}
+              className="flex items-center mb-1 cursor-pointer select-none"
+            >
               <input
                 type="checkbox"
                 checked={selectedProducts.includes(p._id)}
@@ -248,9 +294,14 @@ const DiscountForm: React.FC<{
 
       {targetType === "order" && ordersList.length > 0 && (
         <div className="mb-4 border p-3 rounded max-h-48 overflow-auto">
-          <label className="block mb-2 font-semibold">Chọn đơn hàng áp dụng</label>
+          <label className="block mb-2 font-semibold">
+            Chọn đơn hàng áp dụng
+          </label>
           {ordersList.map((o) => (
-            <label key={o._id} className="flex items-center mb-1 cursor-pointer select-none">
+            <label
+              key={o._id}
+              className="flex items-center mb-1 cursor-pointer select-none"
+            >
               <input
                 type="checkbox"
                 checked={selectedOrders.includes(o._id)}
@@ -265,10 +316,17 @@ const DiscountForm: React.FC<{
 
       {/* Buttons */}
       <div className="flex justify-end gap-3">
-        <button type="button" onClick={onCancel} className="border px-4 py-2 rounded hover:bg-gray-100">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="border px-4 py-2 rounded hover:bg-gray-100"
+        >
           Hủy
         </button>
-        <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+        >
           Lưu
         </button>
       </div>

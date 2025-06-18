@@ -13,7 +13,7 @@ const MyService = () => {
       description:
         "Mỗi sản phẩm của RECO được làm từ những món đồ cũ đã được tái tạo lại thành những chiếc túi xách độc đáo, mang lại sự độc đáo và thân thiện với môi trường.",
       image: pic1,
-      link : "product"
+      link: "product",
     },
     {
       id: 2,
@@ -21,7 +21,7 @@ const MyService = () => {
       description:
         "RECO cung cấp dịch vụ tùy chỉnh sản phẩm, từ thay đổi thiết kế đến khắc tên hoặc hình ảnh, giúp bạn sở hữu sản phẩm độc nhất vô nhị.",
       image: pic2,
-       link : "custom"
+      link: "custom",
     },
     {
       id: 3,
@@ -29,14 +29,16 @@ const MyService = () => {
       description:
         "RECO giúp kết nối khách hàng với các tổ chức từ thiện, tạo cơ hội để quyên góp đồ cũ và giúp đỡ cộng đồng, đặc biệt là những người gặp khó khăn và thiếu thốn.",
       image: pic3,
-       link : "community"
+      link: "community",
     },
   ];
 
   return (
     <div className="container mx-auto px-4">
-     <h2 className="text-gray-600 text-xl">RECO</h2>
-      <h2 className="text-4xl font-semibold mb-2 text-#505050">Dịch Vụ Của Chúng Tôi</h2>
+      <h2 className="text-gray-600 text-xl">RECO</h2>
+      <h2 className="text-4xl font-semibold mb-2 text-#505050">
+        Dịch Vụ Của Chúng Tôi
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {items.map((item, index) => (
           <div

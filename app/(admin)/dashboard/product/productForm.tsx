@@ -65,7 +65,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   const [showDiscountDropdown, setShowDiscountDropdown] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [selectedDiscount, setSelectedDiscount] = useState<Discount | null>(
-    null
+    null,
   );
   const [priceDisplay, setPriceDisplay] = useState<string>("");
 
@@ -113,7 +113,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
       setValue(
         "categories",
         current.filter((c) => c !== category),
-        { shouldValidate: true, shouldDirty: true }
+        { shouldValidate: true, shouldDirty: true },
       );
     } else {
       setValue("categories", [...current, category], {
@@ -150,10 +150,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
   // Danh sách danh mục đã chọn ở đầu
   const sortedCategories = useMemo(() => {
     const selected = categoriesOptions.filter((cat) =>
-      selectedCategorys.includes(cat._id)
+      selectedCategorys.includes(cat._id),
     );
     const others = categoriesOptions.filter(
-      (cat) => !selectedCategorys.includes(cat._id)
+      (cat) => !selectedCategorys.includes(cat._id),
     );
     return [...selected, ...others];
   }, [categoriesOptions, selectedCategorys]);
@@ -377,7 +377,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                       const discountId = e.target.value;
                       const productId = initialValues._id;
                       const selected = discountList.find(
-                        (d) => d._id === discountId
+                        (d) => d._id === discountId,
                       );
 
                       if (productId && selected) {

@@ -25,7 +25,13 @@ const SuccessPage = () => {
       if (!orderNumber && !sessionId) {
         router.push("/");
       } else {
-        await createOrder({ paymentMethod: "Stripe" , statusOrder: "" , statusPayment : "Paid" , feeShipping: Number(feeShipping) || 0 , address: address?.toString() });
+        await createOrder({
+          paymentMethod: "Stripe",
+          statusOrder: "",
+          statusPayment: "Paid",
+          feeShipping: Number(feeShipping) || 0,
+          address: address?.toString(),
+        });
         await deleteAllCart({});
       }
     };

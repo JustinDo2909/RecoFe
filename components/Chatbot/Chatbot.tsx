@@ -56,7 +56,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ messages, isLoading }) => {
                     alt={`Hình ảnh tương tự ${i}`}
                     fill
                     className="object-contain rounded-md"
-                    unoptimized 
+                    unoptimized
                   />
                 </div>
               ))}
@@ -89,7 +89,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ messages, isLoading }) => {
                     alt={`Image ${i}`}
                     className="max-w-xs max-h-60 rounded-md border object-contain"
                   />
-                )
+                ),
               )}
             </div>
           )}

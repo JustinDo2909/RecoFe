@@ -16,9 +16,10 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-
 // Kết nối Socket.IO
-const socket = io("https://deployexe-be-1.onrender.com", { withCredentials: true });
+const socket = io("https://deployexe-be-1.onrender.com", {
+  withCredentials: true,
+});
 
 const OrdersPage = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -65,7 +66,9 @@ const OrdersPage = () => {
       {OrderList ? (
         <Card className="w-full">
           <CardHeader>
-            <CardTitle className="text-2xl md:text-3xl">Danh sách đơn hàng</CardTitle>
+            <CardTitle className="text-2xl md:text-3xl">
+              Danh sách đơn hàng
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <ScrollArea className="w-full">

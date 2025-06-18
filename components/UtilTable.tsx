@@ -44,8 +44,8 @@ const UitlTable = <T extends { _id?: string }>({
 
   const filteredData = data.filter((row) =>
     columns.some((col) =>
-      String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase())
-    )
+      String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
   );
 
   const sortedData = [...filteredData].sort((a, b) => {
@@ -60,7 +60,7 @@ const UitlTable = <T extends { _id?: string }>({
   const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
   const paginatedData = sortedData.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   const handleSort = (colKey: keyof T) => {

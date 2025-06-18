@@ -40,7 +40,7 @@ const LoginPage = () => {
         email: data.Email,
         password: data.Password,
       });
-      console.log('res', res)
+      console.log("res", res);
       if (res.token) {
         resetForm(); // Xóa dữ liệu form khi login thành công
         if (res.user.role === "admin") {
@@ -50,7 +50,9 @@ const LoginPage = () => {
           router.refresh();
         }
       } else {
-        toast.error(res.error.data.message || "Login failed. Please try again.");
+        toast.error(
+          res.error.data.message || "Login failed. Please try again.",
+        );
       }
     } else {
       console.log("data", data);
@@ -86,7 +88,7 @@ const LoginPage = () => {
       }, 3000);
     } catch (err: any) {
       setForgotPasswordMessage(
-        err.data?.message || "Failed to send reset link. Please try again."
+        err.data?.message || "Failed to send reset link. Please try again.",
       );
     }
   };
@@ -107,7 +109,7 @@ const LoginPage = () => {
   const renderInput = (
     field: string,
     formData: Record<string, string>,
-    onInputChange: (field: string, value: string) => void
+    onInputChange: (field: string, value: string) => void,
   ) => {
     const isPasswordField =
       field === "Password" || field === "Confirm Password";

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Feather = () => {
-  return (
-    <div>Feather</div>
-  )
-}
+  return <div>Feather</div>;
+};
 
-export default Feather
+export default Feather;

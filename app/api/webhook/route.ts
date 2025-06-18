@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       {
         error: "No Signature",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
       {
         error: "Stripe webhook secret is not set",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
   let event: Stripe.Event;
@@ -38,27 +38,29 @@ export async function POST(req: NextRequest) {
       {
         error: `Webhook Error: ${error}`,
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
- 
-      await stripe.invoices.retrieve(session.invoice as string)
-      // await deleteAllCart({})
+
+    await stripe.invoices.retrieve(session.invoice as string);
+    // await deleteAllCart({})
 
     try {
     } catch (error) {
-      toast.error("Error creating order in sanity:", error || "Error creating order in sanity");
+      toast.error(
+        "Error creating order in sanity:",
+        error || "Error creating order in sanity",
+      );
       return NextResponse.json(
         {
           error: `Error creating order: ${error}`,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
   }
   return NextResponse.json({ received: true });
 }
-

@@ -36,7 +36,8 @@ const EmptyCart = () => {
             Bạn không có sản phẩm nào trong giỏ hàng
           </h2>
           <p className="text-gray-600">
-            Hãy thêm sản phẩm của RECO vào giỏ hàng của bạn bằng cách bấm vào nút ở dưới đây
+            Hãy thêm sản phẩm của RECO vào giỏ hàng của bạn bằng cách bấm vào
+            nút ở dưới đây
           </p>
         </div>
         <Link

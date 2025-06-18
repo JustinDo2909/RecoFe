@@ -13,8 +13,21 @@ import {
   useUpdateDiscountOrderMutation,
   useUpdateDiscountProductMutation,
 } from "@/state/api";
-import type { Discount, DiscountRequestOrder, DiscountRequestProduct } from "@/types";
-import { Percent, Package, ShoppingCart, CheckCircle, XCircle, Search, Filter, Tag } from "lucide-react";
+import type {
+  Discount,
+  DiscountRequestOrder,
+  DiscountRequestProduct,
+} from "@/types";
+import {
+  Percent,
+  Package,
+  ShoppingCart,
+  CheckCircle,
+  XCircle,
+  Search,
+  Filter,
+  Tag,
+} from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
 
@@ -38,7 +51,8 @@ const DiscountManager = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
   const [filterType, setFilterType] = useState<FilterType>("all");
-  const [filterDiscountType, setFilterDiscountType] = useState<FilterDiscountType>("all");
+  const [filterDiscountType, setFilterDiscountType] =
+    useState<FilterDiscountType>("all");
 
   useEffect(() => {
     setIsMounted(true);
@@ -62,10 +76,13 @@ const DiscountManager = () => {
         (filterStatus === "inactive" && discount.isActive === false);
 
       // Filter by target type
-      const typeMatch = filterType === "all" || discount.targetType === filterType;
+      const typeMatch =
+        filterType === "all" || discount.targetType === filterType;
 
       // Filter by discount type
-      const discountTypeMatch = filterDiscountType === "all" || discount.discountType === filterDiscountType;
+      const discountTypeMatch =
+        filterDiscountType === "all" ||
+        discount.discountType === filterDiscountType;
 
       // Filter by search term
       const searchMatch =
@@ -80,11 +97,21 @@ const DiscountManager = () => {
 
   // Calculate statistics
   const totalDiscounts = discountList.length;
-  const activeDiscounts = discountList.filter((d) => d.isActive === true).length;
-  const inactiveDiscounts = discountList.filter((d) => d.isActive === false).length;
-  const productDiscounts = discountList.filter((d) => d.targetType === "product").length;
-  const orderDiscounts = discountList.filter((d) => d.targetType === "order").length;
-  const percentageDiscounts = discountList.filter((d) => d.discountType === "percentage").length;
+  const activeDiscounts = discountList.filter(
+    (d) => d.isActive === true,
+  ).length;
+  const inactiveDiscounts = discountList.filter(
+    (d) => d.isActive === false,
+  ).length;
+  const productDiscounts = discountList.filter(
+    (d) => d.targetType === "product",
+  ).length;
+  const orderDiscounts = discountList.filter(
+    (d) => d.targetType === "order",
+  ).length;
+  const percentageDiscounts = discountList.filter(
+    (d) => d.discountType === "percentage",
+  ).length;
   const filteredCount = filteredDiscounts.length;
 
   if (!isMounted) {
@@ -97,7 +124,7 @@ const DiscountManager = () => {
       const data = await disableDiscount({ id, reason }).unwrap();
       toast.success(data.message);
       await refetch();
-    } catch  {
+    } catch {
       toast.error("Đình chỉ discount thất bại!");
     }
   };
@@ -108,7 +135,7 @@ const DiscountManager = () => {
       const data = await activeDiscount({ id }).unwrap();
       toast.success(data.message);
       await refetch();
-    } catch  {
+    } catch {
       toast.error("Kích hoạt discount thất bại!");
     }
   };
@@ -168,7 +195,10 @@ const DiscountManager = () => {
           };
 
           console.log("payload của EditProduct", payload);
-          await updateDiscountProduct({ id: editingDiscount._id, body: payload }).unwrap();
+          await updateDiscountProduct({
+            id: editingDiscount._id,
+            body: payload,
+          }).unwrap();
           toast.success("Cập nhật discount sản phẩm thành công");
           handleClose();
           await refetch();
@@ -185,7 +215,10 @@ const DiscountManager = () => {
             targetType: data.targetType,
           };
           console.log("payload nè EditOrder", payload);
-          await updateDiscountOrder({ id: editingDiscount._id, body: payload }).unwrap();
+          await updateDiscountOrder({
+            id: editingDiscount._id,
+            body: payload,
+          }).unwrap();
           toast.success("Cập nhật discount đơn hàng thành công");
           handleClose();
           await refetch();
@@ -242,23 +275,34 @@ const DiscountManager = () => {
   };
 
   // Process data for table display
-  const processedDiscounts = (filteredDiscounts as any).map((discount : any) => ({
-    ...discount,
-    discountType: discount.discountType === "percentage" ? "Phần trăm" : "Giá cố định",
-    targetType:
-      discount.targetType === "product" ? "Sản phẩm" : discount.targetType === "order" ? "Đơn hàng" : "Chưa có",
-    startDate: new Date(discount.startDate).toLocaleDateString("vi-VN"),
-    endDate: new Date(discount.endDate).toLocaleDateString("vi-VN"),
-    isActive: (
-      <span className={`font-semibold ${discount.isActive ? "text-green-600" : "text-red-600"}`}>
-        {discount.isActive ? "Hoạt động" : "Không hoạt động"}
-      </span>
-    ),
-    isActiveInData: discount.isActive ? true : false,
-    reason: discount.reason ? discount.reason : "Không có lý do",
-    value:
-      discount.discountType === "percentage" ? `${discount.value}%` : `${discount.value.toLocaleString("vi-VN")} VND`,
-  }));
+  const processedDiscounts = (filteredDiscounts as any).map(
+    (discount: any) => ({
+      ...discount,
+      discountType:
+        discount.discountType === "percentage" ? "Phần trăm" : "Giá cố định",
+      targetType:
+        discount.targetType === "product"
+          ? "Sản phẩm"
+          : discount.targetType === "order"
+            ? "Đơn hàng"
+            : "Chưa có",
+      startDate: new Date(discount.startDate).toLocaleDateString("vi-VN"),
+      endDate: new Date(discount.endDate).toLocaleDateString("vi-VN"),
+      isActive: (
+        <span
+          className={`font-semibold ${discount.isActive ? "text-green-600" : "text-red-600"}`}
+        >
+          {discount.isActive ? "Hoạt động" : "Không hoạt động"}
+        </span>
+      ),
+      isActiveInData: discount.isActive ? true : false,
+      reason: discount.reason ? discount.reason : "Không có lý do",
+      value:
+        discount.discountType === "percentage"
+          ? `${discount.value}%`
+          : `${discount.value.toLocaleString("vi-VN")} VND`,
+    }),
+  );
 
   return (
     <div className="w-full min-h-screen">
@@ -271,7 +315,9 @@ const DiscountManager = () => {
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{totalDiscounts}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {totalDiscounts}
+                </div>
                 <div className="text-sm text-blue-600">Tổng mã giảm giá</div>
               </div>
               <Tag className="h-8 w-8 text-blue-500" />
@@ -281,7 +327,9 @@ const DiscountManager = () => {
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-green-600">{activeDiscounts}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {activeDiscounts}
+                </div>
                 <div className="text-sm text-green-600">Đang hoạt động</div>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
@@ -291,7 +339,9 @@ const DiscountManager = () => {
           <div className="bg-red-50 rounded-lg p-4 border border-red-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-red-600">{inactiveDiscounts}</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {inactiveDiscounts}
+                </div>
                 <div className="text-sm text-red-600">Không hoạt động</div>
               </div>
               <XCircle className="h-8 w-8 text-red-500" />
@@ -301,7 +351,9 @@ const DiscountManager = () => {
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-purple-600">{productDiscounts}</div>
+                <div className="text-2xl font-bold text-purple-600">
+                  {productDiscounts}
+                </div>
                 <div className="text-sm text-purple-600">Cho sản phẩm</div>
               </div>
               <Package className="h-8 w-8 text-purple-500" />
@@ -311,7 +363,9 @@ const DiscountManager = () => {
           <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-orange-600">{orderDiscounts}</div>
+                <div className="text-2xl font-bold text-orange-600">
+                  {orderDiscounts}
+                </div>
                 <div className="text-sm text-orange-600">Cho đơn hàng</div>
               </div>
               <ShoppingCart className="h-8 w-8 text-orange-500" />
@@ -321,7 +375,9 @@ const DiscountManager = () => {
           <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-yellow-600">{percentageDiscounts}</div>
+                <div className="text-2xl font-bold text-yellow-600">
+                  {percentageDiscounts}
+                </div>
                 <div className="text-sm text-yellow-600">Theo phần trăm</div>
               </div>
               <Percent className="h-8 w-8 text-yellow-500" />
@@ -351,7 +407,9 @@ const DiscountManager = () => {
               {/* Status Filter */}
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                onChange={(e) =>
+                  setFilterStatus(e.target.value as FilterStatus)
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tất cả trạng thái</option>
@@ -373,7 +431,9 @@ const DiscountManager = () => {
               {/* Discount Type Filter */}
               <select
                 value={filterDiscountType}
-                onChange={(e) => setFilterDiscountType(e.target.value as FilterDiscountType)}
+                onChange={(e) =>
+                  setFilterDiscountType(e.target.value as FilterDiscountType)
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tất cả kiểu</option>
@@ -385,7 +445,10 @@ const DiscountManager = () => {
 
           {/* Current filter info */}
           <div className="text-sm text-gray-600 whitespace-nowrap">
-            {searchTerm === "" && filterStatus === "all" && filterType === "all" && filterDiscountType === "all"
+            {searchTerm === "" &&
+            filterStatus === "all" &&
+            filterType === "all" &&
+            filterDiscountType === "all"
               ? `Hiển thị tất cả ${totalDiscounts} mã giảm giá`
               : `Tìm thấy ${filteredCount} kết quả`}
           </div>
@@ -409,7 +472,12 @@ const DiscountManager = () => {
             { key: "reason", label: "Lý do" },
           ]}
           getIsActive={(row) => {
-            console.log("getIsActive called with row:", row._id, "isActive:", (row as any).isActiveInData);
+            console.log(
+              "getIsActive called with row:",
+              row._id,
+              "isActive:",
+              (row as any).isActiveInData,
+            );
             return Boolean((row as any).isActiveInData);
           }}
           data={processedDiscounts}
@@ -424,8 +492,12 @@ const DiscountManager = () => {
       {filteredDiscounts.length === 0 && !isLoading && (
         <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200 mt-4">
           <Tag className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-1">Không tìm thấy mã giảm giá</h3>
-          <p className="text-gray-500">Không có mã giảm giá nào phù hợp với bộ lọc hiện tại.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-1">
+            Không tìm thấy mã giảm giá
+          </h3>
+          <p className="text-gray-500">
+            Không có mã giảm giá nào phù hợp với bộ lọc hiện tại.
+          </p>
           <button
             onClick={() => {
               setFilterStatus("all");
@@ -446,8 +518,12 @@ const DiscountManager = () => {
           <div className="flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-green-600" />
             <div>
-              <p className="text-sm font-medium text-green-800">Có {activeDiscounts} mã giảm giá đang hoạt động</p>
-              <p className="text-xs text-green-600">Khách hàng có thể sử dụng</p>
+              <p className="text-sm font-medium text-green-800">
+                Có {activeDiscounts} mã giảm giá đang hoạt động
+              </p>
+              <p className="text-xs text-green-600">
+                Khách hàng có thể sử dụng
+              </p>
             </div>
           </div>
         </div>
@@ -456,7 +532,11 @@ const DiscountManager = () => {
       {/* Form Modal */}
       {showForm && editingDiscount && (
         <Modal onClose={handleClose}>
-          <DiscountForm initialValues={editingDiscount} onSubmit={handleSubmit} onCancel={handleCancel} />
+          <DiscountForm
+            initialValues={editingDiscount}
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+          />
         </Modal>
       )}
     </div>

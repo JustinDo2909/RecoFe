@@ -7,7 +7,11 @@ import { toast } from "sonner";
 
 interface TableProps<T> {
   data: T[];
-  columns: { key: keyof T; label: string,  render?: (row: T) => React.ReactNode; }[];
+  columns: {
+    key: keyof T;
+    label: string;
+    render?: (row: T) => React.ReactNode;
+  }[];
   onCreate?: () => void;
   onView?: (_id: string) => void;
   onUpdateStatus?: (_id: string, status: string) => void;
@@ -19,7 +23,6 @@ const CustomeTable = <T extends { _id: string }>({
   data,
   columns,
   ITEMS_PER_PAGE,
-
 }: TableProps<T>) => {
   const [searchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
@@ -40,8 +43,8 @@ const CustomeTable = <T extends { _id: string }>({
     columns.some((col) =>
       String(getNestedValue(row, String(col.key)))
         .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-    )
+        .includes(searchTerm.toLowerCase()),
+    ),
   );
 
   // Sort data
@@ -49,11 +52,16 @@ const CustomeTable = <T extends { _id: string }>({
     if (!sortColumn) return 0;
     const aValue = String(a[sortColumn]).toLowerCase();
     const bValue = String(b[sortColumn]).toLowerCase();
-    return sortOrder === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    return sortOrder === "asc"
+      ? aValue.localeCompare(bValue)
+      : bValue.localeCompare(aValue);
   });
 
   const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
-  const paginatedData = sortedData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const paginatedData = sortedData.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
 
   const handleSort = (colKey: keyof T) => {
     if (sortColumn === colKey) {
@@ -86,7 +94,9 @@ const CustomeTable = <T extends { _id: string }>({
 
   const handleSaveReason = async () => {
     if (selectedRowId) {
-      const confirmed = window.confirm("Bạn có chắc muốn đình chỉ người dùng này?");
+      const confirmed = window.confirm(
+        "Bạn có chắc muốn đình chỉ người dùng này?",
+      );
       if (!confirmed) return;
 
       try {
@@ -136,7 +146,12 @@ const CustomeTable = <T extends { _id: string }>({
                   className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors"
                   onClick={() => handleSort(col.key)}
                 >
-                  {col.label} {sortColumn === col.key ? (sortOrder === "asc" ? "▲" : "▼") : ""}
+                  {col.label}{" "}
+                  {sortColumn === col.key
+                    ? sortOrder === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
               {/* <th className="px-4 py-2 text-left border">Thao tác</th> */}
@@ -145,13 +160,14 @@ const CustomeTable = <T extends { _id: string }>({
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.length > 0 ? (
               paginatedData.map((row, rowIndex) => {
-             
-
                 return (
                   <tr key={rowIndex} className="border">
                     {columns.map((col) => {
                       return (
-                        <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
+                        <td
+                          key={String(col.key)}
+                          className="px-4 py-2 border text-customgreys-blueGrey"
+                        >
                           {(col as any).render ? (
                             (col as any).render(row)
                           ) : col.key === "picture" ? (
@@ -162,8 +178,14 @@ const CustomeTable = <T extends { _id: string }>({
                               height={50}
                               className="w-10 h-10 rounded-full"
                             />
-                          ) : col.key === "createdAt" || col.key === "updatedAt" ? (
-                            format(new Date(String(getNestedValue(row, String(col.key)))), "dd/MM/yyyy")
+                          ) : col.key === "createdAt" ||
+                            col.key === "updatedAt" ? (
+                            format(
+                              new Date(
+                                String(getNestedValue(row, String(col.key))),
+                              ),
+                              "dd/MM/yyyy",
+                            )
                           ) : (
                             String(getNestedValue(row, String(col.key)))
                           )}
@@ -186,7 +208,10 @@ const CustomeTable = <T extends { _id: string }>({
               })
             ) : (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-2 text-center">
+                <td
+                  colSpan={columns.length + 1}
+                  className="px-4 py-2 text-center"
+                >
                   Không có dữ liệu
                 </td>
               </tr>
@@ -207,7 +232,9 @@ const CustomeTable = <T extends { _id: string }>({
           Trang {currentPage} / {totalPages}
         </span>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >

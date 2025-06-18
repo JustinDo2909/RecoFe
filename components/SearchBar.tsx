@@ -96,7 +96,7 @@ const SearchBar = () => {
               products
                 ?.filter(
                   (product: Product) =>
-                    product.stock !== 0 && product.isActive === true
+                    product.stock !== 0 && product.isActive === true,
                 )
                 ?.map((product: Product) => (
                   <div

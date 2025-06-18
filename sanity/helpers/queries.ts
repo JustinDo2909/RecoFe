@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export const getProductBySlug = async (slug: string) => {
   const PRODUCT_BY_SLUG_QUERY = defineQuery(
-    `*[_type == 'product' && slug.current == $slug] | order(name asc) [0]`
+    `*[_type == 'product' && slug.current == $slug] | order(name asc) [0]`,
   );
   try {
     const product = await sanityFetch({
@@ -15,13 +15,16 @@ export const getProductBySlug = async (slug: string) => {
     });
     return product?.data || null;
   } catch (error) {
-    toast.error("Error fetching product by Slug:", error || "Error fetching product by Slug");
+    toast.error(
+      "Error fetching product by Slug:",
+      error || "Error fetching product by Slug",
+    );
   }
 };
 
 export const getAllCategories = async () => {
   const CATEGORIES_QUERY = defineQuery(
-    `*[_type=="category"] | order(name asc)`
+    `*[_type=="category"] | order(name asc)`,
   );
   try {
     const categories = await sanityFetch({
@@ -29,7 +32,10 @@ export const getAllCategories = async () => {
     });
     return categories.data || [];
   } catch (error) {
-    toast.error("Error fetching all categories", error || "Error fetching all categories");
+    toast.error(
+      "Error fetching all categories",
+      error || "Error fetching all categories",
+    );
 
     return [];
   }

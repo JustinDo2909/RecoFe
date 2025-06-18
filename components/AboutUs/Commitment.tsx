@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Commitment = () => {
-  return (
-    <div>Commitment</div>
-  )
-}
+  return <div>Commitment</div>;
+};
 
-export default Commitment
+export default Commitment;

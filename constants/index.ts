@@ -38,7 +38,8 @@ export const faqsData = [
   },
   {
     question: "Reco phục vụ những ngành công nghiệp nào?",
-    answer: "Reco phục vụ nhiều ngành công nghiệp bao gồm tài chính, y tế, bán lẻ và sản xuất.",
+    answer:
+      "Reco phục vụ nhiều ngành công nghiệp bao gồm tài chính, y tế, bán lẻ và sản xuất.",
   },
   {
     question: "Reco đảm bảo an toàn dữ liệu như thế nào?",

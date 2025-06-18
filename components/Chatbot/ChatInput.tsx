@@ -7,7 +7,11 @@ interface ChatInputProps {
   isLoading?: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, onImageSelect, isLoading }) => {
+const ChatInput: React.FC<ChatInputProps> = ({
+  onSendMessage,
+  onImageSelect,
+  isLoading,
+}) => {
   const [message, setMessage] = useState("");
 
   const handleSend = () => {

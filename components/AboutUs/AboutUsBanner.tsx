@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import banner from "@/images/usBanner.jpg";
 import Image from "next/image";
@@ -11,7 +11,7 @@ const AboutUsBanner = () => {
         <Image
           src={banner}
           alt="Banner"
-          width={800} 
+          width={800}
           height={600}
           className="object-cover w-full h-[400px] md:h-[500px] lg:h-[600px] "
         />
@@ -20,12 +20,34 @@ const AboutUsBanner = () => {
       <div className="w-full lg:w-1/2 flex flex-col gap-5">
         <h1 className="uppercase text-5xl font-semibold">reco</h1>
         <p className="text-lg lg:text-2xl">
-          RECO là thương hiệu tiên phong trong việc mang đến thời trang bền vững thông qua tái tạo sản phẩm và cá nhân hóa. Chúng tôi tin rằng thời trang không chỉ là sự thể hiện phong cách, mà còn là một công cụ để bảo vệ môi trường và xây dựng một cộng đồng hướng đến sự phát triển bền vững.
+          RECO là thương hiệu tiên phong trong việc mang đến thời trang bền vững
+          thông qua tái tạo sản phẩm và cá nhân hóa. Chúng tôi tin rằng thời
+          trang không chỉ là sự thể hiện phong cách, mà còn là một công cụ để
+          bảo vệ môi trường và xây dựng một cộng đồng hướng đến sự phát triển
+          bền vững.
         </p>
 
         <div className="flex gap-3">
-          <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className="rounded-full px-6 py-3">LIÊN HỆ</Button>
-          <Button onClick={() => window.open("https://www.facebook.com/profile.php?id=61576419491353", "_blank")} className="bg-transparent border border-black text-black rounded-full px-6 py-3">
+          <Button
+            onClick={() =>
+              window.open(
+                "https://www.facebook.com/profile.php?id=61576419491353",
+                "_blank",
+              )
+            }
+            className="rounded-full px-6 py-3"
+          >
+            LIÊN HỆ
+          </Button>
+          <Button
+            onClick={() =>
+              window.open(
+                "https://www.facebook.com/profile.php?id=61576419491353",
+                "_blank",
+              )
+            }
+            className="bg-transparent border border-black text-black rounded-full px-6 py-3"
+          >
             TÌM HIỂU
           </Button>
         </div>

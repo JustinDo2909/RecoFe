@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 interface Props {
   product: any;
   className?: string;
-  quantity? : number
+  quantity?: number;
 }
 
 const AddToCartButton = ({ product, className, quantity }: Props) => {
@@ -19,7 +19,7 @@ const AddToCartButton = ({ product, className, quantity }: Props) => {
   const { data: cartList, refetch } = useGetCardQuery();
   const [itemCount, setItemCount] = useState(0);
   const router = useRouter();
-  const {user} = useUser()
+  const { user } = useUser();
   useEffect(() => {
     const item = cartList?.find((item) => item?.productId?._id === product._id);
     setItemCount(item?.quantity ?? 0);
@@ -27,20 +27,22 @@ const AddToCartButton = ({ product, className, quantity }: Props) => {
 
   const isOutOfStock = product?.stock === 0;
 
-const handleAdd = async () => {
-  if (user) {
-    const result = await addProduct({
-      productId: product._id || "",
-      quantity: 1,
-    });
-    toast.success(`${product.name?.substring(0, 12)} ${result.data?.message}`);
-    await refetch();
-  } else {
-    router.push("/login");
-    toast.error("Vui lòng đăng nhập");
-  }
-};
-console.log('quantity', quantity)
+  const handleAdd = async () => {
+    if (user) {
+      const result = await addProduct({
+        productId: product._id || "",
+        quantity: 1,
+      });
+      toast.success(
+        `${product.name?.substring(0, 12)} ${result.data?.message}`,
+      );
+      await refetch();
+    } else {
+      router.push("/login");
+      toast.error("Vui lòng đăng nhập");
+    }
+  };
+  console.log("quantity", quantity);
   return (
     <div className="w-full h-12 flex items-center">
       {itemCount > 0 ? (
@@ -65,7 +67,7 @@ console.log('quantity', quantity)
           disabled={isOutOfStock}
           className={cn(
             "w-full bg-transparent text-darkColor shadow-none border border-darkColor/30 font-semibold tracking-wide hover:text-white hoverEffect",
-            className
+            className,
           )}
         >
           Thêm vào giỏ hàng

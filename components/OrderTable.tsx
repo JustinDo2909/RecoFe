@@ -31,18 +31,25 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
   const [selectedRejectId, setSelectedRejectId] = useState<string | null>(null);
 
   const filteredData = data.filter((row) =>
-    columns.some((col) => String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()))
+    columns.some((col) =>
+      String(row[col.key]).toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
   );
 
   const sortedData = [...filteredData].sort((a, b) => {
     if (!sortColumn) return 0;
     const aValue = String(a[sortColumn]).toLowerCase();
     const bValue = String(b[sortColumn]).toLowerCase();
-    return sortOrder === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    return sortOrder === "asc"
+      ? aValue.localeCompare(bValue)
+      : bValue.localeCompare(aValue);
   });
 
   const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
-  const paginatedData = sortedData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const paginatedData = sortedData.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
 
   const handleSort = (colKey: keyof T) => {
     if (sortColumn === colKey) {
@@ -97,7 +104,12 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
                   className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors"
                   onClick={() => handleSort(col.key)}
                 >
-                  {col.label} {sortColumn === col.key ? (sortOrder === "asc" ? "▲" : "▼") : ""}
+                  {col.label}{" "}
+                  {sortColumn === col.key
+                    ? sortOrder === "asc"
+                      ? "▲"
+                      : "▼"
+                    : ""}
                 </th>
               ))}
               <th className="px-4 py-2 text-left border">Thao tác</th>
@@ -109,7 +121,10 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
                 return (
                   <tr key={rowIndex} className="border">
                     {columns.map((col) => (
-                      <td key={String(col.key)} className="px-4 py-2 border text-customgreys-blueGrey">
+                      <td
+                        key={String(col.key)}
+                        className="px-4 py-2 border text-customgreys-blueGrey"
+                      >
                         {col.render ? (
                           col.render(row[col.key], row)
                         ) : col.key === "picture" ? (
@@ -120,9 +135,11 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
                             height={50}
                             className="w-10 h-10 rounded-full"
                           />
-                        ) : col.key === "createdAt" || col.key === "updatedAt" ? (
+                        ) : col.key === "createdAt" ||
+                          col.key === "updatedAt" ? (
                           format(new Date(String(row[col.key])), "dd/MM/yyyy")
-                        ) : typeof row[col.key] === "object" && row[col.key] !== null ? (
+                        ) : typeof row[col.key] === "object" &&
+                          row[col.key] !== null ? (
                           "name" in (row[col.key] as object) ? (
                             (row[col.key] as any).name
                           ) : (
@@ -138,17 +155,27 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
                         <>
                           <Button
                             className="bg-blue-500 text-white"
-                            onClick={() => onUpdateStatus?.((row as any)._id, "Shipping")}
+                            onClick={() =>
+                              onUpdateStatus?.((row as any)._id, "Shipping")
+                            }
                           >
                             Giao hàng
                           </Button>
-                          <Button className="bg-red-500 text-white" onClick={() => handleRejectClick((row as any)._id)}>
+                          <Button
+                            className="bg-red-500 text-white"
+                            onClick={() => handleRejectClick((row as any)._id)}
+                          >
                             Từ chối
                           </Button>
                         </>
                       )}
                       {row.statusOrder === "Shipping" && (
-                        <Button className="bg-green-500 text-white" onClick={() => onUpdateStatus?.((row as any)._id, "Done")}>
+                        <Button
+                          className="bg-green-500 text-white"
+                          onClick={() =>
+                            onUpdateStatus?.((row as any)._id, "Done")
+                          }
+                        >
                           Hoàn thành
                         </Button>
                       )}
@@ -159,7 +186,10 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
               })
             ) : (
               <tr>
-                <td colSpan={columns.length + 1} className="px-4 py-2 text-center">
+                <td
+                  colSpan={columns.length + 1}
+                  className="px-4 py-2 text-center"
+                >
                   Không có dữ liệu
                 </td>
               </tr>
@@ -180,7 +210,9 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
           Trang {currentPage} của {totalPages}
         </span>
         <button
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
           className="px-3 py-1 bg-gray-300 text-black rounded disabled:opacity-50"
         >
@@ -191,7 +223,9 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
       {showRejectModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded shadow-lg w-96">
-            <h3 className="mb-4 text-lg font-semibold">Lý do từ chối đơn hàng</h3>
+            <h3 className="mb-4 text-lg font-semibold">
+              Lý do từ chối đơn hàng
+            </h3>
             <textarea
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
@@ -202,7 +236,10 @@ const OrderTable = <T extends { _id?: string; statusOrder?: string }>({
               <Button onClick={handleCancelReject} variant="outline">
                 Hủy
               </Button>
-              <Button onClick={handleSaveRejectReason} disabled={!rejectReason.trim()}>
+              <Button
+                onClick={handleSaveRejectReason}
+                disabled={!rejectReason.trim()}
+              >
                 Xác nhận
               </Button>
             </div>

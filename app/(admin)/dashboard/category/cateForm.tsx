@@ -18,7 +18,10 @@ interface CategoryFormData {
   products: string[]; // mảng product _id đã chọn
 }
 
-const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({
+  initialValues,
+  onSubmit,
+}) => {
   const { data: Products, isLoading } = useGetProductQuery();
 
   const {
@@ -69,7 +72,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) 
       // Bỏ chọn sản phẩm
       setValue(
         "products",
-        watchedProducts.filter((id) => id !== productId)
+        watchedProducts.filter((id) => id !== productId),
       );
     } else {
       // Chọn thêm sản phẩm
@@ -87,7 +90,9 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) 
           {...register("title", { required: "Vui lòng nhập tên danh mục" })}
           className="w-full border rounded px-3 py-2"
         />
-        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+        {errors.title && (
+          <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+        )}
       </div>
 
       {/* Description */}
@@ -98,7 +103,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) 
           {...register("description", { required: "Vui lòng nhập mô tả" })}
           className="w-full border rounded px-3 py-2"
         />
-        {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
+        {errors.description && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.description.message}
+          </p>
+        )}
       </div>
 
       {/* Products với checkbox */}
@@ -108,7 +117,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) 
           {(Products || []).map((product: Product) => {
             const checked = watchedProducts.includes(product._id || "");
             return (
-              <label key={product._id} className="flex items-center space-x-2 mb-1 cursor-pointer">
+              <label
+                key={product._id}
+                className="flex items-center space-x-2 mb-1 cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   value={product._id}
@@ -120,12 +132,17 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues, onSubmit }) 
             );
           })}
         </div>
-        {errors.products && <p className="text-red-500 text-sm mt-1">{errors.products.message}</p>}
+        {errors.products && (
+          <p className="text-red-500 text-sm mt-1">{errors.products.message}</p>
+        )}
       </div>
 
       {/* Submit Button */}
       <div>
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
           {initialValues ? "Cập nhật" : "Tạo mới"}
         </button>
       </div>

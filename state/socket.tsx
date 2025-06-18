@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://deployexe-be-1.onrender.com");  // URL của server WebSocket của bạn
+const socket = io("https://deployexe-be-1.onrender.com"); // URL của server WebSocket của bạn
 
 // Lắng nghe sự kiện từ server
 socket.on("statusUpdated", (updatedStatus) => {

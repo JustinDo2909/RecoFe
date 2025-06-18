@@ -14,17 +14,19 @@ const CharityOverview = () => {
     <div className="flex flex-col lg:flex-row items-center gap-12 px-6 lg:px-16 py-12">
       {/* Phần thông tin bên trái */}
       <div className="flex flex-col lg:w-1/2 gap-10">
-        <h1 className="font-semibold text-4xl text-center">Chúng Tôi Luôn Có Mặt Nơi Mà Thời Trang Cần Sự Giúp Đỡ</h1>
+        <h1 className="font-semibold text-4xl text-center">
+          Chúng Tôi Luôn Có Mặt Nơi Mà Thời Trang Cần Sự Giúp Đỡ
+        </h1>
         <div ref={ref} className="grid grid-cols-2 md:grid-cols-2 gap-8 mt-8">
-        {countUpItems.map((item) => (
+          {countUpItems.map((item) => (
             <div key={item.id} className="text-center">
               {inView && (
                 <MyCountUp
                   start={0}
                   end={item.number}
                   duration={3}
-                  title={item.title}       
-                  description={item.text}   
+                  title={item.title}
+                  description={item.text}
                 />
               )}
             </div>
@@ -36,8 +38,8 @@ const CharityOverview = () => {
         <Image
           src={pic}
           alt="Chúng tôi luôn có mặt"
-          width={600} 
-          height={600} 
+          width={600}
+          height={600}
           className="object-cover w-full max-w-2xl mx-auto "
         />
       </div>

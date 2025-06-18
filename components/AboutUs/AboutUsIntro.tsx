@@ -15,7 +15,7 @@ const AboutUsIntro = () => {
             cusTitle="Chúng Tôi Là Ai?"
             description="Tại RECO, chúng tôi tự hào là thương hiệu đi đầu trong việc cung cấp các sản phẩm thời trang tái tạo từ những món đồ cũ, mang lại cuộc sống mới cho chúng..."
             button="Xem Các Sản Phẩm"
-            onClick={() => router.push("/product") }
+            onClick={() => router.push("/product")}
           />
         </div>
 

@@ -16,9 +16,17 @@ import { BaseQueryApi, FetchArgs } from "@reduxjs/toolkit/query";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
-import { DiscountRequestOrder, DiscountRequestProduct, Response } from "./../types/index";
+import {
+  DiscountRequestOrder,
+  DiscountRequestProduct,
+  Response,
+} from "./../types/index";
 
-const customBaseQuery = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: any) => {
+const customBaseQuery = async (
+  args: string | FetchArgs,
+  api: BaseQueryApi,
+  extraOptions: any,
+) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: "https://deployexe-be-1.onrender.com",
     credentials: "include",
@@ -124,7 +132,10 @@ export const api = createApi({
         body,
       }),
     }),
-    resetPassword: build.mutation<any, { resetToken: string; newPassword: string }>({
+    resetPassword: build.mutation<
+      any,
+      { resetToken: string; newPassword: string }
+    >({
       query: ({ resetToken, newPassword }) => ({
         url: `/auth/reset-password/${resetToken}`,
         method: "POST",
@@ -133,7 +144,10 @@ export const api = createApi({
     }),
 
     //updateProfile
-    updateProfile: build.mutation<any, { phone: string; email: string; username: string }>({
+    updateProfile: build.mutation<
+      any,
+      { phone: string; email: string; username: string }
+    >({
       query: (body) => ({
         url: `/auth/update`,
         method: "PUT",
@@ -187,7 +201,10 @@ export const api = createApi({
     }),
 
     //addProductToCard
-    addProductToCard: build.mutation<Response<null>, { productId: string; quantity: number }>({
+    addProductToCard: build.mutation<
+      Response<null>,
+      { productId: string; quantity: number }
+    >({
       query: (body) => ({
         url: "/cart/add",
         method: "POST",
@@ -214,7 +231,10 @@ export const api = createApi({
       invalidatesTags: ["Card"],
     }),
     //updateProductToCard
-    updateProductToCard: build.mutation<Card[], { productId: string; quantity: number; action: string }>({
+    updateProductToCard: build.mutation<
+      Card[],
+      { productId: string; quantity: number; action: string }
+    >({
       query: (body) => ({
         url: "/cart/update",
         method: "PUT",
@@ -251,7 +271,10 @@ export const api = createApi({
       transformResponse: (response: any): Order[] => response.data,
     }),
     //Update OrderStatus
-    updateOrderStatus: build.mutation<Response<unknown>, { id: string; statusOrder: string; reason?: string }>({
+    updateOrderStatus: build.mutation<
+      Response<unknown>,
+      { id: string; statusOrder: string; reason?: string }
+    >({
       query: ({ id, statusOrder, reason }) => ({
         url: `/order/updateStatus/${id}`,
         method: "PUT",
@@ -282,7 +305,10 @@ export const api = createApi({
       invalidatesTags: ["Users"],
     }),
     //update User
-    updateUser: build.mutation<any, { username: string; email: string; id: string }>({
+    updateUser: build.mutation<
+      any,
+      { username: string; email: string; id: string }
+    >({
       query: ({ id, username, email }) => ({
         url: `/auth/update/${id}`,
         method: "PUT",
@@ -326,7 +352,10 @@ export const api = createApi({
     //   invalidatesTags: ["Products"],
     // }),
     //create Category
-    createCategory: build.mutation<any, { title: string; description: string; products?: string[] }>({
+    createCategory: build.mutation<
+      any,
+      { title: string; description: string; products?: string[] }
+    >({
       query: ({ title, description, products }) => ({
         url: "/category/create",
         method: "POST",
@@ -343,7 +372,10 @@ export const api = createApi({
       invalidatesTags: ["Categories"],
     }),
     //update Category
-    updateCategory: build.mutation<any, { id: string; title: string; description: string; products?: string[] }>({
+    updateCategory: build.mutation<
+      any,
+      { id: string; title: string; description: string; products?: string[] }
+    >({
       query: ({ id, title, description, products }) => ({
         url: `/category/update/${id}`,
         method: "PUT",
@@ -376,7 +408,10 @@ export const api = createApi({
       invalidatesTags: ["Services"],
     }),
     //update Service
-    updateService: build.mutation<Service, { id: string; name?: string; description?: string; price?: number }>({
+    updateService: build.mutation<
+      Service,
+      { id: string; name?: string; description?: string; price?: number }
+    >({
       query: ({ id, name, description, price }) => ({
         url: `/service/update/${id}`,
         method: "PUT",
@@ -384,7 +419,10 @@ export const api = createApi({
       }),
       invalidatesTags: ["Services"],
     }),
-    createService: build.mutation<Service, { id: string; name: string; description: string; price: number }>({
+    createService: build.mutation<
+      Service,
+      { id: string; name: string; description: string; price: number }
+    >({
       query: (body) => ({
         url: "/service/create",
         method: "POST",
@@ -409,7 +447,10 @@ export const api = createApi({
       transformResponse: (response: any): Request[] => response.data,
     }),
     //create Refund Request
-    createRefundRequest: build.mutation<Request, { type: string; message: string; order: string }>({
+    createRefundRequest: build.mutation<
+      Request,
+      { type: string; message: string; order: string }
+    >({
       query: (body) => ({
         url: "/request/createRefundRequest",
         method: "POST",
@@ -419,7 +460,10 @@ export const api = createApi({
       invalidatesTags: ["Requests"],
     }),
     //create Service Request
-    createServiceRequest: build.mutation<Request, { type: string; message: string; service: string }>({
+    createServiceRequest: build.mutation<
+      Request,
+      { type: string; message: string; service: string }
+    >({
       query: (body) => ({
         url: "/request/createServiceRequest",
         method: "POST",
@@ -479,7 +523,10 @@ export const api = createApi({
       transformResponse: (response: any): Discount[] => response.data,
     }),
 
-    disableDiscount: build.mutation<Response<Discount>, { id: string; reason: string }>({
+    disableDiscount: build.mutation<
+      Response<Discount>,
+      { id: string; reason: string }
+    >({
       query: ({ id, reason }) => ({
         url: `/discount/deactivate/${id}`,
         method: "PATCH",
@@ -515,7 +562,10 @@ export const api = createApi({
       invalidatesTags: ["Discount"],
     }),
 
-    updateDiscountProduct: build.mutation<void, { id: string; body: DiscountRequestProduct }>({
+    updateDiscountProduct: build.mutation<
+      void,
+      { id: string; body: DiscountRequestProduct }
+    >({
       query: ({ id, body }) => ({
         url: `/discount/update/product/${id}`,
         method: "PUT",
@@ -523,7 +573,10 @@ export const api = createApi({
       }),
     }),
 
-    updateDiscountOrder: build.mutation<void, { id: string; body: DiscountRequestOrder }>({
+    updateDiscountOrder: build.mutation<
+      void,
+      { id: string; body: DiscountRequestOrder }
+    >({
       query: ({ id, body }) => ({
         url: `/discount/update/order/${id}`,
         method: "PUT",
@@ -550,7 +603,10 @@ export const api = createApi({
       invalidatesTags: ["Products"],
     }),
 
-    deactivateProduct: build.mutation<Response<Product>, { id: string; reason: string }>({
+    deactivateProduct: build.mutation<
+      Response<Product>,
+      { id: string; reason: string }
+    >({
       query: ({ id, reason }) => ({
         url: `/product/deactivate/${id}`,
         method: "PATCH",
@@ -567,7 +623,10 @@ export const api = createApi({
       invalidatesTags: ["Products"],
     }),
 
-    addDiscountProduct: build.mutation<Response<void>, { productId: string; discountId: string }>({
+    addDiscountProduct: build.mutation<
+      Response<void>,
+      { productId: string; discountId: string }
+    >({
       query: ({ productId, discountId }) => ({
         url: `/discount/discountProduct`,
         method: "PATCH",
@@ -575,7 +634,10 @@ export const api = createApi({
       }),
     }),
 
-    removeDiscountProduct: build.mutation<Response<unknown>, { productId: string; discountId: string }>({
+    removeDiscountProduct: build.mutation<
+      Response<unknown>,
+      { productId: string; discountId: string }
+    >({
       query: ({ productId, discountId }) => ({
         url: `/discount/products/${productId}/remove`,
         method: "PATCH",
@@ -601,7 +663,10 @@ export const api = createApi({
       invalidatesTags: ["Categories"],
     }),
 
-    deactivateCate: build.mutation<Response<Product>, { id: string; reason: string }>({
+    deactivateCate: build.mutation<
+      Response<Product>,
+      { id: string; reason: string }
+    >({
       query: ({ id, reason }) => ({
         url: `/category/disable/${id}`,
         method: "PATCH",

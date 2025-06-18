@@ -44,8 +44,7 @@ const TermsPage = () => {
           <h2 className="text-xl font-semibold mb-2">5. Governing Law</h2>
           <p>
             These Terms and Conditions shall be governed by and construed in
-            accordance with the laws of the jurisdiction in which Reco
-            operates.
+            accordance with the laws of the jurisdiction in which Reco operates.
           </p>
         </section>
       </div>

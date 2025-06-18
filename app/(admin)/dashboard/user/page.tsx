@@ -67,7 +67,9 @@ const DashboardUser = () => {
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{totalUsers}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {totalUsers}
+                </div>
                 <div className="text-sm text-blue-600">Tổng người dùng</div>
               </div>
               <Users className="h-8 w-8 text-blue-500" />
@@ -76,7 +78,9 @@ const DashboardUser = () => {
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-green-600">{activeUsers}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {activeUsers}
+                </div>
                 <div className="text-sm text-green-600">Đang hoạt động</div>
               </div>
               <UserCheck className="h-8 w-8 text-green-500" />
@@ -85,7 +89,9 @@ const DashboardUser = () => {
           <div className="bg-red-50 rounded-lg p-4 border border-red-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-red-600">{inactiveUsers}</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {inactiveUsers}
+                </div>
                 <div className="text-sm text-red-600">Không hoạt động</div>
               </div>
               <UserX className="h-8 w-8 text-red-500" />
@@ -94,7 +100,9 @@ const DashboardUser = () => {
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-purple-600">{filteredCount}</div>
+                <div className="text-2xl font-bold text-purple-600">
+                  {filteredCount}
+                </div>
                 <div className="text-sm text-purple-600">Đang hiển thị</div>
               </div>
               <Users className="h-8 w-8 text-purple-500" />
@@ -119,12 +127,16 @@ const DashboardUser = () => {
 
             {/* Filter Buttons */}
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Lọc theo trạng thái:</span>
+              <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                Lọc theo trạng thái:
+              </span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setFilterStatus("all")}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    filterStatus === "all" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    filterStatus === "all"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   Tất cả ({totalUsers})
@@ -155,9 +167,15 @@ const DashboardUser = () => {
 
           {/* Current filter info */}
           <div className="text-sm text-gray-600 whitespace-nowrap">
-            {filterStatus === "all" && searchTerm === "" && `Hiển thị tất cả ${totalUsers} người dùng`}
-            {filterStatus === "active" && searchTerm === "" && `Hiển thị ${activeUsers} người dùng đang hoạt động`}
-            {filterStatus === "inactive" && searchTerm === "" && `Hiển thị ${inactiveUsers} người dùng không hoạt động`}
+            {filterStatus === "all" &&
+              searchTerm === "" &&
+              `Hiển thị tất cả ${totalUsers} người dùng`}
+            {filterStatus === "active" &&
+              searchTerm === "" &&
+              `Hiển thị ${activeUsers} người dùng đang hoạt động`}
+            {filterStatus === "inactive" &&
+              searchTerm === "" &&
+              `Hiển thị ${inactiveUsers} người dùng không hoạt động`}
             {searchTerm !== "" && `Tìm thấy ${filteredCount} kết quả`}
           </div>
         </div>
@@ -178,12 +196,14 @@ const DashboardUser = () => {
             { key: "isActive", label: "Trạng thái" },
             { key: "deactivatedReason", label: "Lý do" },
           ]}
-          getIsActive={(row : any) => row.isActiveValue}
+          getIsActive={(row: any) => row.isActiveValue}
           data={filteredUsers.map((user) => ({
             ...user,
             isActiveValue: user.isActive,
             isActive: (
-              <span className={`font-semibold ${user.isActive ? "text-green-600" : "text-red-600"}`}>
+              <span
+                className={`font-semibold ${user.isActive ? "text-green-600" : "text-red-600"}`}
+              >
                 {user.isActive ? "Hoạt động" : "Không hoạt động"}
               </span>
             ),
@@ -197,10 +217,16 @@ const DashboardUser = () => {
                       : "bg-gray-100 text-gray-800"
                 }`}
               >
-                {user.role === "admin" ? "Quản trị viên" : user.role === "staff" ? "Nhân viên" : "Khách hàng"}
+                {user.role === "admin"
+                  ? "Quản trị viên"
+                  : user.role === "staff"
+                    ? "Nhân viên"
+                    : "Khách hàng"}
               </span>
             ),
-            deactivatedReason: user.deactivatedReason ? user.deactivatedReason : "Không có lý do",
+            deactivatedReason: user.deactivatedReason
+              ? user.deactivatedReason
+              : "Không có lý do",
             phone: user.phone ? user.phone : "Không có số điện thoại",
             address: user.address ? user.address : "Không có địa chỉ",
           }))}
@@ -212,8 +238,12 @@ const DashboardUser = () => {
       {filteredUsers.length === 0 && !isLoading && (
         <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200 mt-4">
           <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-1">Không tìm thấy người dùng</h3>
-          <p className="text-gray-500">Không có người dùng nào phù hợp với bộ lọc hiện tại.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-1">
+            Không tìm thấy người dùng
+          </h3>
+          <p className="text-gray-500">
+            Không có người dùng nào phù hợp với bộ lọc hiện tại.
+          </p>
           <button
             onClick={() => {
               setFilterStatus("all");

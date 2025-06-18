@@ -18,11 +18,10 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
 
   return (
     <div className="hidden md:inline-flex w-full items-center text-center gap-5 md:text-sm  lg:text-lg capitalize font-semibold">
-     
       {headers.map((header, index) => (
         <Link
           key={index}
-          href={header.href} 
+          href={header.href}
           className={`hover:text-darkColor hoverEffect   relative group ${
             pathname === header.href && "text-darkColor"
           }`}
@@ -39,10 +38,13 @@ const HeaderMenu = ({ headers }: HeaderMenuProps) => {
             }`}
           />
         </Link>
-        
       ))}
-      <Button onClick={() => redirect("/chatbot")} className="text-lg px-2 p-5 text-white font-normal  bg-black  rounded-full hoverEffect">AI Style</Button>
-
+      <Button
+        onClick={() => redirect("/chatbot")}
+        className="text-lg px-2 p-5 text-white font-normal  bg-black  rounded-full hoverEffect"
+      >
+        AI Style
+      </Button>
     </div>
   );
 };

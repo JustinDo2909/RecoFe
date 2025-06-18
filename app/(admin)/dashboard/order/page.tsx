@@ -2,9 +2,21 @@
 
 import Loading from "@/components/Loading";
 import OrderTable from "@/components/OrderTable";
-import { useGetAllOrderQuery, useGetUsersQuery, useUpdateOrderStatusMutation } from "@/state/api";
+import {
+  useGetAllOrderQuery,
+  useGetUsersQuery,
+  useUpdateOrderStatusMutation,
+} from "@/state/api";
 import type { Order, User } from "@/types";
-import { CheckCircle, Clock, Filter, Search, ShoppingBag, Truck, XCircle } from "lucide-react";
+import {
+  CheckCircle,
+  Clock,
+  Filter,
+  Search,
+  ShoppingBag,
+  Truck,
+  XCircle,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -40,11 +52,19 @@ const statusPaymentViMap: Record<string, string> = {
 //   Pending: "text-yellow-600",
 // };
 
-type FilterStatus = "all" | "Processing" | "Shipping" | "Done" | "Cancel" | "Refund Requested";
+type FilterStatus =
+  | "all"
+  | "Processing"
+  | "Shipping"
+  | "Done"
+  | "Cancel"
+  | "Refund Requested";
 type FilterPayment = "all" | "Paid" | "Failed" | "Pending";
 
 const formatPriceVND = (price: number) =>
-  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(price);
+  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
+    price,
+  );
 
 const formatDate = (dateString: string) =>
   new Date(dateString).toLocaleDateString("vi-VN", {
@@ -91,15 +111,19 @@ const DashboardOrder = () => {
   const filteredOrders = useMemo(() => {
     return orderList.filter((order) => {
       // Filter by status
-      const statusMatch = filterStatus === "all" || order.statusOrder === filterStatus;
+      const statusMatch =
+        filterStatus === "all" || order.statusOrder === filterStatus;
 
       // Filter by payment status
-      const paymentMatch = filterPayment === "all" || order.statusPayment === filterPayment;
+      const paymentMatch =
+        filterPayment === "all" || order.statusPayment === filterPayment;
 
       // Filter by search term
       const searchMatch =
         searchTerm === "" ||
-        usersMap[order.userId]?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        usersMap[order.userId]
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.paymentMethod?.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -109,37 +133,57 @@ const DashboardOrder = () => {
 
   // Calculate statistics
   const totalOrders = orderList.length;
-  const processingOrders = orderList.filter((o) => o.statusOrder === "Processing").length;
-  const shippingOrders = orderList.filter((o) => o.statusOrder === "Shipping").length;
+  const processingOrders = orderList.filter(
+    (o) => o.statusOrder === "Processing",
+  ).length;
+  const shippingOrders = orderList.filter(
+    (o) => o.statusOrder === "Shipping",
+  ).length;
   const doneOrders = orderList.filter((o) => o.statusOrder === "Done").length;
-  const cancelOrders = orderList.filter((o) => o.statusOrder === "Cancel").length;
+  const cancelOrders = orderList.filter(
+    (o) => o.statusOrder === "Cancel",
+  ).length;
   const filteredCount = filteredOrders.length;
 
   console.log("orderList", orderList);
   console.log(
     "filtered",
     orderList.filter(
-      (o) => o.statusOrder?.toLowerCase().trim() === "done" && o.statusPayment?.toLowerCase().trim() === "paid"
-    )
+      (o) =>
+        o.statusOrder?.toLowerCase().trim() === "done" &&
+        o.statusPayment?.toLowerCase().trim() === "paid",
+    ),
   );
 
   // Calculate total revenue
   const totalRevenue = orderList
-    .filter((o) => o.statusOrder?.toLowerCase().trim() === "done" && o.statusPayment?.toLowerCase().trim() === "paid")
+    .filter(
+      (o) =>
+        o.statusOrder?.toLowerCase().trim() === "done" &&
+        o.statusPayment?.toLowerCase().trim() === "paid",
+    )
     .reduce((sum, order) => sum + (Number(order.totalPrice) || 0), 0);
 
   if (!isMounted) {
     return null;
   }
 
-  const handleUpdateStatus = async (id: string, status: string, reason?: string) => {
+  const handleUpdateStatus = async (
+    id: string,
+    status: string,
+    reason?: string,
+  ) => {
     try {
       const result = await updateOrderStatus({
         id,
         statusOrder: status,
         reason,
       }).unwrap();
-      setOrderList((prev) => prev.map((order) => (order._id === id ? { ...order, statusOrder: status } : order)));
+      setOrderList((prev) =>
+        prev.map((order) =>
+          order._id === id ? { ...order, statusOrder: status } : order,
+        ),
+      );
       toast.success(result.message);
       refetch();
     } catch {
@@ -158,7 +202,9 @@ const DashboardOrder = () => {
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{totalOrders}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {totalOrders}
+                </div>
                 <div className="text-sm text-blue-600">Tổng đơn hàng</div>
               </div>
               <ShoppingBag className="h-8 w-8 text-blue-500" />
@@ -168,7 +214,9 @@ const DashboardOrder = () => {
           <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-yellow-600">{processingOrders}</div>
+                <div className="text-2xl font-bold text-yellow-600">
+                  {processingOrders}
+                </div>
                 <div className="text-sm text-yellow-600">Đang xử lý</div>
               </div>
               <Clock className="h-8 w-8 text-yellow-500" />
@@ -178,7 +226,9 @@ const DashboardOrder = () => {
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{shippingOrders}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {shippingOrders}
+                </div>
                 <div className="text-sm text-blue-600">Đang giao</div>
               </div>
               <Truck className="h-8 w-8 text-blue-500" />
@@ -188,7 +238,9 @@ const DashboardOrder = () => {
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-green-600">{doneOrders}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {doneOrders}
+                </div>
                 <div className="text-sm text-green-600">Hoàn thành</div>
               </div>
               <CheckCircle className="h-8 w-8 text-green-500" />
@@ -198,7 +250,9 @@ const DashboardOrder = () => {
           <div className="bg-red-50 rounded-lg p-4 border border-red-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-2xl font-bold text-red-600">{cancelOrders}</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {cancelOrders}
+                </div>
                 <div className="text-sm text-red-600">Đã hủy</div>
               </div>
               <XCircle className="h-8 w-8 text-red-500" />
@@ -208,7 +262,9 @@ const DashboardOrder = () => {
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xl font-bold text-purple-600">{formatPriceVND(totalRevenue)}</div>
+                <div className="text-xl font-bold text-purple-600">
+                  {formatPriceVND(totalRevenue)}
+                </div>
                 <div className="text-sm text-purple-600">Doanh thu</div>
               </div>
               <ShoppingBag className="h-8 w-8 text-purple-500" />
@@ -236,7 +292,9 @@ const DashboardOrder = () => {
               <Filter className="h-4 w-4 text-gray-500" />
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                onChange={(e) =>
+                  setFilterStatus(e.target.value as FilterStatus)
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tất cả trạng thái</option>
@@ -252,7 +310,9 @@ const DashboardOrder = () => {
             <div className="flex items-center gap-2">
               <select
                 value={filterPayment}
-                onChange={(e) => setFilterPayment(e.target.value as FilterPayment)}
+                onChange={(e) =>
+                  setFilterPayment(e.target.value as FilterPayment)
+                }
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tất cả thanh toán</option>
@@ -265,7 +325,9 @@ const DashboardOrder = () => {
 
           {/* Current filter info */}
           <div className="text-sm text-gray-600 whitespace-nowrap">
-            {searchTerm === "" && filterStatus === "all" && filterPayment === "all"
+            {searchTerm === "" &&
+            filterStatus === "all" &&
+            filterPayment === "all"
               ? `Hiển thị tất cả ${totalOrders} đơn hàng`
               : `Tìm thấy ${filteredCount} kết quả`}
           </div>
@@ -281,18 +343,28 @@ const DashboardOrder = () => {
             {
               key: "userId",
               label: "Tên người dùng",
-              render: (userId: any) => <span className="font-medium text-gray-900">{usersMap[userId] || userId}</span>,
+              render: (userId: any) => (
+                <span className="font-medium text-gray-900">
+                  {usersMap[userId] || userId}
+                </span>
+              ),
             },
             {
               key: "totalPrice",
               label: "Giá",
-              render: (value: any) => <span className="font-semibold text-green-600">{formatPriceVND(value)}</span>,
+              render: (value: any) => (
+                <span className="font-semibold text-green-600">
+                  {formatPriceVND(value)}
+                </span>
+              ),
             },
             {
               key: "paymentMethod",
               label: "Phương thức thanh toán",
               render: (value: any) => (
-                <span className="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-700">{value}</span>
+                <span className="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-700">
+                  {value}
+                </span>
               ),
             },
             {
@@ -336,7 +408,9 @@ const DashboardOrder = () => {
             {
               key: "createdAt",
               label: "Ngày tạo",
-              render: (value: any) => <span className="text-gray-600">{formatDate(value)}</span>,
+              render: (value: any) => (
+                <span className="text-gray-600">{formatDate(value)}</span>
+              ),
             },
           ]}
           onUpdateStatus={handleUpdateStatus}
@@ -347,8 +421,12 @@ const DashboardOrder = () => {
       {filteredOrders.length === 0 && !isLoading && (
         <div className="bg-gray-50 rounded-lg p-8 text-center border border-gray-200 mt-4">
           <ShoppingBag className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-1">Không tìm thấy đơn hàng</h3>
-          <p className="text-gray-500">Không có đơn hàng nào phù hợp với bộ lọc hiện tại.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-1">
+            Không tìm thấy đơn hàng
+          </h3>
+          <p className="text-gray-500">
+            Không có đơn hàng nào phù hợp với bộ lọc hiện tại.
+          </p>
           <button
             onClick={() => {
               setFilterStatus("all");

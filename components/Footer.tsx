@@ -24,9 +24,10 @@ const Footer = () => {
           <div className="space-y-4">
             <LogoReco className="justify-center flex md:justify-start" />
             <p className="text-gray-600 text-sm  pb-4">
-              Mỗi sản phẩm của RECO đều được thiết kế lại, từ những chiếc áo cũ, túi xách đã qua sử dụng đến các phụ kiện, tất cả đều được biến hóa để mang lại sự tươi mới và độc đáo.
+              Mỗi sản phẩm của RECO đều được thiết kế lại, từ những chiếc áo cũ,
+              túi xách đã qua sử dụng đến các phụ kiện, tất cả đều được biến hóa
+              để mang lại sự tươi mới và độc đáo.
             </p>
-           
           </div>
           <div>
             <h3 className="font-semibold text-darkColor mb-4">RECO</h3>
@@ -59,7 +60,8 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-darkColor mb-4">Tham Gia Ngay</h3>
             <p className="text-gray-600 text-sm mb-4">
-             Trở thành thành viên của RECO để được tích điểm & nhận ưu đãi cho lần mua hàng tiếp theo!
+              Trở thành thành viên của RECO để được tích điểm & nhận ưu đãi cho
+              lần mua hàng tiếp theo!
             </p>
             <form className="space-y-3">
               <Input

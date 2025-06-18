@@ -34,7 +34,11 @@ const AppSidebar = () => {
 
   const navLinks = {
     admin: [
-      { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard/overview" },
+      {
+        icon: LayoutDashboard,
+        label: "Dashboard",
+        href: "/dashboard/overview",
+      },
       { icon: User, label: "Người dùng", href: "/dashboard/user" },
       { icon: BookOpen, label: "Loại", href: "/dashboard/category" },
       { icon: Package, label: "Đơn hàng", href: "/dashboard/order" },
@@ -55,7 +59,11 @@ const AppSidebar = () => {
   const userType: "admin" = user?.user.role;
   const currentNavLinks = navLinks[userType];
   return (
-    <Sidebar collapsible="icon" style={{ height: "100vh" }} className="bg-white border-none shadow-lg">
+    <Sidebar
+      collapsible="icon"
+      style={{ height: "100vh" }}
+      className="bg-white border-none shadow-lg"
+    >
       <SidebarHeader>
         <SidebarMenu className="mt-5 group-data-[collapsible=icon]:mt-7">
           <SidebarMenuItem>
@@ -70,7 +78,9 @@ const AppSidebar = () => {
                     <LogoReco className=" transition duration-200 group-data-[collapsible=icon]:group-hover:brightness-75 w-auto" />
                   </div>
 
-                  <p className="text-lg font-extrabold group-data-[collapsible=icon]:hidden">RECO</p>
+                  <p className="text-lg font-extrabold group-data-[collapsible=icon]:hidden">
+                    RECO
+                  </p>
                 </div>
                 <PanelLeft className="text-gray-400 w-5 h-5 group-data-[collapsible=icon]:hidden" />
               </div>
@@ -87,7 +97,7 @@ const AppSidebar = () => {
                 key={link.href}
                 className={cn(
                   "group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:py-4 hover:bg-customgreys-secondarybg",
-                  isActive && "bg-gray-800 text-white"
+                  isActive && "bg-gray-800 text-white",
                 )}
               >
                 <SidebarMenuButton
@@ -95,22 +105,30 @@ const AppSidebar = () => {
                   size="lg"
                   className={cn(
                     "gap-4 p-8 hover:bg-customgreys-secondarybg group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center",
-                    !isActive && "text-customgreys-dirtyGrey"
+                    !isActive && "text-customgreys-dirtyGrey",
                   )}
                 >
-                  <Link href={link.href} className="relative flex items-center" scroll={false}>
-                    <link.icon className={isActive ? "text-white-50" : "text-gray-500"} />
+                  <Link
+                    href={link.href}
+                    className="relative flex items-center"
+                    scroll={false}
+                  >
+                    <link.icon
+                      className={isActive ? "text-white-50" : "text-gray-500"}
+                    />
                     <span
                       className={cn(
                         "font-medium text-md ml-4 group-data-[collapsible=icon]:hidden",
-                        isActive ? "text-white-50" : "text-gray-500"
+                        isActive ? "text-white-50" : "text-gray-500",
                       )}
                     >
                       {link.label}
                     </span>
                   </Link>
                 </SidebarMenuButton>
-                {isActive && <div className="absolute right-0 top-0 h-full w-[4px] bg-primary-750" />}
+                {isActive && (
+                  <div className="absolute right-0 top-0 h-full w-[4px] bg-primary-750" />
+                )}
               </SidebarMenuItem>
             );
           })}

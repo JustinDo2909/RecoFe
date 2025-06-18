@@ -20,7 +20,7 @@
 //   return (
 //     <Box className="flex flex-col gap-4">
 //       <Row className='flex items-center gap-4'>
-//         <QuantityButton quantity={quantity} increment={increment} decrement={decrement}/> 
+//         <QuantityButton quantity={quantity} increment={increment} decrement={decrement}/>
 //         <RText className='text-gray-500'>{totalStock} left in stock</RText>
 //       </Row>
 //       <Row className='flex space-x-4'>

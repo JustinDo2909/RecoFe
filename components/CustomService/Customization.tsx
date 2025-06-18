@@ -32,7 +32,7 @@ const Customization = () => {
           onClick: () =>
             window.open(
               "https://www.facebook.com/profile.php?id=61576419491353",
-              "_blank"
+              "_blank",
             ),
         }}
       />
