@@ -46,7 +46,7 @@ const CartPage = () => {
   }, [user]);
   const { data: cartProducts = [], refetch: cartRefetch } = useGetCardQuery();
   const [deleteAllCart] = useDeleteAllProductToCardMutation();
-  const [ setItemCount] = useState(0);
+  const [itemCount, setItemCount] = useState(0);
   const [districSelected, setDistricSelected] = useState("");
   const [provinceSelected, setProvinceSelected] = useState("");
   const [wardSelected, setWardSelected] = useState("");
@@ -71,7 +71,7 @@ const CartPage = () => {
   const { data: wallet, refetch: refetchWallet } = useGetWalletQuery({});
   const [address, setAddress] = useState("");
   const socket = useSocket();
-
+console.log('',itemCount )
   useEffect(() => {
     if (!socket) return;
     const handler = (wallet: { refundAmount: number }) => {
