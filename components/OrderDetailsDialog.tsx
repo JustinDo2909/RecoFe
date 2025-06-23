@@ -108,7 +108,7 @@ const OrderDetailsDialog: FC<Props> = ({ order, isOpen, onClose }) => {
 
                 <TableCell>{product?.quantity}</TableCell>
                 <TableCell>{order?.feeShipping} đ</TableCell>
-                <TableCell>{product?.finalPrice} đ</TableCell>
+                <TableCell>{(product as any)?.price} đ</TableCell>
               </TableRow>
             ))}
           </TableBody>
