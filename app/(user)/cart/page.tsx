@@ -185,7 +185,7 @@ console.log('',itemCount )
       await createOrder({
         paymentMethod: "Cash",
         statusOrder: "",
-        statusPayment: "Paid",
+        statusPayment: "Failed",
         feeShipping: Number(feeShipping) || 0,
         address: addressString,
       });
@@ -255,13 +255,13 @@ console.log('',itemCount )
         address: addressString,
       }).unwrap();
 
-      await createOrder({
-        paymentMethod: "Wallet",
-        statusOrder: "",
-        statusPayment: "Paid",
-        feeShipping: Number(feeShipping),
-        address: addressString,
-      });
+      // await createOrder({
+      //   paymentMethod: "Wallet",
+      //   statusOrder: "",
+      //   statusPayment: "Paid",
+      //   feeShipping: Number(feeShipping),
+      //   address: addressString,
+      // });
 
       await deleteAllCart({}).unwrap();
       toast.success("Thanh toán bằng ví thành công!");
