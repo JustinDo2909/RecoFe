@@ -1,5 +1,8 @@
 "use client";
-import { createCheckoutSession, Metadata } from "@/actions/createCheckoutSession";
+import {
+  createCheckoutSession,
+  Metadata,
+} from "@/actions/createCheckoutSession";
 import Container from "@/components/Container";
 import EmptyCart from "@/components/EmptyCart";
 import NoAccessToCart from "@/components/NoAccessToCart";
@@ -9,7 +12,12 @@ import QuantityButtons from "@/components/QuantityButtons";
 import { SelectFiled } from "@/components/SelectFiled";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useUser } from "@/hooks/useUser";
 import { useSocket } from "@/hooks/useWebSocket";
 import paypalLogo from "@/images/paypalLogo.png";
@@ -27,7 +35,13 @@ import {
   useGetWardsQuery,
 } from "@/state/apiGHN";
 import useCartStore from "@/store";
-import { BanknoteIcon, DollarSign, ShoppingBag, Trash, WalletIcon } from "lucide-react";
+import {
+  BanknoteIcon,
+  DollarSign,
+  ShoppingBag,
+  Trash,
+  WalletIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -71,7 +85,7 @@ const CartPage = () => {
   const { data: wallet, refetch: refetchWallet } = useGetWalletQuery({});
   const [address, setAddress] = useState("");
   const socket = useSocket();
-console.log('',itemCount )
+  console.log("", itemCount);
   useEffect(() => {
     if (!socket) return;
     const handler = (wallet: { refundAmount: number }) => {
@@ -135,9 +149,15 @@ console.log('',itemCount )
   };
 
   const handleCheckout = async () => {
-    const selectedProvince = province?.find((p: { codeId: string }) => p.codeId === provinceSelected);
-    const selectedDistrict = district?.find((d: { codeId: string }) => d.codeId === districSelected);
-    const selectedWard = ward?.find((w: { codeId: string }) => w.codeId === wardSelected);
+    const selectedProvince = province?.find(
+      (p: { codeId: string }) => p.codeId === provinceSelected
+    );
+    const selectedDistrict = district?.find(
+      (d: { codeId: string }) => d.codeId === districSelected
+    );
+    const selectedWard = ward?.find(
+      (w: { codeId: string }) => w.codeId === wardSelected
+    );
 
     if (!selectedProvince || !selectedDistrict || !selectedWard) {
       toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
@@ -155,7 +175,12 @@ console.log('',itemCount )
         address: addressString,
       };
       if (cartProducts && feeShipping > 0) {
-        const checkoutUrl = await createCheckoutSession(feeShipping, cartProducts, metadata, () => deleteAllCart({}));
+        const checkoutUrl = await createCheckoutSession(
+          feeShipping,
+          cartProducts,
+          metadata,
+          () => deleteAllCart({})
+        );
         if (checkoutUrl) {
           window.location.href = checkoutUrl;
         }
@@ -168,9 +193,15 @@ console.log('',itemCount )
   };
 
   const handleCheckoutCash = async () => {
-    const selectedProvince = province?.find((p: { codeId: string }) => p.codeId === provinceSelected);
-    const selectedDistrict = district?.find((d: { codeId: string }) => d.codeId === districSelected);
-    const selectedWard = ward?.find((w: { codeId: string }) => w.codeId === wardSelected);
+    const selectedProvince = province?.find(
+      (p: { codeId: string }) => p.codeId === provinceSelected
+    );
+    const selectedDistrict = district?.find(
+      (d: { codeId: string }) => d.codeId === districSelected
+    );
+    const selectedWard = ward?.find(
+      (w: { codeId: string }) => w.codeId === wardSelected
+    );
 
     if (!selectedProvince || !selectedDistrict || !selectedWard) {
       toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
@@ -192,7 +223,7 @@ console.log('',itemCount )
       await deleteAllCart({}).unwrap();
       toast.success("Order created successfully , Please check your order!");
       window.location.reload();
-    } catch  {
+    } catch {
       toast.error("Có lỗi xảy ra khi tạo đơn hàng!");
     } finally {
       setLoading(false);
@@ -206,7 +237,7 @@ console.log('',itemCount )
         cartProducts?.reduce((total, item) => {
           const price = item.productId.price as number;
           const quantity = item.quantity as number;
-          return total + price * quantity;
+          return total + price * quantity + Number(feeShipping) || 0;
         }, 0) -
         (cartProducts?.reduce((total, item) => {
           const price = item.productId.price ?? 0;
@@ -225,9 +256,15 @@ console.log('',itemCount )
         return;
       }
 
-      const selectedProvince = province?.find((p: { codeId: string }) => p.codeId === provinceSelected);
-      const selectedDistrict = district?.find((d: { codeId: string }) => d.codeId === districSelected);
-      const selectedWard = ward?.find((w: { codeId: string }) => w.codeId === wardSelected);
+      const selectedProvince = province?.find(
+        (p: { codeId: string }) => p.codeId === provinceSelected
+      );
+      const selectedDistrict = district?.find(
+        (d: { codeId: string }) => d.codeId === districSelected
+      );
+      const selectedWard = ward?.find(
+        (w: { codeId: string }) => w.codeId === wardSelected
+      );
 
       if (!selectedProvince || !selectedDistrict || !selectedWard) {
         toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
@@ -287,7 +324,10 @@ console.log('',itemCount )
                 </div>
                 <div className="text-2xl font-semibold flex justify-center items-center gap-1">
                   <WalletIcon /> :{" "}
-                  <PriceFormatter className="text-red-500 text-2xl" amount={(wallet as any)?.wallet ?? 0} />
+                  <PriceFormatter
+                    className="text-red-500 text-2xl"
+                    amount={(wallet as any)?.wallet ?? 0}
+                  />
                 </div>
               </div>
               <div className="grid lg:grid-cols-3 md:gap-8">
@@ -318,13 +358,23 @@ console.log('',itemCount )
                             )}
                             <div className="h-full flex flex-1 items-start flex-col justify-between py-1">
                               <div className="space-y-1.5">
-                                <h2 className="font-semibold line-clamp-1">{product?.productId.name}</h2>
-                                <p className="text-sm text-lightColor font-medium">{product?.productId.description}</p>
-                                <p className="text-sm capitalize">
-                                  Số lượng còn lại: <span className="font-semibold">{product?.productId.stock}</span>
+                                <h2 className="font-semibold line-clamp-1">
+                                  {product?.productId.name}
+                                </h2>
+                                <p className="text-sm text-lightColor font-medium">
+                                  {product?.productId.description}
                                 </p>
                                 <p className="text-sm capitalize">
-                                  Mô tả: <span className="font-semibold">{product?.productId.decription}</span>
+                                  Số lượng còn lại:{" "}
+                                  <span className="font-semibold">
+                                    {product?.productId.stock}
+                                  </span>
+                                </p>
+                                <p className="text-sm capitalize">
+                                  Mô tả:{" "}
+                                  <span className="font-semibold">
+                                    {product?.productId.decription}
+                                  </span>
                                 </p>
                               </div>
                               <div className="text-gray-500 flex items-center gap-2">
@@ -332,7 +382,11 @@ console.log('',itemCount )
                                   <Tooltip>
                                     <TooltipTrigger>
                                       <Trash
-                                        onClick={() => handleDeleteProduct(product?.productId._id)}
+                                        onClick={() =>
+                                          handleDeleteProduct(
+                                            product?.productId._id
+                                          )
+                                        }
                                         className="w-4 h-4 md:w-5 md:h-5 hover:text-red-600 hoverEffect"
                                       />
                                     </TooltipTrigger>
@@ -346,7 +400,10 @@ console.log('',itemCount )
                             <div className="flex flex-col items-start justify-between h-36 md:h-44 p-0.5 md:p-1">
                               <PriceView
                                 className="font-bold text-lg"
-                                price={(product?.productId.price as number) * (product?.quantity as number)}
+                                price={
+                                  (product?.productId.price as number) *
+                                  (product?.quantity as number)
+                                }
                                 discount={20}
                               />
                               <QuantityButtons
@@ -360,7 +417,11 @@ console.log('',itemCount )
                         </div>
                       );
                     })}
-                    <Button onClick={handleResetCart} className="m-5 font-semibold" variant="destructive">
+                    <Button
+                      onClick={handleResetCart}
+                      className="m-5 font-semibold"
+                      variant="destructive"
+                    >
                       Xóa trắng giỏ hàng
                     </Button>
                   </div>
@@ -397,7 +458,9 @@ console.log('',itemCount )
                   {/* Summary */}
                   <div className="lg:col-span-1">
                     <div className="hidden md:inline-block w-full bg-white p-6 rounded-lg border">
-                      <h2 className="text-xl font-semibold mb-4">Chi tiết đơn hàng</h2>
+                      <h2 className="text-xl font-semibold mb-4">
+                        Chi tiết đơn hàng
+                      </h2>
                       <div className="space-y-4">
                         <div className="flex justify-between">
                           <span>Giá sản phẩm</span>
@@ -415,7 +478,9 @@ console.log('',itemCount )
                             amount={
                               cartProducts?.reduce((total, item) => {
                                 const price = item.productId.price ?? 0;
-                                const discount = ((item.productId.discount ?? 0) * price) / 100;
+                                const discount =
+                                  ((item.productId.discount ?? 0) * price) /
+                                  100;
                                 const discountedPrice = price + discount;
                                 return total + discountedPrice * item.quantity;
                               }, 0) -
@@ -443,7 +508,9 @@ console.log('',itemCount )
                               }, 0) -
                               (cartProducts?.reduce((total, item) => {
                                 const price = item.productId.price ?? 0;
-                                const discount = ((item.productId.discount ?? 0) * price) / 100;
+                                const discount =
+                                  ((item.productId.discount ?? 0) * price) /
+                                  100;
                                 const discountedPrice = price + discount;
                                 return total + discountedPrice * item.quantity;
                               }, 0) -
@@ -458,7 +525,9 @@ console.log('',itemCount )
                           />
                         </div>
                         <Button
-                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
                           onClick={handleCheckoutWallet}
                           className="w-full rounded-full font-semibold tracking-wide bg-green-500"
                           size="lg"
@@ -466,7 +535,9 @@ console.log('',itemCount )
                           Thanh toán bằng ví <WalletIcon />
                         </Button>
                         <Button
-                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
                           onClick={handleCheckoutCash}
                           className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
                           size="lg"
@@ -474,7 +545,9 @@ console.log('',itemCount )
                           Thanh toán khi nhận <DollarSign />
                         </Button>
                         <Button
-                          disabled={loading || !cartProducts?.length || !feeShipping}
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
                           onClick={handleCheckout}
                           className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
                           size="lg"
@@ -497,7 +570,9 @@ console.log('',itemCount )
                 {/* Order summary for mobile view */}
                 <div className="md:hidden fixed bottom-0 left-0 w-full bg-white pt-2">
                   <div className="p-4 rounded-lg border mx-4">
-                    <h2 className="text-xl font-semibold mb-4">Chi tiêt đơn hàng</h2>
+                    <h2 className="text-xl font-semibold mb-4">
+                      Chi tiêt đơn hàng
+                    </h2>
                     <div className="space-y-4">
                       <div className="flex justify-between">
                         <span>Giá sản phẩm</span>
@@ -505,7 +580,9 @@ console.log('',itemCount )
                       </div>
                       <div className="flex justify-between">
                         <span>Giảm giá</span>
-                        <PriceFormatter amount={getSubtotalPrice() - getTotalPrice()} />
+                        <PriceFormatter
+                          amount={getSubtotalPrice() - getTotalPrice()}
+                        />
                       </div>
                       <div className="flex justify-between">
                         <span>Phí giao hàng</span>
@@ -520,7 +597,9 @@ console.log('',itemCount )
                         />
                       </div>
                       <Button
-                        disabled={loading || !cartProducts?.length || !feeShipping}
+                        disabled={
+                          loading || !cartProducts?.length || !feeShipping
+                        }
                         onClick={handleCheckoutWallet}
                         className="w-full rounded-full font-semibold tracking-wide bg-green-500"
                         size="lg"
@@ -528,7 +607,9 @@ console.log('',itemCount )
                         Thanh toán bằng ví <WalletIcon />
                       </Button>
                       <Button
-                        disabled={loading || !cartProducts?.length || !feeShipping}
+                        disabled={
+                          loading || !cartProducts?.length || !feeShipping
+                        }
                         onClick={handleCheckoutCash}
                         className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
                         size="lg"
@@ -536,7 +617,9 @@ console.log('',itemCount )
                         Thanh toán khi nhận <DollarSign />
                       </Button>
                       <Button
-                        disabled={loading || !cartProducts?.length || !feeShipping}
+                        disabled={
+                          loading || !cartProducts?.length || !feeShipping
+                        }
                         onClick={handleCheckout}
                         className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
                         size="lg"
@@ -547,7 +630,11 @@ console.log('',itemCount )
                         href={"/"}
                         className="flex items-center justify-center py-2 border border-darkColor/50 rounded-full hover:border-darkColor hover:bg-darkColor/5 hoverEffect"
                       >
-                        <Image src={paypalLogo} alt="paypalLogo" className="w-20" />
+                        <Image
+                          src={paypalLogo}
+                          alt="paypalLogo"
+                          className="w-20"
+                        />
                       </Link>
                     </div>
                   </div>
