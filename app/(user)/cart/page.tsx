@@ -353,9 +353,9 @@ const CartPage = () => {
 
   return (
     <div className="bg-gray-50 pb-52 md:pb-10">
-      {!isClient ? (
+      {isClient ? (
         <Container>
-          {!cartProducts?.length ? (
+          {cartProducts?.length ? (
             <>
               <div className="flex items-center gap-10 py-5 ">
                 <div className=" flex justify-center items-center gap-4">
@@ -595,9 +595,9 @@ const CartPage = () => {
                           Thanh toán bằng Stripe <BanknoteIcon />
                         </Button>
                         <Button
-                          // disabled={
-                          //   loading || !cartProducts?.length || !feeShipping
-                          // }
+                          disabled={
+                            loading || !cartProducts?.length || !feeShipping
+                          }
                           onClick={handleQR}
                           className="w-full rounded-full font-semibold tracking-wide bg-teal-500"
                           size="lg"
