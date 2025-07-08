@@ -52,7 +52,7 @@ const CartPage = () => {
   const [loading, setLoading] = useState(false);
   const { deleteCartProduct, getTotalPrice, getSubtotalPrice } = useCartStore();
   const { user } = useUser();
-
+  const [qrUrl, setQrUrl] = useState("");
   useEffect(() => {
     if (user) {
       setIsClient(true);
@@ -146,6 +146,46 @@ const CartPage = () => {
   const handleDeleteProduct = (id: string) => {
     deleteCartProduct(id);
     toast.success("Product deleted successfully!");
+  };
+
+  const handleQR = async () => {
+    if (!cartProducts?.length || !feeShipping) {
+      toast.error("Không có sản phẩm hoặc phí vận chuyển chưa được tính!");
+      return;
+    }
+
+    const totalAmount =
+      cartProducts.reduce((total, item) => {
+        const price = item.productId.price as number;
+        const quantity = item.quantity as number;
+        return total + price * quantity;
+      }, 0) -
+      (cartProducts.reduce((total, item) => {
+        const price = item.productId.price ?? 0;
+        const discount = ((item.productId.discount ?? 0) * price) / 100;
+        const discountedPrice = price + discount;
+        return total + discountedPrice * item.quantity;
+      }, 0) -
+        cartProducts.reduce((total, item) => {
+          const price = item.productId.price as number;
+          const quantity = item.quantity as number;
+          return total + price * quantity;
+        }, 0)) +
+      feeShipping;
+
+    const bankCode = "970436"; // Mã ngân hàng của bạn
+    const accountNumber = "1025533132"; // Số tài khoản
+    const template = "compact2"; // Giao diện mã QR
+    const amount = Math.round(totalAmount); // Làm tròn nếu cần
+    const addInfo = encodeURIComponent(
+      `Thanh toan don hang ${crypto.randomUUID()}`
+    );
+    const accountName = encodeURIComponent("DO MINH HIEU");
+
+    const qrUrl = `https://img.vietqr.io/image/${bankCode}-${accountNumber}-${template}.png?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+
+    // Mở cửa sổ mới hiển thị mã QR
+    setQrUrl(qrUrl);
   };
 
   const handleCheckout = async () => {
@@ -313,9 +353,9 @@ const CartPage = () => {
 
   return (
     <div className="bg-gray-50 pb-52 md:pb-10">
-      {isClient ? (
+      {!isClient ? (
         <Container>
-          {cartProducts?.length ? (
+          {!cartProducts?.length ? (
             <>
               <div className="flex items-center gap-10 py-5 ">
                 <div className=" flex justify-center items-center gap-4">
@@ -554,6 +594,38 @@ const CartPage = () => {
                         >
                           Thanh toán bằng Stripe <BanknoteIcon />
                         </Button>
+                        <Button
+                          // disabled={
+                          //   loading || !cartProducts?.length || !feeShipping
+                          // }
+                          onClick={handleQR}
+                          className="w-full rounded-full font-semibold tracking-wide bg-teal-500"
+                          size="lg"
+                        >
+                          Thanh toán bằng QR <BanknoteIcon />
+                        </Button>
+                        {qrUrl && (
+                          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+                            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                              <h2 className="text-lg font-semibold mb-4">
+                                Quét mã để thanh toán
+                              </h2>
+                              <Image
+                                src={qrUrl}
+                                alt="QR thanh toán"
+                                className="w-80 mx-auto mb-4"
+                                width={200}
+                                height={200}
+                              />
+                              <Button
+                                onClick={() => setQrUrl("")}
+                                className="bg-red-500 text-white"
+                              >
+                                Đóng
+                              </Button>
+                            </div>
+                          </div>
+                        )}
 
                         {/* <Button
                           disabled={loading || !cartProducts?.length || !feeShipping}
