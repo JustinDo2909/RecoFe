@@ -48,7 +48,7 @@ const AddToCartButton = ({ product, className, quantity }: Props) => {
       {itemCount > 0 ? (
         <div className="w-full text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Quantity</span>
+            <span className="text-xs text-muted-foreground">Số lượng còn lại</span>
             <QuantityButtons
               product={product}
               cartList={cartList || []}
@@ -58,7 +58,7 @@ const AddToCartButton = ({ product, className, quantity }: Props) => {
           </div>
           <div className="flex items-center justify-between border-t pt-1">
             <span className="text-xs font-semibold">Giá sản phẩm</span>
-            <PriceFormatter amount={product.finalPrice * itemCount} />
+            <PriceFormatter amount={product.price * itemCount} />
           </div>
         </div>
       ) : (

@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       "cdnd.lystit.com",
       "static.super-shop.com",
       "cdn.shopify.com",
+      "img.vietqr.io",
       "images-eu.ssl-images-amazon.com",
       "www.dhgate.com",
       "i5.walmartimages.com",
