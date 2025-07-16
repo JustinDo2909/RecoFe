@@ -152,44 +152,87 @@ const CartPage = () => {
     }
   };
 
+  // const handleQR = async () => {
+  //   if (!cartProducts?.length || !feeShipping) {
+  //     toast.error("Không có sản phẩm hoặc phí vận chuyển chưa được tính!");
+  //     return;
+  //   }
+
+  //   const totalAmount =
+  //     cartProducts.reduce((total, item) => {
+  //       const price = item.productId.price as number;
+  //       const quantity = item.quantity as number;
+  //       return total + price * quantity;
+  //     }, 0) -
+  //     (cartProducts.reduce((total, item) => {
+  //       const price = item.productId.price ?? 0;
+  //       const discount = ((item.productId.discount ?? 0) * price) / 100;
+  //       const discountedPrice = price + discount;
+  //       return total + discountedPrice * item.quantity;
+  //     }, 0) -
+  //       cartProducts.reduce((total, item) => {
+  //         const price = item.productId.price as number;
+  //         const quantity = item.quantity as number;
+  //         return total + price * quantity;
+  //       }, 0)) +
+  //     feeShipping;
+
+  //   const bankCode = "970436"; // Mã ngân hàng của bạn
+  //   const accountNumber = "1025533132"; // Số tài khoản
+  //   const template = "compact2"; // Giao diện mã QR
+  //   const amount = Math.round(totalAmount); // Làm tròn nếu cần
+  //   const addInfo = encodeURIComponent(`Thanh toan don hang ${crypto.randomUUID()}`);
+  //   const accountName = encodeURIComponent("DO MINH HIEU");
+
+  //   const qrUrl = `https://img.vietqr.io/image/${bankCode}-${accountNumber}-${template}.png?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+
+  //   // Mở cửa sổ mới hiển thị mã QR
+  //   setQrUrl(qrUrl);
+  // };
+
+  //------------------------------------------------------------------------
+  // Ở đây
   const handleQR = async () => {
     if (!cartProducts?.length || !feeShipping) {
       toast.error("Không có sản phẩm hoặc phí vận chuyển chưa được tính!");
       return;
     }
 
-    const totalAmount =
-      cartProducts.reduce((total, item) => {
-        const price = item.productId.price as number;
-        const quantity = item.quantity as number;
-        return total + price * quantity;
-      }, 0) -
-      (cartProducts.reduce((total, item) => {
-        const price = item.productId.price ?? 0;
-        const discount = ((item.productId.discount ?? 0) * price) / 100;
-        const discountedPrice = price + discount;
-        return total + discountedPrice * item.quantity;
-      }, 0) -
-        cartProducts.reduce((total, item) => {
-          const price = item.productId.price as number;
-          const quantity = item.quantity as number;
-          return total + price * quantity;
-        }, 0)) +
-      feeShipping;
+    try {
+      const token = localStorage.getItem("token");
+      setLoading(true);
 
-    const bankCode = "970436"; // Mã ngân hàng của bạn
-    const accountNumber = "1025533132"; // Số tài khoản
-    const template = "compact2"; // Giao diện mã QR
-    const amount = Math.round(totalAmount); // Làm tròn nếu cần
-    const addInfo = encodeURIComponent(`Thanh toan don hang ${crypto.randomUUID()}`);
-    const accountName = encodeURIComponent("DO MINH HIEU");
+      const res = await fetch("https://deployexe-be-1.onrender.com/payOS/create-payment-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          items: cartProducts,
+          feeShipping,
+          address,
+        }),
+      });
 
-    const qrUrl = `https://img.vietqr.io/image/${bankCode}-${accountNumber}-${template}.png?amount=${amount}&addInfo=${addInfo}&accountName=${accountName}`;
+      const data = await res.json();
 
-    // Mở cửa sổ mới hiển thị mã QR
-    setQrUrl(qrUrl);
+      console.log("data", data);
+
+      if (data.checkoutUrl) {
+        // const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.checkoutUrl)}`;
+        // setQrUrl(qrImageUrl);
+
+        window.location.href = data.checkoutUrl;
+      } else {
+        toast.error("Không tạo được link thanh toán.");
+      }
+    } catch (err) {
+      toast.error("Lỗi khi tạo mã QR.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  //---------------------------------------------------------------------------
   const handleCheckout = async () => {
     const selectedProvince = province?.find((p: { codeId: string }) => p.codeId === provinceSelected);
     const selectedDistrict = district?.find((d: { codeId: string }) => d.codeId === districSelected);
