@@ -31,4 +31,22 @@
       </a>
     </div>
   </body>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const orderCode = params.get("orderCode");
+
+    if (orderCode) {
+      fetch("https://deployexe-be-1.onrender.com/order/update-status-cancel", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderCode }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("Đã cập nhật trạng thái đơn hàng:", data))
+        .catch((err) => console.error("Lỗi cập nhật đơn hàng:", err));
+    }
+  </script>
 </html>

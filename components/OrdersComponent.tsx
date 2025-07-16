@@ -76,12 +76,16 @@ const OrdersComponent = ({
                           className={`px-2 py-1 rounded-full text-xs font-semibold ${
                             order?.statusPayment === "Paid"
                               ? "bg-green-100 text-green-800"
-                              : "bg-yellow-100 text-yellow-800"
+                              : order?.statusPayment === "Pending"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-red-100 text-red-800"
                           }`}
                         >
                           {order?.statusPayment === "Paid"
                             ? "Đã thanh toán"
-                            : "Thanh toán lúc nhận hàng"}
+                            : order?.statusPayment === "Pending"
+                              ? "Đang chờ thanh toán"
+                              : "Thanh toán thất bại"}
                         </span>
                       )}
                     </TableCell>
