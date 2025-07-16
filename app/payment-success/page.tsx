@@ -26,7 +26,9 @@ export default function PaymentSuccessPage() {
 
   return (
     <div className="min-h-screen flex justify-center items-center">
-      <h1 className="text-xl text-green-600 font-semibold">Đang xử lý đơn hàng...</h1>
+      <h1 className="text-xl text-green-600 font-semibold">
+        Đang xử lý đơn hàng...
+      </h1>
     </div>
   );
 }

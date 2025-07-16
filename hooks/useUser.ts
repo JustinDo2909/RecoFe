@@ -1,6 +1,11 @@
 "use client";
 
-import { useAuthLoginMutation, useAuthLogoutMutation, useAuthRegisterMutation, useLazyGetMeQuery } from "@/state/api";
+import {
+  useAuthLoginMutation,
+  useAuthLogoutMutation,
+  useAuthRegisterMutation,
+  useLazyGetMeQuery,
+} from "@/state/api";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -35,7 +40,13 @@ export const useUser = () => {
     fetchUser();
   }, [triggerGetMe]);
 
-  const login = async ({ email, password }: { email: string; password: string }) => {
+  const login = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     setLoading(true);
     try {
       const data = await loginAPI({ email, password }).unwrap();
