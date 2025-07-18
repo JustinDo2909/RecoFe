@@ -552,12 +552,14 @@ const CartPage = () => {
                   </div>
                   <div>
                     <input
+
                       title="Chi tiết"
                       type="text"
                       className="w-full border p-2 mb-2"
                       placeholder="Hãy nhập địa chỉ chi tiết"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
+                      required
                     />
                   </div>
                   {/* Summary */}
