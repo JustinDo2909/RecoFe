@@ -561,7 +561,7 @@ const CartPage = () => {
                       placeholder="Hãy nhập địa chỉ chi tiết"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      required
+
                     />
                   </div>
                   {/* Summary */}
@@ -635,7 +635,7 @@ const CartPage = () => {
                         </div>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping
+                            loading || !cartProducts?.length || !feeShipping || !address
                           }
                           onClick={handleCheckoutWallet}
                           className="w-full rounded-full font-semibold tracking-wide bg-green-500"
@@ -645,7 +645,7 @@ const CartPage = () => {
                         </Button>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping
+                            loading || !cartProducts?.length || !feeShipping || !address 
                           }
                           onClick={handleCheckoutCash}
                           className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
@@ -655,7 +655,7 @@ const CartPage = () => {
                         </Button>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping
+                            loading || !cartProducts?.length || !feeShipping || !address 
                           }
                           onClick={handleCheckout}
                           className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
@@ -665,7 +665,7 @@ const CartPage = () => {
                         </Button>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping
+                            loading || !cartProducts?.length || !feeShipping || !address
                           }
                           onClick={handleQR}
                           className="w-full rounded-full font-semibold tracking-wide bg-teal-500"
