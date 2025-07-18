@@ -207,6 +207,8 @@ const CartPage = () => {
   //------------------------------------------------------------------------
   // Ở đây
   const handleQR = async () => {
+    console.log("111");
+
     if (!cartProducts?.length || !feeShipping) {
       toast.error("Không có sản phẩm hoặc phí vận chuyển chưa được tính!");
       return;
