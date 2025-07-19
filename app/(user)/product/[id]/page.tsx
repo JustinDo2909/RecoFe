@@ -5,12 +5,11 @@ import Container from "@/components/Container";
 import PriceView from "@/components/PriceView";
 import ProductCharacteristics from "@/components/ProductCharacteristics";
 import { useGetProductByIdQuery } from "@/state/api";
-import { BoxIcon, FileQuestion, ListOrderedIcon, Share } from "lucide-react";
+import { BoxIcon, FileQuestion, ListOrderedIcon, Share, Palette } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { Palette } from "lucide-react";
+import { useState } from "react";
 
-// Đây là viết cứng (không nên)
 const idCustom = "684a85aa1d6c9de849557543";
 
 const SingleProductPage = () => {
@@ -18,24 +17,49 @@ const SingleProductPage = () => {
   const id = params.id;
   const router = useRouter();
   const { data: product } = useGetProductByIdQuery({ id });
+  const [selectedImage, setSelectedImage] = useState(0);
+
+  const images = product?.picture?.length 
+    ? product.picture 
+    : [
+        "http://res.cloudinary.com/dfyihjjih/image/upload/v1752832449/kjisfafoyo2rgbjxj4t5.jpg",
+        "http://res.cloudinary.com/dfyihjjih/image/upload/v1752832449/placeholder_image_2.jpg",
+        "http://res.cloudinary.com/dfyihjjih/image/upload/v1752832449/placeholder_image_3.jpg"
+      ];
 
   return (
     <Container className="py-10 flex flex-col md:flex-row gap-10">
-      {/* Hình ảnh sản phẩm */}
-      {product?.picture && (
-        <Image
-          src={product?.picture}
-          width={500}
-          height={500}
-          alt="Ảnh sản phẩm"
-          priority
-          className="rounded-md border border-gray-100 shadow-sm"
-        />
-      )}
+      <div className="w-full md:w-1/2 flex flex-col items-center">
+        {images.length > 0 && (
+          <Image
+            src={images[selectedImage]}
+            width={500}
+            height={500}
+            alt="Ảnh sản phẩm"
+            priority
+            className="rounded-md border border-gray-100 shadow-sm"
+          />
+        )}
+        {images.length > 2 && (
+          <div className="flex gap-2 mt-4 flex-wrap justify-center">
+            {images.map((img: string, index: number) => (
+              <Image
+                key={index}
+                src={img}
+                width={80}
+                height={80}
+                alt={`Thumbnail ${index + 1}`}
+                onClick={() => setSelectedImage(index)}
+                className={`rounded-md border cursor-pointer transition-all ${
+                  selectedImage === index ? "border-blue-500 shadow-md" : "border-gray-200"
+                } hover:border-blue-400`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
-      {/* Thông tin chi tiết */}
       <div className="w-full md:w-1/2 flex flex-col gap-5">
-        {/* Tên và giá sản phẩm */}
         <div>
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
             {product?.name}
@@ -43,11 +67,10 @@ const SingleProductPage = () => {
           <PriceView
             price={product?.price}
             discount={20}
-            className="text-lg font-bold "
+            className="text-lg font-bold"
           />
         </div>
 
-        {/* Tình trạng kho */}
         {product?.stock && (
           <p className="bg-green-100 w-fit px-4 py-2 text-green-600 text-sm font-semibold rounded-lg">
             Còn hàng
@@ -66,17 +89,12 @@ const SingleProductPage = () => {
           </button>
         )}
 
-        {/* Mô tả sản phẩm */}
         <p className="text-sm text-gray-700 leading-relaxed">
           {product?.description}
         </p>
 
-        {/* Nút yêu thích */}
-
-        {/* Đặc điểm sản phẩm */}
         <ProductCharacteristics product={product || {}} />
 
-        {/* Các tùy chọn */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 py-5 mt-5">
           <OptionItem
             onClick={() => router.push(`/product`)}
@@ -87,7 +105,7 @@ const SingleProductPage = () => {
             onClick={() =>
               window.open(
                 "https://www.facebook.com/profile.php?id=61576419491353",
-                "_blank",
+                "_blank"
               )
             }
             icon={<FileQuestion />}
@@ -102,7 +120,7 @@ const SingleProductPage = () => {
             onClick={() =>
               window.open(
                 "https://www.facebook.com/profile.php?id=61576419491353",
-                "_blank",
+                "_blank"
               )
             }
             icon={<Share />}
@@ -110,7 +128,6 @@ const SingleProductPage = () => {
           />
         </div>
 
-        {/* Chính sách */}
         <div className="flex flex-wrap items-center gap-5 mt-4">
           <PolicyCard
             title="Vận chuyển nhanh chóng"

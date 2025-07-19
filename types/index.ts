@@ -45,7 +45,7 @@ export interface Product {
   price?: number;
   rating?: number;
   location?: string;
-  picture?: string;
+  picture?: any;
   stock?: number;
   categories?: string[]; // đúng tên theo BE là `categories`
   editby?: string;
