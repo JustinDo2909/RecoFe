@@ -19,13 +19,7 @@ const SingleProductPage = () => {
   const { data: product } = useGetProductByIdQuery({ id });
   const [selectedImage, setSelectedImage] = useState(0);
 
-  const images = product?.picture?.length 
-    ? product.picture 
-    : [
-        "http://res.cloudinary.com/dfyihjjih/image/upload/v1752832449/kjisfafoyo2rgbjxj4t5.jpg",
-        "http://res.cloudinary.com/dfyihjjih/image/upload/v1752832449/placeholder_image_2.jpg",
-        "http://res.cloudinary.com/dfyihjjih/image/upload/v1752832449/placeholder_image_3.jpg"
-      ];
+  const images = product?.picture?.length ? product.picture : product?.picture ? [product.picture] : [];
 
   return (
     <Container className="py-10 flex flex-col md:flex-row gap-10">
@@ -40,7 +34,7 @@ const SingleProductPage = () => {
             className="rounded-md border border-gray-100 shadow-sm"
           />
         )}
-        {images.length > 2 && (
+        {images.length > 1 && (
           <div className="flex gap-2 mt-4 flex-wrap justify-center">
             {images.map((img: string, index: number) => (
               <Image
