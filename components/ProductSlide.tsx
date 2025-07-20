@@ -26,7 +26,7 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
           swiperRef.current?.autoplay.start();
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.2 }
     );
 
     if (swiperContainerRef.current) {
@@ -60,24 +60,26 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
           1024: { slidesPerView: 2.5, spaceBetween: 30 },
         }}
       >
-        {products?.map((product, index) => (
-          <SwiperSlide key={index} className="flex justify-center">
-            <div
-              className={`relative transition-all duration-500 ease-in-out ${
-                index === activeIndex ? "scale-115 " : " scale-90 "
-              }`}
-            >
-              <Image
-                src={product.picture || ""}
-                alt={product.name || ""}
-                width={1200}
-                height={400}
-                className="transition-transform duration-500 hover:scale-105 object-contain rounded-xl h-[300px]"
-                priority={index === 0}
-              />
-            </div>
-          </SwiperSlide>
-        ))}
+        {products
+          .filter((product) => product.isActive)
+          ?.map((product, index) => (
+            <SwiperSlide key={index} className="flex justify-center">
+              <div
+                className={`relative transition-all duration-500 ease-in-out ${
+                  index === activeIndex ? "scale-115 " : " scale-90 "
+                }`}
+              >
+                <Image
+                  src={product.picture || ""}
+                  alt={product.name || ""}
+                  width={1200}
+                  height={400}
+                  className="transition-transform duration-500 hover:scale-105 object-contain rounded-xl h-[300px]"
+                  priority={index === 0}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
       </Swiper>
 
       <button

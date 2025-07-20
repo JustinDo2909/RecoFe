@@ -57,7 +57,7 @@ const AboutUsBanner = () => {
         <div>
           <p className="text-lg">Có bất kỳ câu hỏi gì?</p>
           <p className="text-lg font-semibold">Liên hệ ngay với chúng tôi!</p>
-          <p className="text-3xl text-red-500 font-bold mt-2">+84 123457890</p>
+          <p className="text-3xl text-red-500 font-bold mt-2">0397966775</p>
         </div>
       </div>
     </div>

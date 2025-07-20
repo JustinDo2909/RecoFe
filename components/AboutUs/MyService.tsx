@@ -1,5 +1,5 @@
 import React from "react";
-import pic1 from "@/images/tui1.png";
+import pic1 from "@/public/kjisfafoyo2rgbjxj4t5 (1).webp";
 import pic2 from "@/images/tui2.png";
 import pic3 from "@/images/tui3.jpg";
 import Image from "next/image";
