@@ -98,7 +98,7 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
       </button>
 
       <div className="flex justify-center gap-2 mt-6">
-        {products.map((_, index) => (
+        {products.filter((product) => product.isActive).map((_, index) => (
           <button
             key={index}
             onClick={() => swiperRef.current?.slideToLoop(index)}
