@@ -66,7 +66,7 @@ const OrdersComponent = ({
 
                     <TableCell>
                       <PriceFormatter
-                        amount={order?.totalPrice}
+                        amount={order?.finalPriceOrder}
                         className="text-black font-medium"
                       />
                     </TableCell>
