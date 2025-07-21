@@ -19,7 +19,6 @@ const CommunityPage = () => {
     <Container>
       <CommunityIntro />
       <CommunityBody />
-    
 
       <CharityOverview />
       <Slogan />

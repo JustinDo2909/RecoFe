@@ -4,6 +4,7 @@ import Loading from "@/components/Loading";
 import OrderTable from "@/components/OrderTable";
 import {
   useGetAllOrderQuery,
+  useGetProductQuery,
   useGetUsersQuery,
   useUpdateOrderStatusMutation,
 } from "@/state/api";
@@ -78,10 +79,13 @@ const DashboardOrder = () => {
   const { data: users } = useGetUsersQuery({});
   const [orderList, setOrderList] = useState<Order[]>([]);
   const [isMounted, setIsMounted] = useState(false);
-  const [usersMap, setUsersMap] = useState<Record<string, string>>({});
+  const [usersMap, setUsersMap] = useState<
+    Record<string, { name: string; phone: string }>
+  >({});
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
   const [filterPayment, setFilterPayment] = useState<FilterPayment>("all");
+  const { data: Products } = useGetProductQuery();
 
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
@@ -91,21 +95,46 @@ const DashboardOrder = () => {
 
   useEffect(() => {
     if (orders) {
-      // Reverse the list to show newest first
       const reversedOrders = [...(orders as Order[])].reverse();
-      setOrderList(reversedOrders);
+
+      const startDate = new Date(2025, 6, 20); // Tháng 7 là 6 (0-based)
+      startDate.setHours(0, 0, 0, 0);
+
+      const filtered = reversedOrders.filter((order) => {
+        const orderDate = new Date(order.createdAt);
+        return orderDate >= startDate;
+      });
+
+      setOrderList(filtered); // Chỉ giữ các đơn từ hôm nay trở đi
     }
   }, [orders]);
 
   useEffect(() => {
     if (users) {
-      const map: Record<string, string> = {};
+      const map: Record<string, { name: string; phone: string }> = {};
+
       users.forEach((user: User) => {
-        map[user._id] = user.username;
+        if (user._id) {
+          map[user._id] = {
+            name: user.username,
+            phone: user.phone || "Không có số điện thoại", // hoặc user.phoneNumber
+          };
+        }
       });
+
       setUsersMap(map);
     }
   }, [users]);
+
+  const productsMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    Products?.forEach((product) => {
+      if (product._id && product.name) {
+        map[product._id] = product.name;
+      }
+    });
+    return map;
+  }, [Products]);
 
   // Filter orders based on search term and filters
   const filteredOrders = useMemo(() => {
@@ -121,8 +150,8 @@ const DashboardOrder = () => {
       // Filter by search term
       const searchMatch =
         searchTerm === "" ||
-        usersMap[order.userId]
-          ?.toLowerCase()
+        usersMap[order.userId]?.name
+          .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.paymentMethod?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -343,12 +372,49 @@ const DashboardOrder = () => {
             {
               key: "userId",
               label: "Tên người dùng",
-              render: (userId: any) => (
-                <span className="font-medium text-gray-900">
-                  {usersMap[userId] || userId}
+              render: (userId: any) => {
+                const user = usersMap[userId];
+                return user ? (
+                  <div>
+                    <div className="font-medium text-gray-900">{user.name}</div>
+                    <div className="text-sm text-gray-600">{user.phone}</div>
+                  </div>
+                ) : (
+                  <span>{userId}</span>
+                );
+              },
+            },
+            {
+              key: "address",
+              label: "Địa chỉ",
+              render: (value: any) => (
+                <span className="block text-sm text-gray-800 break-words whitespace-pre-line">
+                  {value}
                 </span>
               ),
             },
+
+            {
+              key: "items",
+              label: "Sản phẩm",
+              render: (value) => {
+                const items = value as {
+                  productId: string;
+                  quantity: number;
+                }[];
+                return (
+                  <div className="text-sm text-gray-800 space-y-1">
+                    {items?.map((item, idx) => (
+                      <div key={idx}>
+                        {productsMap[item.productId] || "Không rõ sản phẩm"} ×{" "}
+                        {item.quantity}
+                      </div>
+                    ))}
+                  </div>
+                );
+              },
+            },
+
             {
               key: "totalPrice",
               label: "Giá",
@@ -358,6 +424,7 @@ const DashboardOrder = () => {
                 </span>
               ),
             },
+
             {
               key: "paymentMethod",
               label: "Phương thức thanh toán",

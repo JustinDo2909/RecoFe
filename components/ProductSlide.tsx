@@ -26,7 +26,7 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
           swiperRef.current?.autoplay.start();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     if (swiperContainerRef.current) {
@@ -98,17 +98,19 @@ const CustomSwiper: React.FC<ProductSlideProps> = ({ products }) => {
       </button>
 
       <div className="flex justify-center gap-2 mt-6">
-        {products.filter((product) => product.isActive).map((_, index) => (
-          <button
-            key={index}
-            onClick={() => swiperRef.current?.slideToLoop(index)}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              activeIndex === index
-                ? "bg-black scale-125"
-                : "border border-black hover:bg-gray-400"
-            }`}
-          />
-        ))}
+        {products
+          .filter((product) => product.isActive)
+          .map((_, index) => (
+            <button
+              key={index}
+              onClick={() => swiperRef.current?.slideToLoop(index)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                activeIndex === index
+                  ? "bg-black scale-125"
+                  : "border border-black hover:bg-gray-400"
+              }`}
+            />
+          ))}
       </div>
     </div>
   );

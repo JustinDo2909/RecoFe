@@ -121,6 +121,7 @@ export interface Order {
   feeShipping: number;
   statusOrder: string;
   statusPayment: string;
+  address: string;
   reason: string;
   createdAt: string;
 }

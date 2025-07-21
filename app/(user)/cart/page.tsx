@@ -218,6 +218,26 @@ const CartPage = () => {
       const token = localStorage.getItem("token");
       setLoading(true);
 
+      const selectedProvince = province?.find(
+        (p: { codeId: string }) => p.codeId === provinceSelected,
+      );
+      const selectedDistrict = district?.find(
+        (d: { codeId: string }) => d.codeId === districSelected,
+      );
+      const selectedWard = ward?.find(
+        (w: { codeId: string }) => w.codeId === wardSelected,
+      );
+
+      if (!selectedProvince || !selectedDistrict || !selectedWard) {
+        toast.error("Vui lòng chọn đầy đủ tỉnh, quận và phường!");
+
+        return;
+      }
+
+      const addressString = `${selectedWard.name}, ${selectedDistrict.name}, ${selectedProvince.name}, ${address}`;
+
+      console.log("addressString", addressString);
+
       const res = await fetch(
         "https://deployexe-be-1.onrender.com/payOS/create-payment-link",
         {
@@ -229,7 +249,7 @@ const CartPage = () => {
           body: JSON.stringify({
             items: cartProducts,
             feeShipping,
-            address,
+            address: addressString,
           }),
         },
       );
@@ -554,14 +574,12 @@ const CartPage = () => {
                   </div>
                   <div>
                     <input
-
                       title="Chi tiết"
                       type="text"
                       className="w-full border p-2 mb-2"
                       placeholder="Hãy nhập địa chỉ chi tiết"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-
                     />
                   </div>
                   {/* Summary */}
@@ -635,7 +653,10 @@ const CartPage = () => {
                         </div>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping || !address
+                            loading ||
+                            !cartProducts?.length ||
+                            !feeShipping ||
+                            !address
                           }
                           onClick={handleCheckoutWallet}
                           className="w-full rounded-full font-semibold tracking-wide bg-green-500"
@@ -645,7 +666,10 @@ const CartPage = () => {
                         </Button>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping || !address 
+                            loading ||
+                            !cartProducts?.length ||
+                            !feeShipping ||
+                            !address
                           }
                           onClick={handleCheckoutCash}
                           className="w-full rounded-full font-semibold tracking-wide bg-neutral-600"
@@ -655,7 +679,10 @@ const CartPage = () => {
                         </Button>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping || !address 
+                            loading ||
+                            !cartProducts?.length ||
+                            !feeShipping ||
+                            !address
                           }
                           onClick={handleCheckout}
                           className="w-full rounded-full font-semibold tracking-wide bg-blue-500"
@@ -665,7 +692,10 @@ const CartPage = () => {
                         </Button>
                         <Button
                           disabled={
-                            loading || !cartProducts?.length || !feeShipping || !address
+                            loading ||
+                            !cartProducts?.length ||
+                            !feeShipping ||
+                            !address
                           }
                           onClick={handleQR}
                           className="w-full rounded-full font-semibold tracking-wide bg-teal-500"

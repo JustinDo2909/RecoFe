@@ -65,7 +65,6 @@ const SingleProductPage = () => {
           {product?.description}
         </p>
 
-
         <ProductCharacteristics product={product || {}} />
 
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 py-5 mt-5">
